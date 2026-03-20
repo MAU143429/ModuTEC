@@ -1,0 +1,13 @@
+-------- LOAD FILES --------
+
+mpremote connect COM6 fs cp io_pots.py :
+mpremote connect COM6 fs cp main.py :
+mpremote connect COM6 fs cp AM.py :
+mpremote connect COM6 fs cp ASK.py :
+mpremote connect COM6 fs cp config.json :
+
+----------- RESET -----------
+ 
+mpremote connect COM6 reset
+
+-----------------------------
