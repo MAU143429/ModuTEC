@@ -1,281 +1,184 @@
 \chapter{Marco teórico}
 \label{ch:marco}
 
+\section{Introducción del capítulo}
 
-El marco de referencia teórico, también conocido como marco referencial o marco conceptual, tiene el propósito de dar a la investigación un sistema sólido, coordinado y coherente de conceptos, definiciones, teorías y herramientas con las cuales se abordar el proyecto.
-En esta sección se describen los conceptos teóricos y prácticos que sustentan el desarrollo del estudio. Se debe realizar una búsqueda de publicaciones, antecedentes sobre otras soluciones, artículos y trabajos similares para analizar la manera como otros han resuelto el problema en cuestión o problemas similares. Este servirá para sustentar de manera contundente la solución que se proponga, siempre con base en las prácticas y principios de la ingeniería.
-Como estructura del marco teórico se recomienda:
-a. Introducción al capítulo
-b. Mapa conceptual.
-c. Explicación y discusión de los principales elementos.
-Es fundamental que las referencias bibliográficas sean estandarizadas a lo largo de todo el informe y muy claramente en el marco teórico, ya sea por el estándar APA o IEEE, pero solo utilizando uno de ellos a lo largo de todo el documento.
+El análisis y procesamiento de señales constituye un elemento fundamental dentro de la ingeniería de computadores, particularmente en el diseño de sistemas digitales capaces de representar, transformar y transmitir información. En este contexto, la comprensión de los principios que rigen el comportamiento de las señales resulta indispensable para el desarrollo de técnicas que permitan su manipulación de manera controlada.
 
-RECOMENDACIONES:
+De manera análoga, cuando el tratamiento de señales se aborda dentro del desarrollo de soluciones en entornos computacionales específicos, surgen consideraciones adicionales que deben ser tomadas en cuenta para su correcta aplicación. Estas condiciones introducen nuevos elementos en el análisis, los cuales difieren de aquellos presentes en entornos de desarrollo más generales, haciendo necesario ampliar la base conceptual desde la cual se estudian estos procesos.
 
-a.	Se recomienda crear un esquema con los conceptos más importantes del proyecto. De esta forma queda más fluido ir desarrollando cada uno de los conceptos. Colocarlo al inicio del capítulo.
-b.	Evitar que se vea como un diccionario. Debe haber un hilo conductor por cada uno de los conceptos.
-c.	Evitar anidar muchas subsecciones. El marco teórico debe ser fácil de leer.
-d.	Es difícil establecer un máximo, pero la idea no es que sea extenso. Debe ser directo a los conceptos necesarios para poder sentar una base para desarrollar el proyecto.
-e.	No olvidar las referencias.
+En el presente capítulo se establece el conjunto de fundamentos teóricos necesarios para comprender el tratamiento de señales, su transformación y las consideraciones asociadas a su implementación en sistemas digitales. A partir de esta base, se construye un marco conceptual que permite abordar de manera estructurada los elementos que intervienen en el desarrollo del problema de estudio.
 
+\section{Mapa conceptual del marco teórico}
 
+Con el fin de organizar de manera estructurada los conceptos desarrollados en este capítulo, se presenta el mapa conceptual mostrado en la Figura \ref{fig:mapa_conceptual}. Este permite visualizar la relación entre los distintos elementos teóricos y la progresión lógica bajo la cual serán abordados.
 
-\section{Descripción}
-
-Toda tesis hace referencia a trabajos previos en el área y trabajos afines que
-están directamente relacionados con lo planteado en el tesis.
-
-Además, en el marco teórico debe aparecer la información absolutamente
-necesaria para comprender la solución, y por eso es recomendable escribir
-primero la solución (el siguiente capítulo), para ir anotando qué debe ser
-explicado en el marco teórico.
-
-\section{Generalidades}
-
-Se recomienda revisar las guías de publicación de la \nt{IEEE} en
-\url{http://www.ieee.org/publications_standards/publications/authors/authors_journals.html},
-donde puede encontrar cómo hacer referencias bibliográficas correctamente, cómo
-citar ecuaciones, tablas y figuras, etc.  
-
-\subsection{Redacción}
-
-La \nt{redacción} en todo el documento debe seguir un estilo científico
-objetivo. Esto implica que se redacta de modo impersonal, sin utilizar primeras
-personas del singular o del plural, y se evita el uso de cualquier tipo de
-calificativo, sustituyéndolos siempre por datos concretos, vinculados a
-referencias bibliográficas o datos experimentales. Los comparativos también
-deben concretarse a hechos y datos, y nunca dejarse ``en el aire''. Por la
-naturaleza de la tesis, el tiempo verbal es usualmente presente, no perdiendo
-nunca de vista que se está explicando ``cómo hacer algo'', en vez de ``qué se
-hizo''.
-
-Las \nt{frases} deben ser cortas, y debe evitarse que el lector tenga que saltar
-constantemente entre partes de la tesis, lo que implica una exposición lineal
-clara, donde lo que se necesita ya ha sido explicado antes. Deben evitarse
-redundancias y por tanto cada concepto se exponen en un único lugar.
-
-Todo aspecto circunstancial es irrelevante para la tesis, es decir, si se ha
-desarrollado en el laboratorio $X$, o en el curso $Y$, con el profesor $Z$, o
-en la empresa $W$, el nombre de funciones o clases en su código, etc., es
-información irrelevante para reproducir el experimento, y por lo tanto sobra.
-%
-Esa información puede incluirse en uno de los anexos.
-
-
-\subsection{Ecuaciones}
-
-Para citar \nt{ecuaciones} se utilizan paréntesis redondos, y no es
-necesario emplear explícitamente la palabra ``ecuación''. Por ejemplo
-``Introduciendo en (4.2) los resultados de (3.3) y (3.7) se obtiene
-...''. La ecuación es parte del flujo de texto y no un objeto
-flotante, así que no pueden emplearse como figuras. Cuando se requiere
-la ecuación, allí se inserta.
-
-Es incorrecto redactar de la siguiente forma: \explain{MAL}
-
-\textsl{La operación del transistor sin tomar en cuenta el efecto Early está
-  dada por (\ref{eq:ej1}), donde el parámetro $\kappa$ está dado por
-  (\ref{eq:ej2}).}
-
-\begin{equation} \label{eq:ej1}
-  I_{DS}
-  =
-  I_{n0} \frac{W}{L}e^{\kappa \frac{V_{GB}}{v_t}}
-  \left[
-    e^{-\frac{V_{SB}}{v_t}}
-    -
-    e^{-\frac{V_{DB}}{v_t}}
-  \right]
-\end{equation}
-
-\begin{equation} \label{eq:ej2}
-  \kappa = \frac{C_{ox}}{C_{ox}+C_{dep}}
-\end{equation}
-
-Lo anterior es incorrecto porque obliga al lector a estar buscando ecuaciones,
-que pueden mostrarse directamente.  La única referenciación permitida es hacia
-atrás.
-
-La forma correcta de redactar lo anterior es: \chk{BIEN}
-
-\textsl{La operación del transistor sin tomar en cuenta el efecto Early está
-  dada por}
-\begin{equation} \label{eq:ej3}
-  I_{DS}
-  =
-  I_{n0} \frac{W}{L}e^{\kappa \frac{V_{GB}}{v_t}}
-  \left[
-    e^{-\frac{V_{SB}}{v_t}}
-    -
-    e^{-\frac{V_{DB}}{v_t}}
-  \right]
-\end{equation}
-\textsl{donde el parámetro $\kappa$ es}
-\begin{equation} \label{eq:ej4}
-  \kappa = \frac{C_{ox}}{C_{ox}+C_{dep}}
-\end{equation}
-
-Así el flujo del texto guía al lector por las ecuaciones sin mayor esfuerzo.
-
-Es recomendable numerar \emph{todas} las ecuaciones, de modo que en la revisión
-del documento, o en futuras referencias a su documento de tesis todas las
-ecuaciones puedan ser citadas sin requerir describir textualmente a cuál
-ecuación se está haciendo referencia.
-
-Es preferible utilizar coma decimal en vez de punto decimal, debido a
-que es el estándar internacional.  El Diccionario panhispánico de
-dudas aclara que se acepta el punto como separador decimal, pero eso
-no quiere decir que sea preferible.  Esta plantilla ya incorpora el
-uso del paquete de \LaTeX\ \code{icomma}, que se encarga de realizar
-el espaciado correcto de la coma.  Cuando utilice coma como signo de
-puntuación, deje un espacio posterior, para asegurarse de que
-\code{icomma} no lo tome como separador decimal.
-
-\begin{equation}
-  \label{eq:normrnd}
-  h(x)=\norm{\rand()-0,5}^2_2
-\end{equation}
-
-\subsection{Figuras}
-
-Para el almacenamiento de imágenes existen dos tipos de formato: las imágenes
-raster y las imágenes vectoriales.\index{imagen!raster}
-
-\subsubsection{Imágenes raster}
-
-Las imágenes raster son representadas por una rejilla de píxeles, en donde cada
-píxel tiene un valor que representa al nivel de gris o el color. La
-discretización espacial es ineludible, y la única forma de obtener buena
-calidad es empleando tamaños grandes de la imagen que conduzcan a resoluciones
-de al menos 300 puntos por pulgada en la impresión, lo que conlleva a archivos
-de documentos de varios megabytes. Dentro de los formatos para almacenar
-imágenes raster existen algunos con pérdida (como el JPEG) que producen en
-imágenes sintéticas, como diagramas, estructuras ruidosas que dan una
-apariencia de baja calidad a las figuras. Otros formatos (como PNG, BMP, TIFF o
-GIF) no tiene pérdidas de información, pero los algoritmos de compresión no
-pueden reducir el tamaño de las imágenes con los mismos factores de reducción
-que los formatos con pérdidas. Este tipo de formatos debe utilizarse únicamente
-para fotografías o capturas de escenas reales con cámaras digitales.
-
-\subsubsection{Imágenes vectoriales}
-
-\index{imagen!vectorial}
-Las imágenes vectoriales \textbf{deben} ser empleadas en todo tipo de
-diagrama. En ellas no se almacenan píxeles, sino las estructuras geométricas
-que componen la figura como círculos (representado por posicion de su centro y
-su radio), rectángulos (representados por sus esquinas), líneas, texto, etc. La
-mayoría de programas para elaborar este tipo de diagramas, como Inkscape, XFig,
-OpenOffice.org Draw, MS Visio, Adobe Illustrator, etc. proveen varios formatos
-vectoriales que pueden ser insertados tanto en LaTeX como en OpenOffice.org
-Writer (o MS Word). Los formatos más empleados son los llamados metafiles, que
-incluyen al WMF, EMF. En LaTeX se utiliza por lo general EPS. Recientemente se
-ha incrementado el soporte al formato SVG.
-
-No debe cometerse el error de generar una imagen vectorial a partir de una
-imagen raster, pues una vez realizada la discretización espacial no es posible
-reconstruir los elementos geométricos que componen la imagen. Por ello, no
-tiene ningún sentido generar un archivo EPS o WMF a partir de una imagen ya
-almacenada en BMP, JPG, o PNG, pues lo único que ocurrirá es que se inserta la
-figura raster tal cual en la imagen vectorial, sin implicar ninguna ganancia en
-la calidad.
-
-Esta plantilla de LaTeX administra la generación de ciertas figuras por usted.
-Puede colocar en el directorio \texttt{fig/} archivos EPS, JPG, PNG o GP (de
-GNUPlot) y el Makefile se encarga de hacer todas las conversiones necesarias.
-En las siguientes subsecciones se describen dos casos adicionales que resultan
-útiles para realizar figuras más complejas.
-
-\subsubsection{Figuras tikz}
-\index{tikz}
-
-Esta plantilla compila archivos con código en Tikz para generar
-figuras.
-%
-En realidad, lo único que hace el Makefile es compilar con
-\code{pdflatex} cualquier archivo \texttt{fig/*.tikz} y dejar el
-resultado en el directorio de figuras, aunque el concepto fue pensado
-particularmente para generar imágenes vectoriales utilizando las
-características de Tikz, biblioteca de LaTeX que es utilizada cada vez
-más por su enorme flexibilidad.
-%
-\begin{figure}[htb]
-  \centering
-  \includegraphics{figtemplate}
-  \caption[Ejemplo de figura con tikz]{Ejemplo realizado con
-    \texttt{tikz}.  Usted encuentra la plantilla en el directorio de
-    figuras bajo el nombre \texttt{fig/figtemplate.tikz}.}
-  \label{fig:figtemplate}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../fig/mapaconceptual.png}
+    \caption{Mapa conceptual del marco teórico. Fuente: Elaboración Propia.}
+    \label{fig:mapa_conceptual}
 \end{figure}
 
-La figura~\ref{fig:figtemplate} muestra un ejemplo que se puede
-utilizar como plantilla para generar figuras \texttt{tikz}.  La
-plantilla la encuentra en el directorio de figuras y se llama
-\code{figtemplate.tikz}.
+\section{Fundamentos de procesamiento de señales}
 
+El procesamiento de señales se fundamenta en el estudio de las representaciones matemáticas de la información y en las operaciones que pueden realizarse sobre estas para su análisis y transformación. En el contexto de sistemas digitales, este estudio permite comprender cómo la información es modelada, manipulada y posteriormente utilizada dentro de distintos procesos computacionales.
 
-\subsubsection{Figuras ltxfig/psfrag}
+\subsection{Definición de señal}
 
-\index{psfrag}\index{ltxfig}
-Cuando en el subdirectorio \texttt{fig/} se encuentran dos archivos con el
-mismo nombre pero extensiones \texttt{ltxfig} y \texttt{psfrag}, por ejemplo
-\texttt{prueba.ltxfig} y \texttt{prueba.psfrag}, entonces el Makefile asume que
-usted desea crear una figura a partir del archivo \texttt{prueba.ltxfig},
-creado con el programa \texttt{XFig}, sustituyendo los textos ahí presentes con
-texto formateado con LaTeX.
+En este contexto, el concepto de señal constituye el punto de partida para el análisis, ya que permite formalizar la manera en que la información es representada dentro de un sistema.
 
-La figura~\ref{fig:ltxfig} ha sido creada con este esquema.  Revise los
-archivos correspondientes en el directorio de figuras
-\texttt{fig/ltxfig\_prototipo.*} para más detalles sobre su uso.
+Según establece Oppenheim \cite{oppenheim1997} en la teoría de señales y sistemas, una señal puede entenderse como una función que describe la variación de una magnitud en relación con una o más variables independientes. En la mayoría de los sistemas de interés en ingeniería, dicha variable corresponde al tiempo, lo que permite representar la evolución de la información dentro de un sistema.
 
+Una señal continua puede representarse de forma general como:
 
-\subsubsection{Figuras pstricks}  
+\begin{equation}
+x(t)
+\end{equation}
 
-\index{pstricks}
-Los archivos con extensión \texttt{.pstricks} en el directorio \texttt{fig} se
-utilizan para generar cualquier tipo de imágenes según el código que se
-contenga.  Es un concepto más general que el anterior.  La
-figura~\ref{fig:pstricks} ha sido creada con este esquema.  Puede revisar los
-archivos \texttt{prototipo\_gnuplot*} como un ejemplo de su uso, en donde de un
-archivo gnuplot (\texttt{\_.gp}) se genera un archivo \texttt{\_.eps}, el cual
-es incluido en el archivo \texttt{.pstricks} sustituyendo cadenas de texto por
-código LaTeX.
+donde $x$ denota la señal y $t$ representa la variable independiente asociada al tiempo. Esta formulación permite modelar fenómenos físicos y procesos de información que varían de manera continua, tales como señales eléctricas o acústicas presentes en sistemas electrónicos \cite{oppenheim1997}.
 
+Por otra parte, cuando la señal es tratada en sistemas digitales, su representación se realiza de forma discreta mediante una secuencia de valores definidos en instantes específicos. En este caso, la señal puede expresarse como:
 
+\begin{equation}
+x[n]
+\end{equation}
 
-\subsubsection{Entradas en el índice de figuras}
+donde $n$ es un índice entero que identifica cada muestra dentro de la secuencia. Esta representación es fundamental en el procesamiento digital, ya que permite manipular la señal mediante algoritmos y estructuras propias de sistemas computacionales \cite{oppenheim1997}.
 
-El índice de figuras debe servir para encontrar rápidamente dónde se
-encuentra cierta figura.  El pie de la figura, indicado en \LaTeX con
-\texttt{caption} puede ser extenso, en especial para indicar detalles
-de las figura, y es la entrada por defecto que aparecerá en el índice
-de figuras, la cual no debe superar la extensión de una línea y debe
-únicamente dar la idea del contenido de la figura para poder ser
-encontrada.  Para lograr esto en \LaTeX{} se agrega un parámetro
-opcional con el texto del índice de la siguiente forma:
-\begin{verbatim}
-  \caption[Texto en el índice]{Texto al pie de la figura}
-\end{verbatim}
+\subsection{Señales en el dominio del tiempo y la frecuencia}
 
-\subsection{Referencias bibliográficas}
+A partir de la representación de una señal, su análisis puede abordarse desde distintas perspectivas dependiendo de la información que se desee obtener. En este sentido, una misma señal puede ser descrita tanto en el dominio del tiempo como en el dominio de la frecuencia, lo que permite caracterizar su comportamiento desde enfoques complementarios.
 
-\index{referencias}\index{BibTeX}
-Todo concepto o idea tomado de otros autores contar con la respectiva
-referencia. En redacción técnica de ingeniería rara vez se utiliza la cita
-textual, así que es necesario reformular las ideas y conceptos con palabras
-propias. En ingeniería electrónica se utilizan los formatos de referencia de la
-IEEE o la ACM, que son numéricos, encerrados entre paréntesis cuadrados (por
-ejemplo, ``En \cite{Davis1963} se propuso un nuevo algoritmo'', o ``En
-\cite{ProakisManolakis1998} los autores proponen tomar las ventajas de los
-algorimos presentados en \cite{Oppenheim1998,Roberts2005,Haykin2001} por medio
-del método de Newton \cite{Burrus1998} conocido en el área de optimización
-lineal.''). La referencia es parte de las frases, así que si la frase termina
-con la referencia para indicar la idea, ésta debe estar antes del punto final o
-demás signos de puntuación: ``La capacidad de memoria también sigue una Ley
-similar a la de Moore \cite{Octave}. Los siguientes son los aspectos a tomar en
-cuenta en el diseño del sistema \cite{Lindner2002}:''
+En el dominio del tiempo, la señal se representa directamente como una función de la variable independiente, lo que permite observar su evolución a lo largo del tiempo. Esta representación resulta adecuada para analizar propiedades como la amplitud y la forma de la señal \cite{oppenheim1997}.
 
-Se recomienda utilizar BibTeX para indicar las referencias
-bibliográficas.  Actualmente herramientas como Mendeley, Zotero u
-otras similares simplifican la administración de las referencias y
-pueden exportar al formato BibTeX.
+Por otra parte, el dominio de la frecuencia permite describir la señal en términos de las componentes espectrales que la conforman. Según establece Oppenheim \cite{oppenheim1997}, cualquier señal puede expresarse como una combinación de componentes sinusoidales de distintas frecuencias.
 
+La relación entre ambas representaciones se ilustra en la Figura \ref{fig:tiempo_frecuencia}. En el dominio del tiempo se observa una señal compuesta, cuya forma no permite identificar de manera directa las componentes que la originan. Sin embargo, al analizarla en el dominio de la frecuencia, se evidencian claramente las componentes sinusoidales presentes, representadas mediante picos en frecuencias específicas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{tiempo_frecuencia.png}
+    \caption{Representación de una señal compuesta en el dominio del tiempo y su correspondiente espectro de magnitud. Fuente: Elaboración Propia.}
+    \label{fig:tiempo_frecuencia}
+\end{figure}
+
+Según establece Oppenheim \cite{oppenheim1997}, la relación entre el dominio del tiempo y la frecuencia puede describirse mediante la Transformada de Fourier:
+
+\begin{equation}
+X(f) = \int_{-\infty}^{\infty} x(t)e^{-j2\pi ft} \, dt
+\end{equation}
+
+donde $X(f)$ representa la transformada de la señal $x(t)$, $f$ corresponde a la frecuencia y $j$ es la unidad imaginaria. Esta transformación permite describir cómo se distribuyen las componentes de la señal en función de la frecuencia.
+
+\subsection{Señales analógicas y digitales}
+
+Las señales pueden clasificarse según la naturaleza de los valores que representan y la forma en que son procesadas dentro de un sistema. En este sentido, es posible distinguir entre señales analógicas y señales digitales, las cuales presentan características y comportamientos distintos en función del entorno en el que se utilizan.
+
+Según establece Oppenheim \cite{oppenheim1997}, una señal analógica se caracteriza por tomar valores continuos tanto en el tiempo como en amplitud. Este tipo de señal es común en fenómenos físicos, donde las magnitudes varían de manera continua, como es el caso de señales eléctricas, acústicas o electromagnéticas.
+
+Por otra parte, una señal digital se define por tomar valores discretos en el tiempo y, en la mayoría de los casos, también en amplitud. Este tipo de representación es propia de los sistemas digitales, donde la información es tratada como una secuencia de valores que pueden ser almacenados, procesados y transmitidos mediante estructuras y algoritmos computacionales \cite{oppenheim1997}. En aplicaciones prácticas, este tipo de señales es ampliamente utilizado en sistemas de comunicación y procesamiento implementados en plataformas digitales \cite{stm32_comm}.
+
+\subsection{Muestreo y discretización}
+
+El tratamiento de señales en sistemas digitales requiere establecer un mecanismo que permita representar señales continuas mediante una forma discreta. En este contexto, el muestreo se define como el proceso mediante el cual una señal continua en el tiempo es evaluada en instantes específicos, generando una secuencia de valores que puede ser procesada digitalmente.
+
+Según establece Oppenheim \cite{oppenheim1997}, una señal discreta puede obtenerse a partir de una señal continua mediante la selección de muestras separadas por un intervalo de tiempo constante. Este proceso puede expresarse como:
+
+\begin{equation}
+x[n] = x(nT_s)
+\end{equation}
+
+donde $T_s$ representa el período de muestreo y $n$ es un índice entero que identifica cada muestra. La frecuencia de muestreo asociada se define como $f_s = \frac{1}{T_s}$.
+
+Para que la señal original pueda ser representada adecuadamente a partir de sus muestras, es necesario que la frecuencia de muestreo cumpla con ciertos criterios. En particular, el teorema de muestreo establece que una señal puede ser reconstruida sin pérdida de información si la frecuencia de muestreo es al menos el doble de la máxima frecuencia presente en la señal \cite{oppenheim1997}.
+
+Este proceso permite establecer la base para el tratamiento digital de señales, al definir la forma en que la información continua es llevada a un dominio discreto donde puede ser manipulada mediante algoritmos y estructuras computacionales.
+
+\subsection{Representación espectral}
+
+El análisis de señales en el dominio de la frecuencia permite identificar las componentes que conforman una señal, proporcionando una descripción alternativa basada en su contenido espectral. En este contexto, el espectro de una señal describe cómo se distribuyen sus componentes en función de la frecuencia.
+
+Según se establece en la teoría de señales y sistemas, la representación espectral de una señal puede obtenerse mediante la Transformada de Fourier, la cual permite expresar una señal en términos de sus componentes sinusoidales \cite{oppenheim1997}. Esta representación resulta fundamental para el análisis de sistemas de procesamiento, ya que permite identificar características como el contenido frecuencial y la distribución de energía.
+
+El espectro de magnitud, en particular, permite visualizar la intensidad de las componentes presentes en la señal, facilitando la identificación de frecuencias dominantes. Este tipo de análisis es ampliamente utilizado en aplicaciones de procesamiento y comunicación, donde la manipulación de señales se realiza en función de sus características espectrales.
+
+De esta manera, la representación espectral constituye una herramienta fundamental para comprender el comportamiento de las señales y las transformaciones que pueden aplicarse sobre ellas en distintos sistemas.
+
+\section{Modulación de señales}
+
+\subsection{Concepto de modulación}
+
+\subsection{Modulación analógica}
+
+\subsubsection{Señal portadora y señal mensaje}
+
+\subsubsection{Modulación en amplitud (AM)}
+
+\subsubsection{Índice de modulación}
+
+\subsection{Modulación digital}
+
+\subsubsection{Principio de modulación digital por amplitud}
+
+\subsubsection{Modulación ASK}
+
+\subsubsection{Modulación OOK}
+
+\section{Demodulación de señales}
+
+\subsection{Concepto de demodulación}
+
+\subsection{Demodulación de AM}
+
+\subsubsection{Demodulación por detección de envolvente}
+
+\subsubsection{Demodulación coherente}
+
+\subsection{Demodulación de señales digitales}
+
+\subsubsection{Recuperación de símbolos en ASK/OOK}
+
+\subsubsection{Umbral de decisión}
+
+\section{Implementación digital de señales}
+
+\subsection{Representación discreta de señales}
+
+\subsection{Procesamiento por bloques}
+
+\subsection{Aproximaciones y limitaciones numéricas}
+
+\subsection{Filtrado digital}
+
+\subsubsection{Propósito del filtrado en demodulación}
+
+\subsubsection{Filtro pasa bajas}
+
+\section{Sistemas embebidos para procesamiento de señales}
+
+\subsection{Concepto de sistema embebido}
+
+\subsection{Restricciones de hardware}
+
+\subsubsection{Capacidad de procesamiento}
+
+\subsubsection{Memoria disponible}
+
+\subsubsection{Precisión numérica}
+
+\subsection{Procesamiento en tiempo real}
+
+\subsection{Consideraciones de diseño en DSP embebido}
+
+\subsubsection{Eficiencia computacional}
+
+\subsubsection{Compromisos entre precisión y costo computacional}
+
+\subsubsection{Implicaciones para la implementación de técnicas de modulación y demodulación}
+
+\section{Síntesis del capítulo}
+
+\subsection{Relación entre los conceptos desarrollados}
+
+\subsection{Vinculación con el marco metodológico}

@@ -11,12 +11,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% \documentclass is book
 
-% If you want a printable two-side version of the thesis
-%\documentclass[12pt,twoside,letterpaper]{book}
-
-% If you want an electronic-only version of the thesis, do it one-sided
 \documentclass[12pt,oneside,letterpaper]{book}
 
 \usepackage[utf8]{inputenc}
@@ -93,27 +88,7 @@ Embebidos - ModuTEC}
 
   % select one of the following titlepages
   \include{frontmatter/titlepage_licel_es} % Titlepage in Spanish
-
-  %\include{titlepage_licce_es}  % Titlepage in Spanish
-  %\include{titlepage_licce_en} % Titlepage in English (only if thesis is in En)
-  
-  %\include{titlepage_msc_es}   % Titlepage in Spanish
-  %\include{titlepage_msc_en}   % Titlepage in English (only if thesis is in En)
-
-  \include{frontmatter/disclaimer}
-  
-  %% -------------------------------------------------
-  %% Acta y hoja del tribunal
-  
-  %% Para la licenciatura en electrónica:
-  %\include{tribunal_licel}  % Remover en versión final
-  %\include{acta_licel}      % Remover en versión final
-  
-  %% Para la maestría en electrónica:
-  %\include{tribunal_mscel}  % Remover en versión final
-  %\include{acta_mscel}      % Remover en versión final
-  %% -------------------------------------------------
-
+  % \include{frontmatter/disclaimer}
   \include{frontmatter/dedicatoria}
   \include{frontmatter/agradecimientos}
   \include{frontmatter/resumen}
@@ -157,15 +132,17 @@ Embebidos - ModuTEC}
   \include{chapters/cap2_marco_teorico}
   \include{chapters/cap3_marco_metodologico}
   \include{chapters/cap4_resultados}
-  \include{chapters/cap5_conclusiones}
+  \include{chapters/cap5_conclusiones} 
+  \include{appendices/apendice}
 
   %----------------------------------------------------------------------------
   % literature in bibtex way:
   % \bibliographystyle{sty/plainurl} % for english documents
   % \bibliography{literatura}
-  
+  \DeclareFieldFormat{url}{Available at: \url{#1}}
   % literature in biblatex/biber way
   \printbibliography[title={Bibliografía},heading=bibintoc]
+  
   %----------------------------------------------------------------------------
 
   %----------------------------------------------------------------------------

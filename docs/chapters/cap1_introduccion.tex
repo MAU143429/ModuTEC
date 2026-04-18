@@ -1,82 +1,110 @@
-%% ---------------------------------------------------------------------------
-%% intro.tex
-%%
-%% Introduction
-%%
-%% $Id: intro.tex 1477 2010-07-28 21:34:43Z palvarado $
-%% ---------------------------------------------------------------------------
-
 \chapter{Introducción}
 \label{chp:intro}
+\vspace{-1em}
 
-Agregar texto introductorio al capítulo
+La modulación y demodulación de señales constituye la base de los sistemas modernos de comunicación, permitiendo la transmisión eficiente de información a través de distintos medios físicos \cite{haykin2001}. Su estudio suele apoyarse en simuladores o equipos especializados que permiten observar el comportamiento de las señales bajo condiciones controladas \cite{oppenheim1997}. Sin embargo, estas herramientas no siempre están disponibles en entornos educativos o de prototipado de bajo costo, lo cual limita la experimentación práctica con técnicas tanto analógicas como digitales.
+
+Esta limitación adquiere mayor relevancia al considerar que los entornos de simulación no reflejan completamente las restricciones inherentes a los sistemas embebidos. Aspectos como la capacidad de procesamiento, la memoria disponible y las latencias de ejecución influyen directamente en el comportamiento de los algoritmos de procesamiento de señales, y su impacto no puede ser evaluado de manera adecuada en plataformas puramente simuladas \cite{heath2002}.
+
+En este contexto, surge la necesidad de trasladar la ejecución de dichas técnicas hacia entornos de hardware con recursos limitados, de manera que sea posible analizar su comportamiento bajo condiciones operativas concretas. Este proyecto propone el desarrollo de un sistema embebido capaz de ejecutar en tiempo real técnicas de modulación y demodulación, específicamente AM y ASK/OOK, mediante la adaptación de algoritmos de procesamiento de señales a un microcontrolador con restricciones de cómputo.
+
+La solución desarrollada integra la generación de señales, su procesamiento dentro del dispositivo embebido y la transmisión de datos hacia una aplicación externa en un computador personal para su visualización y análisis. Esto permite no solo observar el comportamiento de las señales moduladas y demoduladas, sino también evaluar el desempeño de los algoritmos en función de las limitaciones propias del hardware.
+
+De esta forma, el proyecto no se limita a reproducir el comportamiento teórico de estas técnicas, sino que analiza su desempeño en condiciones reales de ejecución, aportando evidencia práctica sobre la implementación de algoritmos de procesamiento de señales en plataformas embebidas de bajo costo, y contribuyendo a la comprensión de los compromisos entre complejidad algorítmica y restricciones de hardware.
+
 
 \section{Antecedentes del proyecto}
 
-Agregar texto introductorio a la sección
-
 \subsection{Descripción de la organización}
 
-RECOMENDACIÓN: En la descripción de la organización no olvidar las referencias.
+El proyecto se desarrollará en el Instituto Tecnológico de Costa Rica (TEC), una institución pública de educación superior fundada en 1971, reconocida por su enfoque en la formación científica, tecnológica e investigativa \cite{tec}. Su sede principal se ubica en Cartago, y cuenta con diversas unidades académicas distribuidas en todo el país, orientadas al desarrollo de conocimiento y la generación de soluciones tecnológicas aplicadas.
+
+Específicamente, el proyecto se llevará a cabo en la Escuela de Ingeniería en Computadores, unidad académica que forma profesionales en áreas como sistemas embebidos, arquitectura de computadoras y desarrollo de software. La escuela proporciona laboratorios especializados, asesoría técnica y un ambiente propicio para el desarrollo de proyectos de aplicación tecnológica orientados a resolver necesidades del entorno nacional.
 
 \subsection{Descripción del área de conocimiento del proyecto}
 
-\textbf{Desarrollo de algoritmos en sistemas empotrados}
+El proyecto se enmarca en el área de desarrollo de algoritmos en sistemas empotrados, al abordar la implementación de técnicas de modulación y demodulación dentro de un microcontrolador con recursos limitados. Esto involucra la interacción entre el procesamiento de señales y la ejecución de algoritmos en plataformas de hardware específicas.
+
+Estas técnicas forman parte del procesamiento de señales aplicado a sistemas de comunicación \cite{oppenheim1997}, donde el análisis y manipulación de señales es fundamental para la transmisión y recuperación de información. En este contexto, el proyecto integra conceptos asociados tanto al tratamiento de señales como a su implementación en sistemas computacionales.
+
+Desde la perspectiva de los sistemas embebidos, la ejecución de estos algoritmos requiere considerar restricciones propias del hardware, como la capacidad de procesamiento, la memoria disponible y la operación en tiempo real \cite{heath2002}. Estas condiciones influyen directamente en la forma en que los algoritmos deben ser adaptados para su ejecución en un entorno de hardware real.
+
 
 \subsection{Trabajos similares encontrados}
 
-RECOMENDACIONES:
+Diversos trabajos han abordado la implementación de técnicas de modulación y demodulación en sistemas embebidos bajo diferentes condiciones de hardware, evidenciando cómo el poder computacional disponible influye directamente en la complejidad de los algoritmos utilizados y en el alcance de las soluciones desarrolladas.
 
-\begin{itemize}
-    \item Es posible que no exista un trabajo idéntico al que está realizando por lo que puede buscar variantes. La idea es mostrar aproximaciones para un problema similar. Debe indicar detalles de implementación para encontrar alguna similitud con su trabajo.
-    \item Algunos proyectos pueden presentar confidencialidad dentro de la empresa, por lo que pueden citar que se desarrolló un sistema con X y Y características (sin detallar nombres). Adicionalmente, puede aplicar el punto anterior.
+En primer lugar, se identifican implementaciones en plataformas embebidas de alto desempeño, como sistemas basados en microcontroladores avanzados tipo STM32, en los cuales se desarrollan sistemas completos de comunicación, incluyendo procesos de modulación y demodulación con técnicas más complejas, como FSK u OFDM \cite{stm32_comm}. Estos sistemas permiten una mayor fidelidad en el procesamiento de señales y la integración de mecanismos adicionales como sincronización y filtrado avanzado, gracias a su mayor capacidad de cómputo y memoria. No obstante, este tipo de soluciones dependen de hardware con mayores prestaciones, lo que reduce su accesibilidad y limita su uso en contextos educativos o de bajo costo.
 
-\end{itemize}
+Por otro lado, existen implementaciones orientadas a hardware de muy bajo costo, como microcontroladores tipo PIC, donde se utilizan técnicas simples como ASK para desarrollar sistemas de comunicación funcionales \cite{pic_ask}. En estos casos, el enfoque se centra en la simplicidad de implementación y el uso eficiente de recursos, limitando la complejidad de los algoritmos para adaptarse a las restricciones del hardware. Sin embargo, estas soluciones suelen restringirse a esquemas básicos, lo que reduce su capacidad para analizar con mayor profundidad el comportamiento de las señales o incorporar técnicas adicionales.
+
+A partir de estos enfoques, se observa que las soluciones existentes tienden a ubicarse en dos extremos: por un lado, implementaciones con alta complejidad algorítmica soportadas por hardware de mayor capacidad, y por otro, soluciones simplificadas orientadas a dispositivos de bajo costo con funcionalidades limitadas. Esta situación evidencia la falta de propuestas que permitan equilibrar la complejidad de los algoritmos con las restricciones de hardware, manteniendo al mismo tiempo un enfoque accesible y orientado al análisis práctico.
+
+En este contexto, el proyecto ModuTEC se posiciona como una solución intermedia, al proponer la implementación de técnicas de modulación y demodulación (AM y ASK/OOK) en un sistema embebido de recursos limitados, buscando un balance entre complejidad algorítmica y viabilidad de ejecución. Esto permite no solo validar la ejecución de dichas técnicas en hardware restringido, sino también facilitar el análisis de su comportamiento en condiciones reales, aportando una perspectiva práctica dentro del desarrollo de sistemas embebidos aplicados al procesamiento de señales.
 
 
 \section{Planteamiento del problema}
 
-Agregar texto introductorio a la sección
-
 \subsection{Contexto del problema}
+
+La modulación y demodulación de señales constituye un elemento fundamental en los sistemas modernos de comunicación, siendo utilizada en tecnologías como radio, transmisión digital, enlaces inalámbricos y sistemas electrónicos de control \cite{haykin2001}. No obstante, el estudio práctico de estas técnicas suele depender de simuladores especializados o equipos de laboratorio que permiten observar el comportamiento de las señales moduladas, recursos que no siempre están disponibles en entornos educativos o de prototipado de bajo costo \cite{oppenheim1997}.
+
+En el ámbito de los sistemas embebidos, la implementación de procesos de modulación y demodulación en tiempo real presenta desafíos asociados a las restricciones de cómputo, memoria y sincronización propias de este tipo de dispositivos \cite{heath2002}. Estas limitaciones obligan a adaptar y optimizar los algoritmos de procesamiento de señales para garantizar su ejecución bajo condiciones reales, lo cual no siempre es considerado en entornos de simulación tradicionales.
+
+Como consecuencia, la experimentación directa con técnicas analógicas y digitales en plataformas embebidas accesibles se ve condicionada por la necesidad de equilibrar la complejidad algorítmica con los recursos disponibles. Esto dificulta la validación práctica de los principios de comunicación en condiciones reales de ejecución. Adicionalmente, gran parte de las herramientas de análisis operan en computadores personales, sin evaluar el comportamiento del procesamiento dentro del hardware embebido, lo que limita la comprensión integral del desempeño de estas técnicas en sistemas reales.
 
 \subsection{Justificación del problema}
 
+El desarrollo de un sistema embebido capaz de ejecutar técnicas de modulación y demodulación de forma directa responde a una necesidad creciente en el ámbito de la formación y experimentación en comunicaciones. Actualmente, gran parte de los procesos de análisis de señales dependen de simuladores de software o equipos especializados \cite{oppenheim1997}, los cuales no reflejan completamente las restricciones reales del hardware ni permiten evaluar el desempeño de los algoritmos en condiciones de operación limitadas \cite{heath2002}.
+
+Adicionalmente, estas herramientas suelen requerir plataformas de mayor capacidad computacional, lo que dificulta su utilización en entornos educativos o en proyectos de bajo costo. En este contexto, la implementación de técnicas de modulación y demodulación en un microcontrolador accesible permite trasladar estos procesos a un entorno de ejecución real, habilitando el análisis directo de señales dentro de un sistema físico.
+
+Esto representa un aporte relevante al posibilitar la experimentación práctica sin depender de infraestructura externa compleja. Asimismo, la adaptación de algoritmos de procesamiento de señales a un entorno embebido permite analizar su comportamiento bajo restricciones reales, contribuyendo a una mejor comprensión de las implicaciones de su implementación y fortaleciendo el proceso de aprendizaje y validación de estas técnicas en el ámbito académico y tecnológico \cite{haykin2001}.
+
 \subsection{Enunciado del problema}
 
-no colocarlo en forma de solución. Lo que va a desarrollar en su proyecto no es el problema en sí del proyecto
+Los procesos de modulación y demodulación suelen depender de simuladores o equipos especializados, y son limitadas las implementaciones accesibles que permiten ejecutar técnicas básicas como AM y ASK/OOK de forma eficiente sobre hardware embebido de bajo costo. Esta situación restringe la experimentación práctica y dificulta la evaluación del comportamiento real de estas técnicas en entornos académicos e investigativos.
 
 \section{Objetivos del proyecto}
 
-Agregar texto introductorio a la sección
-
 \subsection{Objetivo general}
 
-El objetivo general va a establecer cómo se va a resolver el problema que estableció anteriormente.
-
+Implementar un sistema embebido para la modulación y demodulación analógica y digital (AM y ASK/OOK), con el fin de que la evaluación de su desempeño en tiempo real se realice dentro de un entorno con recursos computacionales limitados, mediante la integración de procesos internos de generación, procesamiento y transmisión de señales.
 \subsection{Objetivos específicos}
 
-numerados
+\begin{enumerate}
+\item Integrar una versión simplificada de los algoritmos de modulación y demodulación en el sistema embebido, para el funcionamiento consistente de las técnicas en tiempo real, mediante ajustes en parámetros internos y estructuras de procesamiento.
+ 
+\item Crear un sistema para la visualización y el análisis de los resultados de modulación y demodulación, mediante el envío estructurado de bloques de señal por comunicación serial hacia un computador externo.
 
-Para los objetivos recuerde que debe contestar las preguntas qué, cómo y para.
+\item Optimizar el procesamiento y flujo de datos de las señales dentro del dispositivo embebido, para un desempeño estable en condiciones de operación, mediante la disminución de la carga computacional.
 
-Los objetivos no son actividades. Deben colocarse entre 3 y 4 específicos.
-
-Los objetivos deben tener un verbo que termine en -ar, -er, -ir. Basarse en la taxonomía de Bloom.
-
-Asegurarse de que cada objetivo específico cumpla con las siguientes características:
-i.	Tener un entregable(s) definido.
-ii.	Establecer un procedimiento para desarrollarlo.
-iii.	Se pueda evidenciar el cumplimiento (resultados).
-
-
-Para los entregables, asegurarse que se pueda evidenciar que se lograron.
+\item Evaluar la calidad de los procesos de modulación y demodulación ejecutados en el sistema embebido, para la obtención de métricas que reflejen de forma objetiva su precisión y estabilidad, mediante el análisis comparativo de señales y parámetros de desempeño.
+\end{enumerate}
 
 
 \section{Alcances, entregables y limitaciones del proyecto}
 
+\subsection{Alcances}
 
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "main"
-%%% End: 
+El proyecto contempla la implementación de un sistema embebido capaz de ejecutar en tiempo real técnicas de modulación y demodulación analógicas y digitales (AM y ASK/OOK) sobre un microcontrolador de recursos limitados. Este sistema integra el procesamiento de señales dentro del dispositivo, permitiendo la generación, modulación y demodulación de señales bajo condiciones controladas.
+
+Asimismo, se incluye el desarrollo de un mecanismo de comunicación entre el sistema embebido y un computador externo, con el objetivo de transmitir los datos generados para su visualización y análisis. Esto permite observar el comportamiento de las señales procesadas mediante una aplicación orientada a su representación gráfica.
+
+Adicionalmente, el alcance considera la optimización del procesamiento y flujo de datos dentro del sistema embebido, así como la definición de métricas que permitan evaluar de manera objetiva el desempeño de los procesos implementados en términos de precisión y estabilidad.
+
+\subsection{Entregables}
+
+Como resultado del desarrollo del proyecto, se establece un conjunto de entregables que evidencian el cumplimiento de los objetivos planteados. En primer lugar, se obtiene un sistema embebido funcional capaz de ejecutar técnicas de modulación y demodulación (AM y ASK/OOK) en tiempo real.
+
+Asimismo, se entrega el código embebido optimizado que implementa los algoritmos de procesamiento de señales y el manejo de la comunicación de datos. Este desarrollo se complementa con una aplicación en computador personal que permite la visualización y análisis de las señales generadas.
+
+Adicionalmente, se define un protocolo de comunicación serial para la transmisión estructurada de datos entre el sistema embebido y la aplicación externa. Finalmente, se entrega el informe técnico que documenta el diseño, la implementación y la evaluación del sistema desarrollado.
+
+\subsection{Limitaciones}
+
+El desarrollo del proyecto se encuentra sujeto a limitaciones inherentes tanto al entorno de implementación como a las restricciones del hardware utilizado. En primer lugar, el sistema se desarrolla en un entorno académico controlado, por lo que no se contempla su validación en escenarios industriales ni en medios físicos reales de transmisión.
+
+Desde el punto de vista técnico, la implementación se limita a técnicas de modulación y demodulación de baja complejidad, específicamente AM y ASK/OOK. La incorporación de técnicas adicionales depende de la capacidad del microcontrolador, particularmente en términos de procesamiento, memoria y velocidad de comunicación.
+
+Adicionalmente, la visualización y el análisis de las señales se realizan mediante una aplicación externa en un computador personal, por lo que el sistema embebido no incorpora una interfaz gráfica propia. Finalmente, el procesamiento de señales se realiza de forma completamente digital dentro del dispositivo, sin considerar interacción directa con señales analógicas reales en medios de transmisión físicos.
