@@ -2,40 +2,81 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # -----------------------------
-# Parámetros de la señal
+# Parámetros
 # -----------------------------
-f = 2
-t_cont = np.linspace(0, 2, 1000)
+bits = np.array([1, 0, 1, 1, 0, 0, 1])
+Tb = 0.1
+fc = 50
+fs = 5000
 
-signal_cont = np.sin(2 * np.pi * f * t_cont)
+samples_per_bit = int(Tb * fs)
 
-# -----------------------------
-# Muestreo
-# -----------------------------
-fs = 10
-Ts = 1 / fs
-
-t_samples = np.arange(0, 2, Ts)
-signal_samples = np.sin(2 * np.pi * f * t_samples)
+# Tiempo
+t = np.arange(0, len(bits)*Tb, 1/fs)
 
 # -----------------------------
-# Gráfica
+# Señal binaria (expandida)
 # -----------------------------
-plt.figure(figsize=(10, 5))
+binary_signal = np.repeat(bits, samples_per_bit)
+binary_signal = binary_signal[:len(t)]
 
-plt.plot(t_cont, signal_cont, label="Señal continua")
-plt.scatter(t_samples, signal_samples, zorder=3, label="Muestras")
+# Escalar para que quede arriba (visual)
+binary_visual = binary_signal * 1.5
 
-for ts in t_samples:
-    plt.axvline(x=ts, linestyle="--", linewidth=0.8)
+# -----------------------------
+# Portadora y OOK
+# -----------------------------
+carrier = np.cos(2 * np.pi * fc * t)
+ook_signal = binary_signal * carrier
 
-plt.title("Muestreo de una señal continua")
-plt.xlabel("Tiempo (s)")
-plt.ylabel("Amplitud")
-plt.grid(True, linestyle=":", linewidth=0.5)
+# -----------------------------
+# Gráfica única
+# -----------------------------
+plt.figure(figsize=(12, 5))
 
-# 🔥 LEYENDA DENTRO DEL PLOT (ESQUINA SUPERIOR DERECHA)
-plt.legend(loc="upper right")
+# Señal OOK
+plt.plot(t, ook_signal, color='black', linewidth=1.2, label='Señal OOK')
 
-plt.savefig("muestreo.png", dpi=300, bbox_inches="tight")
+# Señal binaria (arriba)
+plt.step(t, binary_visual, where='post', color='blue', linewidth=2, label='Señal binaria')
+
+# -----------------------------
+# Regiones de bits (colores)
+# -----------------------------
+for i, bit in enumerate(bits):
+    if bit == 1:
+        plt.axvspan(i*Tb, (i+1)*Tb, color='green', alpha=0.1)
+    else:
+        plt.axvspan(i*Tb, (i+1)*Tb, color='red', alpha=0.05)
+
+# -----------------------------
+# Etiquetas de bits
+# -----------------------------
+for i, bit in enumerate(bits):
+    plt.text(i*Tb + Tb/2, 1.7, str(bit), ha='center', fontsize=10)
+
+# -----------------------------
+# Ejes
+# -----------------------------
+plt.axhline(0, color='black', linewidth=1)
+plt.axvline(0, color='black', linewidth=1)
+
+# -----------------------------
+# Estética
+# -----------------------------
+plt.title('Modulación ASK tipo OOK en el dominio del tiempo')
+plt.xlabel('Tiempo (s)')
+plt.ylabel('Amplitud / Nivel lógico')
+plt.ylim(-1.5, 2)
+
+plt.grid(True, linestyle='--', alpha=0.4)
+
+# Leyenda
+plt.legend(loc='upper right')
+
+# -----------------------------
+# Guardar
+# -----------------------------
+plt.tight_layout()
+plt.savefig('ook_unificado.png', dpi=300)
 plt.show()
