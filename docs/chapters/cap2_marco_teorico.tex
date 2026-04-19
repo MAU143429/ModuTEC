@@ -67,6 +67,7 @@ Según establece Oppenheim \cite{oppenheim1997}, la relación entre el dominio d
 
 \begin{equation}
 X(f) = \int_{-\infty}^{\infty} x(t)e^{-j2\pi ft} \, dt
+\label{eq:fourier}
 \end{equation}
 
 donde $X(f)$ representa la transformada de la señal $x(t)$, $f$ corresponde a la frecuencia y $j$ es la unidad imaginaria. Esta transformación permite describir cómo se distribuyen las componentes de la señal en función de la frecuencia.
@@ -81,30 +82,45 @@ Por otra parte, una señal digital se define por tomar valores discretos en el t
 
 \subsection{Muestreo y discretización}
 
-El tratamiento de señales en sistemas digitales requiere establecer un mecanismo que permita representar señales continuas mediante una forma discreta. En este contexto, el muestreo se define como el proceso mediante el cual una señal continua en el tiempo es evaluada en instantes específicos, generando una secuencia de valores que puede ser procesada digitalmente.
+El tratamiento de señales en sistemas digitales requiere establecer un mecanismo que permita representar señales continuas mediante una forma discreta. En este contexto, Oppenheim \cite{oppenheim1997} define el muestreo como el proceso mediante el cual una señal continua en el tiempo es evaluada en instantes específicos, generando una secuencia de valores que puede ser procesada digitalmente.
 
-Según establece Oppenheim \cite{oppenheim1997}, una señal discreta puede obtenerse a partir de una señal continua mediante la selección de muestras separadas por un intervalo de tiempo constante. Este proceso puede expresarse como:
+A partir de este proceso, la señal discreta puede expresarse como:
 
 \begin{equation}
 x[n] = x(nT_s)
 \end{equation}
+ 
+donde $T_s$ representa el período de muestreo y $n$ es un índice entero que identifica cada muestra. La frecuencia de muestreo asociada se define como $f_s = \frac{1}{T_s}$, lo cual establece la relación entre el dominio continuo y su representación discreta \cite{proakis2001digital}.
 
-donde $T_s$ representa el período de muestreo y $n$ es un índice entero que identifica cada muestra. La frecuencia de muestreo asociada se define como $f_s = \frac{1}{T_s}$.
+El proceso de muestreo se ilustra en la Figura \ref{fig:muestreo}, donde se observa una señal continua junto con los valores discretos obtenidos al evaluarla en instantes uniformemente espaciados. En esta representación, las muestras corresponden a los valores de la señal en dichos instantes, evidenciando cómo la información continua es capturada mediante un conjunto finito de puntos.
 
-Para que la señal original pueda ser representada adecuadamente a partir de sus muestras, es necesario que la frecuencia de muestreo cumpla con ciertos criterios. En particular, el teorema de muestreo establece que una señal puede ser reconstruida sin pérdida de información si la frecuencia de muestreo es al menos el doble de la máxima frecuencia presente en la señal \cite{oppenheim1997}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{muestreo.png}
+    \caption{Ejemplo de muestreo de una señal continua.}
+    \label{fig:muestreo}
+\end{figure}
 
-Este proceso permite establecer la base para el tratamiento digital de señales, al definir la forma en que la información continua es llevada a un dominio discreto donde puede ser manipulada mediante algoritmos y estructuras computacionales.
+Para que la señal original pueda ser representada adecuadamente a partir de sus muestras, es necesario que la frecuencia de muestreo cumpla con ciertos criterios. Según establece Shannon \cite{shannon1949} en la teoría de comunicaciones, si se desea que una señal pueda ser reconstruida sin pérdida de información, la frecuencia de muestreo debe ser al menos el doble de la máxima frecuencia presente en la señal. Este resultado es conocido como el teorema de Nyquist-Shannon.
+
+De manera formal, esta condición puede expresarse como:
+
+\begin{equation}
+f_s \geq 2f_{max}
+\label{eq:nyquist}
+\end{equation}
+
+donde $f_s$ corresponde a la frecuencia de muestreo y $f_{max}$ representa la máxima frecuencia presente en la señal. El cumplimiento de esta condición garantiza que las componentes frecuenciales de la señal puedan ser representadas sin ambigüedad en el dominio discreto.
+
+El análisis de estas condiciones resulta fundamental para comprender cómo la información contenida en una señal se preserva durante su representación digital, lo cual establece una relación directa con la forma en que dicha información puede ser caracterizada en términos de sus componentes en frecuencia.
 
 \subsection{Representación espectral}
 
-El análisis de señales en el dominio de la frecuencia permite identificar las componentes que conforman una señal, proporcionando una descripción alternativa basada en su contenido espectral. En este contexto, el espectro de una señal describe cómo se distribuyen sus componentes en función de la frecuencia.
+La representación de una señal en el dominio de la frecuencia permite describirla en términos de sus componentes espectrales, proporcionando una perspectiva basada en su contenido frecuencial. De esta forma, el espectro de una señal representa la distribución de dichas componentes en función de la frecuencia.
 
-Según se establece en la teoría de señales y sistemas, la representación espectral de una señal puede obtenerse mediante la Transformada de Fourier, la cual permite expresar una señal en términos de sus componentes sinusoidales \cite{oppenheim1997}. Esta representación resulta fundamental para el análisis de sistemas de procesamiento, ya que permite identificar características como el contenido frecuencial y la distribución de energía.
+A partir de la relación entre el dominio del tiempo y el dominio de la frecuencia, expresada previamente mediante la Transformada de Fourier en la ecuación \eqref{eq:fourier}, resulta posible identificar las frecuencias presentes en una señal y analizar cómo se distribuyen en términos de amplitud o energía, lo cual es fundamental para su caracterización en sistemas de procesamiento \cite{oppenheim1997}.
 
-El espectro de magnitud, en particular, permite visualizar la intensidad de las componentes presentes en la señal, facilitando la identificación de frecuencias dominantes. Este tipo de análisis es ampliamente utilizado en aplicaciones de procesamiento y comunicación, donde la manipulación de señales se realiza en función de sus características espectrales.
-
-De esta manera, la representación espectral constituye una herramienta fundamental para comprender el comportamiento de las señales y las transformaciones que pueden aplicarse sobre ellas en distintos sistemas.
-
+El espectro de magnitud, en particular, permite visualizar la intensidad de las componentes presentes en la señal, facilitando la identificación de frecuencias dominantes y la comprensión de cómo una señal puede ser manipulada en función de sus características frecuenciales.
 \section{Modulación de señales}
 
 \subsection{Concepto de modulación}

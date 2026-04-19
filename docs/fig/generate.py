@@ -4,56 +4,38 @@ import matplotlib.pyplot as plt
 # -----------------------------
 # Parámetros de la señal
 # -----------------------------
-fs = 5000  # 🔥 subir resolución
-t = np.arange(0, 1, 1/fs)
+f = 2
+t_cont = np.linspace(0, 2, 1000)
 
-f1 = 50
-f2 = 120
-
-signal = np.sin(2*np.pi*f1*t) + 0.5*np.sin(2*np.pi*f2*t)
+signal_cont = np.sin(2 * np.pi * f * t_cont)
 
 # -----------------------------
-# FFT
+# Muestreo
 # -----------------------------
-N = len(signal)
-fft_vals = np.fft.fft(signal)
-fft_vals = np.abs(fft_vals) / N
-freqs = np.fft.fftfreq(N, 1/fs)
+fs = 10
+Ts = 1 / fs
 
-mask = freqs >= 0
-freqs = freqs[mask]
-fft_vals = fft_vals[mask]
+t_samples = np.arange(0, 2, Ts)
+signal_samples = np.sin(2 * np.pi * f * t_samples)
 
 # -----------------------------
-# Gráficas
+# Gráfica
 # -----------------------------
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(10, 5))
 
-# 🔹 Dominio del tiempo (ZOOM)
-plt.subplot(2, 1, 1)
+plt.plot(t_cont, signal_cont, label="Señal continua")
+plt.scatter(t_samples, signal_samples, zorder=3, label="Muestras")
 
-t_zoom = t[:1000]  # mantiene ~0.2s pero con más puntos
-signal_zoom = signal[:1000]
+for ts in t_samples:
+    plt.axvline(x=ts, linestyle="--", linewidth=0.8)
 
-plt.plot(t_zoom, signal_zoom, linewidth=1)
+plt.title("Muestreo de una señal continua")
 plt.xlabel("Tiempo (s)")
 plt.ylabel("Amplitud")
-plt.title("Señal compuesta en el dominio del tiempo (f1 = 50 Hz, f2 = 120 Hz)")
-plt.grid(True)
+plt.grid(True, linestyle=":", linewidth=0.5)
 
-# 🔹 Dominio de la frecuencia (RECORTE)
-plt.subplot(2, 1, 2)
+# 🔥 LEYENDA DENTRO DEL PLOT (ESQUINA SUPERIOR DERECHA)
+plt.legend(loc="upper right")
 
-freq_limit = 200  # solo hasta 200 Hz
-mask_freq = freqs <= freq_limit
-
-plt.plot(freqs[mask_freq], fft_vals[mask_freq], linewidth=1)
-plt.xlabel("Frecuencia (Hz)")
-plt.ylabel("Magnitud")
-plt.title("Espectro de magnitud de la señal compuesta")
-plt.grid(True)
-plt.text(120, 0.25, "120 Hz")
-plt.text(50, 0.5, "50 Hz")
-plt.tight_layout()
-plt.savefig("tiempo_frecuencia_zoom.png", dpi=300)
+plt.savefig("muestreo.png", dpi=300, bbox_inches="tight")
 plt.show()
