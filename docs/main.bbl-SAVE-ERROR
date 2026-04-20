@@ -1,0 +1,520 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{haykin2001}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=91e57481898b943d6a72a1deba06a6a9}{%
+           family={Haykin},
+           familyi={H\bibinitperiod},
+           given={Simon},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Wiley}%
+      }
+      \strng{namehash}{91e57481898b943d6a72a1deba06a6a9}
+      \strng{fullhash}{91e57481898b943d6a72a1deba06a6a9}
+      \strng{fullhashraw}{91e57481898b943d6a72a1deba06a6a9}
+      \strng{bibnamehash}{91e57481898b943d6a72a1deba06a6a9}
+      \strng{authorbibnamehash}{91e57481898b943d6a72a1deba06a6a9}
+      \strng{authornamehash}{91e57481898b943d6a72a1deba06a6a9}
+      \strng{authorfullhash}{91e57481898b943d6a72a1deba06a6a9}
+      \strng{authorfullhashraw}{91e57481898b943d6a72a1deba06a6a9}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Communication Systems}
+      \field{year}{2001}
+    \endentry
+    \entry{oppenheim1997}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=3d2d1d8687de3baa625d3d62a7e0e464}{%
+           family={Oppenheim},
+           familyi={O\bibinitperiod},
+           given={Alan\bibnamedelima V.},
+           giveni={A\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=4dfdd3890b62d46ff882fa27ef7f2af0}{%
+           family={Willsky},
+           familyi={W\bibinitperiod},
+           given={Alan\bibnamedelima S.},
+           giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Prentice Hall}%
+      }
+      \strng{namehash}{1935313fe80187068a46e4e06a04bb68}
+      \strng{fullhash}{1935313fe80187068a46e4e06a04bb68}
+      \strng{fullhashraw}{1935313fe80187068a46e4e06a04bb68}
+      \strng{bibnamehash}{1935313fe80187068a46e4e06a04bb68}
+      \strng{authorbibnamehash}{1935313fe80187068a46e4e06a04bb68}
+      \strng{authornamehash}{1935313fe80187068a46e4e06a04bb68}
+      \strng{authorfullhash}{1935313fe80187068a46e4e06a04bb68}
+      \strng{authorfullhashraw}{1935313fe80187068a46e4e06a04bb68}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Signals and Systems}
+      \field{year}{1997}
+    \endentry
+    \entry{heath2002}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=1397ba544c083c62f1d59885c34aa919}{%
+           family={Heath},
+           familyi={H\bibinitperiod},
+           given={Steve},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Newnes}%
+      }
+      \strng{namehash}{1397ba544c083c62f1d59885c34aa919}
+      \strng{fullhash}{1397ba544c083c62f1d59885c34aa919}
+      \strng{fullhashraw}{1397ba544c083c62f1d59885c34aa919}
+      \strng{bibnamehash}{1397ba544c083c62f1d59885c34aa919}
+      \strng{authorbibnamehash}{1397ba544c083c62f1d59885c34aa919}
+      \strng{authornamehash}{1397ba544c083c62f1d59885c34aa919}
+      \strng{authorfullhash}{1397ba544c083c62f1d59885c34aa919}
+      \strng{authorfullhashraw}{1397ba544c083c62f1d59885c34aa919}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Embedded Systems Design}
+      \field{year}{2002}
+    \endentry
+    \entry{tec}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=9707a71a16f85b9105c919f255759537}{%
+           family={{Tecnológico de Costa Rica}},
+           familyi={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{9707a71a16f85b9105c919f255759537}
+      \strng{fullhash}{9707a71a16f85b9105c919f255759537}
+      \strng{fullhashraw}{9707a71a16f85b9105c919f255759537}
+      \strng{bibnamehash}{9707a71a16f85b9105c919f255759537}
+      \strng{authorbibnamehash}{9707a71a16f85b9105c919f255759537}
+      \strng{authornamehash}{9707a71a16f85b9105c919f255759537}
+      \strng{authorfullhash}{9707a71a16f85b9105c919f255759537}
+      \strng{authorfullhashraw}{9707a71a16f85b9105c919f255759537}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Accessed: 2026}
+      \field{title}{Instituto Tecnológico de Costa Rica}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://www.tec.ac.cr
+      \endverb
+      \verb{url}
+      \verb https://www.tec.ac.cr
+      \endverb
+    \endentry
+    \entry{stm32_comm}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=1fd38aa73e6bf9efc15dbd3a6f782bc1}{%
+           family={Su},
+           familyi={S\bibinitperiod},
+           given={Y.},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=0e94ef43806b89ce54340abc73bf37f4}{%
+           family={Dong},
+           familyi={D\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod}}}%
+        {{hash=16afd9391f364b3271b8cebd5c90d52f}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Z.},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=4b44bba1743c2ad874f7d960887af663}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={X.},
+           giveni={X\bibinitperiod}}}%
+        {{hash=3bdb7d28a8ce130c0bff74f4c5ed81af}{%
+           family={Wei},
+           familyi={W\bibinitperiod},
+           given={X.},
+           giveni={X\bibinitperiod}}}%
+      }
+      \strng{namehash}{3699899321096b6fe88b829343493b8c}
+      \strng{fullhash}{09d78233c2c47cc944e98805aa345053}
+      \strng{fullhashraw}{09d78233c2c47cc944e98805aa345053}
+      \strng{bibnamehash}{09d78233c2c47cc944e98805aa345053}
+      \strng{authorbibnamehash}{09d78233c2c47cc944e98805aa345053}
+      \strng{authornamehash}{3699899321096b6fe88b829343493b8c}
+      \strng{authorfullhash}{09d78233c2c47cc944e98805aa345053}
+      \strng{authorfullhashraw}{09d78233c2c47cc944e98805aa345053}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Embedded Systems Letters}
+      \field{number}{3}
+      \field{title}{A General Embedded Underwater Acoustic Communication System Based on Advanced STM32}
+      \field{volume}{13}
+      \field{year}{2021}
+      \field{pages}{90\bibrangedash 93}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1109/LES.2020.3006838
+      \endverb
+    \endentry
+    \entry{pic_ask}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=b97104341413e23a0b1cbdff1d502f8c}{%
+           family={al.},
+           familyi={a\bibinitperiod},
+           given={J.\bibnamedelimi I.\bibnamedelimi Morales-Aragones},
+           giveni={J\bibinitperiod\bibinitdelim I\bibinitperiod\bibinitdelim M\bibinithyphendelim A\bibinitperiod},
+           prefix={et},
+           prefixi={e\bibinitperiod}}}%
+      }
+      \strng{namehash}{b97104341413e23a0b1cbdff1d502f8c}
+      \strng{fullhash}{b97104341413e23a0b1cbdff1d502f8c}
+      \strng{fullhashraw}{b97104341413e23a0b1cbdff1d502f8c}
+      \strng{bibnamehash}{b97104341413e23a0b1cbdff1d502f8c}
+      \strng{authorbibnamehash}{b97104341413e23a0b1cbdff1d502f8c}
+      \strng{authornamehash}{b97104341413e23a0b1cbdff1d502f8c}
+      \strng{authorfullhash}{b97104341413e23a0b1cbdff1d502f8c}
+      \strng{authorfullhashraw}{b97104341413e23a0b1cbdff1d502f8c}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Sensors}
+      \field{number}{23}
+      \field{title}{A Power-Line Communication System Governed by Loop Resonance for Photovoltaic Plant Monitoring}
+      \field{volume}{22}
+      \field{year}{2022}
+      \field{pages}{9207}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/s22239207
+      \endverb
+    \endentry
+    \entry{lathi2009modern}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=ba7069648b5a3d3ec32aa3112eaf6ff6}{%
+           family={Lathi},
+           familyi={L\bibinitperiod},
+           given={B.\bibnamedelimi P.},
+           giveni={B\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=54169607ccc9817379bee0a5fea7d272}{%
+           family={Ding},
+           familyi={D\bibinitperiod},
+           given={Zhi},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford University Press}%
+      }
+      \strng{namehash}{ae4fadb9bf69ade026533a0e8a00d805}
+      \strng{fullhash}{ae4fadb9bf69ade026533a0e8a00d805}
+      \strng{fullhashraw}{ae4fadb9bf69ade026533a0e8a00d805}
+      \strng{bibnamehash}{ae4fadb9bf69ade026533a0e8a00d805}
+      \strng{authorbibnamehash}{ae4fadb9bf69ade026533a0e8a00d805}
+      \strng{authornamehash}{ae4fadb9bf69ade026533a0e8a00d805}
+      \strng{authorfullhash}{ae4fadb9bf69ade026533a0e8a00d805}
+      \strng{authorfullhashraw}{ae4fadb9bf69ade026533a0e8a00d805}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Modern Digital and Analog Communication Systems}
+      \field{year}{2009}
+    \endentry
+    \entry{proakis2001digital}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=5fe41cc224eb8b59f5bb9f1a7ba509f2}{%
+           family={Proakis},
+           familyi={P\bibinitperiod},
+           given={John\bibnamedelima G.},
+           giveni={J\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {McGraw-Hill}%
+      }
+      \strng{namehash}{5fe41cc224eb8b59f5bb9f1a7ba509f2}
+      \strng{fullhash}{5fe41cc224eb8b59f5bb9f1a7ba509f2}
+      \strng{fullhashraw}{5fe41cc224eb8b59f5bb9f1a7ba509f2}
+      \strng{bibnamehash}{5fe41cc224eb8b59f5bb9f1a7ba509f2}
+      \strng{authorbibnamehash}{5fe41cc224eb8b59f5bb9f1a7ba509f2}
+      \strng{authornamehash}{5fe41cc224eb8b59f5bb9f1a7ba509f2}
+      \strng{authorfullhash}{5fe41cc224eb8b59f5bb9f1a7ba509f2}
+      \strng{authorfullhashraw}{5fe41cc224eb8b59f5bb9f1a7ba509f2}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Digital Communications}
+      \field{year}{2001}
+    \endentry
+    \entry{shannon1949}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=536c91678d1dde76c9acd47047556291}{%
+           family={Shannon},
+           familyi={S\bibinitperiod},
+           given={Claude\bibnamedelima E.},
+           giveni={C\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \strng{namehash}{536c91678d1dde76c9acd47047556291}
+      \strng{fullhash}{536c91678d1dde76c9acd47047556291}
+      \strng{fullhashraw}{536c91678d1dde76c9acd47047556291}
+      \strng{bibnamehash}{536c91678d1dde76c9acd47047556291}
+      \strng{authorbibnamehash}{536c91678d1dde76c9acd47047556291}
+      \strng{authornamehash}{536c91678d1dde76c9acd47047556291}
+      \strng{authorfullhash}{536c91678d1dde76c9acd47047556291}
+      \strng{authorfullhashraw}{536c91678d1dde76c9acd47047556291}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Proceedings of the IRE}
+      \field{number}{1}
+      \field{title}{Communication in the Presence of Noise}
+      \field{volume}{37}
+      \field{year}{1949}
+      \field{pages}{10\bibrangedash 21}
+      \range{pages}{12}
+    \endentry
+    \entry{haykin2001communication}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=91e57481898b943d6a72a1deba06a6a9}{%
+           family={Haykin},
+           familyi={H\bibinitperiod},
+           given={Simon},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Wiley}%
+      }
+      \strng{namehash}{91e57481898b943d6a72a1deba06a6a9}
+      \strng{fullhash}{91e57481898b943d6a72a1deba06a6a9}
+      \strng{fullhashraw}{91e57481898b943d6a72a1deba06a6a9}
+      \strng{bibnamehash}{91e57481898b943d6a72a1deba06a6a9}
+      \strng{authorbibnamehash}{91e57481898b943d6a72a1deba06a6a9}
+      \strng{authornamehash}{91e57481898b943d6a72a1deba06a6a9}
+      \strng{authorfullhash}{91e57481898b943d6a72a1deba06a6a9}
+      \strng{authorfullhashraw}{91e57481898b943d6a72a1deba06a6a9}
+      \field{extraname}{2}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Communication Systems}
+      \field{year}{2001}
+    \endentry
+    \entry{proakis2007digital}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=5fe41cc224eb8b59f5bb9f1a7ba509f2}{%
+           family={Proakis},
+           familyi={P\bibinitperiod},
+           given={John\bibnamedelima G.},
+           giveni={J\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=b1e7a6c73f69c6c16233dbf5c83a00de}{%
+           family={Salehi},
+           familyi={S\bibinitperiod},
+           given={Masoud},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {McGraw-Hill}%
+      }
+      \strng{namehash}{ab367421912bdf03ed020bffc5ad1f47}
+      \strng{fullhash}{ab367421912bdf03ed020bffc5ad1f47}
+      \strng{fullhashraw}{ab367421912bdf03ed020bffc5ad1f47}
+      \strng{bibnamehash}{ab367421912bdf03ed020bffc5ad1f47}
+      \strng{authorbibnamehash}{ab367421912bdf03ed020bffc5ad1f47}
+      \strng{authornamehash}{ab367421912bdf03ed020bffc5ad1f47}
+      \strng{authorfullhash}{ab367421912bdf03ed020bffc5ad1f47}
+      \strng{authorfullhashraw}{ab367421912bdf03ed020bffc5ad1f47}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Digital Communications}
+      \field{year}{2007}
+    \endentry
+    \entry{sklar2001digital}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=6d2ad72fbf0f75d5b3690e00625e6012}{%
+           family={Sklar},
+           familyi={S\bibinitperiod},
+           given={Bernard},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Prentice Hall}%
+      }
+      \strng{namehash}{6d2ad72fbf0f75d5b3690e00625e6012}
+      \strng{fullhash}{6d2ad72fbf0f75d5b3690e00625e6012}
+      \strng{fullhashraw}{6d2ad72fbf0f75d5b3690e00625e6012}
+      \strng{bibnamehash}{6d2ad72fbf0f75d5b3690e00625e6012}
+      \strng{authorbibnamehash}{6d2ad72fbf0f75d5b3690e00625e6012}
+      \strng{authornamehash}{6d2ad72fbf0f75d5b3690e00625e6012}
+      \strng{authorfullhash}{6d2ad72fbf0f75d5b3690e00625e6012}
+      \strng{authorfullhashraw}{6d2ad72fbf0f75d5b3690e00625e6012}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Digital Communications: Fundamentals and Applications}
+      \field{year}{2001}
+    \endentry
+    \entry{mitra2006digital}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=c73e898170f1e5c14807557b39b65817}{%
+           family={Mitra},
+           familyi={M\bibinitperiod},
+           given={Sanjit\bibnamedelima K.},
+           giveni={S\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {McGraw-Hill}%
+      }
+      \strng{namehash}{c73e898170f1e5c14807557b39b65817}
+      \strng{fullhash}{c73e898170f1e5c14807557b39b65817}
+      \strng{fullhashraw}{c73e898170f1e5c14807557b39b65817}
+      \strng{bibnamehash}{c73e898170f1e5c14807557b39b65817}
+      \strng{authorbibnamehash}{c73e898170f1e5c14807557b39b65817}
+      \strng{authornamehash}{c73e898170f1e5c14807557b39b65817}
+      \strng{authorfullhash}{c73e898170f1e5c14807557b39b65817}
+      \strng{authorfullhashraw}{c73e898170f1e5c14807557b39b65817}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Digital Signal Processing: A Computer-Based Approach}
+      \field{year}{2006}
+    \endentry
+    \entry{wolf2012computers}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=ac46dc0f06f374c3e3adac7cdebe42ab}{%
+           family={Wolf},
+           familyi={W\bibinitperiod},
+           given={Marilyn},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Morgan Kaufmann}%
+      }
+      \strng{namehash}{ac46dc0f06f374c3e3adac7cdebe42ab}
+      \strng{fullhash}{ac46dc0f06f374c3e3adac7cdebe42ab}
+      \strng{fullhashraw}{ac46dc0f06f374c3e3adac7cdebe42ab}
+      \strng{bibnamehash}{ac46dc0f06f374c3e3adac7cdebe42ab}
+      \strng{authorbibnamehash}{ac46dc0f06f374c3e3adac7cdebe42ab}
+      \strng{authornamehash}{ac46dc0f06f374c3e3adac7cdebe42ab}
+      \strng{authorfullhash}{ac46dc0f06f374c3e3adac7cdebe42ab}
+      \strng{authorfullhashraw}{ac46dc0f06f374c3e3adac7cdebe42ab}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Computers as Components: Principles of Embedded Computing System Design}
+      \field{year}{2012}
+    \endentry
+    \entry{noergaard2005embedded}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=6a77c1944fded0316597b0c113d77148}{%
+           family={Noergaard},
+           familyi={N\bibinitperiod},
+           given={Tammy},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{6a77c1944fded0316597b0c113d77148}
+      \strng{fullhash}{6a77c1944fded0316597b0c113d77148}
+      \strng{fullhashraw}{6a77c1944fded0316597b0c113d77148}
+      \strng{bibnamehash}{6a77c1944fded0316597b0c113d77148}
+      \strng{authorbibnamehash}{6a77c1944fded0316597b0c113d77148}
+      \strng{authornamehash}{6a77c1944fded0316597b0c113d77148}
+      \strng{authorfullhash}{6a77c1944fded0316597b0c113d77148}
+      \strng{authorfullhashraw}{6a77c1944fded0316597b0c113d77148}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Embedded Systems Architecture: A Comprehensive Guide for Engineers and Programmers}
+      \field{year}{2005}
+    \endentry
+    \entry{smith1997dsp}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=1795fe90e11d3a84947c656b94c2fd87}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Steven\bibnamedelima W.},
+           giveni={S\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {California Technical Publishing}%
+      }
+      \strng{namehash}{1795fe90e11d3a84947c656b94c2fd87}
+      \strng{fullhash}{1795fe90e11d3a84947c656b94c2fd87}
+      \strng{fullhashraw}{1795fe90e11d3a84947c656b94c2fd87}
+      \strng{bibnamehash}{1795fe90e11d3a84947c656b94c2fd87}
+      \strng{authorbibnamehash}{1795fe90e11d3a84947c656b94c2fd87}
+      \strng{authornamehash}{1795fe90e11d3a84947c656b94c2fd87}
+      \strng{authorfullhash}{1795fe90e11d3a84947c656b94c2fd87}
+      \strng{authorfullhashraw}{1795fe90e11d3a84947c656b94c2fd87}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{The Scientist and Engineer's Guide to Digital Signal Processing}
+      \field{year}{1997}
+    \endentry
+    \entry{kopetz2011real}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=44b9df2303234ba39ec62a0c8f1fe5b9}{%
+           family={Kopetz},
+           familyi={K\bibinitperiod},
+           given={Hermann},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{44b9df2303234ba39ec62a0c8f1fe5b9}
+      \strng{fullhash}{44b9df2303234ba39ec62a0c8f1fe5b9}
+      \strng{fullhashraw}{44b9df2303234ba39ec62a0c8f1fe5b9}
+      \strng{bibnamehash}{44b9df2303234ba39ec62a0c8f1fe5b9}
+      \strng{authorbibnamehash}{44b9df2303234ba39ec62a0c8f1fe5b9}
+      \strng{authornamehash}{44b9df2303234ba39ec62a0c8f1fe5b9}
+      \strng{authorfullhash}{44b9df2303234ba39ec62a0c8f1fe5b9}
+      \strng{authorfullhashraw}{44b9df2303234ba39ec62a0c8f1fe5b9}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Real-Time Systems: Design Principles for Distributed Embedded Applications}
+      \field{year}{2011}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

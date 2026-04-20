@@ -162,7 +162,7 @@ La modulación constituye uno de los procesos fundamentales en el tratamiento de
 
 \subsection{Definición de modulación}
 
-El concepto de modulación ha sido abordado desde distintas perspectivas en la literatura. Según Haykin, en el contexto de los sistemas de comunicación, la modulación se define como el proceso mediante el cual una señal de información altera una propiedad de una señal de mayor frecuencia, con el propósito de facilitar su transmisión \cite{haykin2001communication}. Por su parte, Proakis y Salehi plantean que la modulación no solo implica dicha interacción entre señales, sino que además permite trasladar el contenido de información hacia bandas de frecuencia específicas, favoreciendo la multiplexación y el aprovechamiento eficiente del espectro disponible \cite{proakis2007digital}.
+El concepto de modulación ha sido abordado desde distintas perspectivas en la literatura. Según Haykin, en el contexto de los sistemas de comunicación, la modulación se define como el proceso mediante el cual una señal de información altera una propiedad de una señal de mayor frecuencia, con el propósito de facilitar su transmisión \cite{haykin2001}. Por su parte, Proakis y Salehi plantean que la modulación no solo implica dicha interacción entre señales, sino que además permite trasladar el contenido de información hacia bandas de frecuencia específicas, favoreciendo la multiplexación y el aprovechamiento eficiente del espectro disponible \cite{proakis2007digital}.
 
 Ambas definiciones coinciden en que la modulación implica una transformación de la señal original y, de manera complementaria, permiten entender este proceso tanto desde la interacción entre señales como desde su función dentro del sistema de comunicación. En conjunto, estas perspectivas establecen que la modulación no solo modifica características de una señal, sino que también responde a condiciones específicas impuestas por el medio de transmisión.
 
@@ -189,11 +189,11 @@ La interacción entre $m(t)$ y $c(t)$ da lugar a la señal modulada, en la cual 
 
 La modulación analógica se caracteriza por operar sobre señales cuyo comportamiento es continuo en el tiempo y en amplitud. En este tipo de modulación, la señal mensaje modifica de manera proporcional alguna propiedad de la señal portadora, generando una señal modulada que conserva la naturaleza continua de la información original.
 
-Según \cite{haykin2001communication}, las principales variantes de modulación analógica corresponden a la modificación de la amplitud, la frecuencia o la fase de la portadora. Por su parte, \cite{lathi2009modern} destaca que estas técnicas surgen como respuesta a diferentes requerimientos del canal, tales como la eficiencia espectral o la robustez frente al ruido.
+Según \cite{haykin2001}, las principales variantes de modulación analógica corresponden a la modificación de la amplitud, la frecuencia o la fase de la portadora. Por su parte, \cite{lathi2009modern} destaca que estas técnicas surgen como respuesta a diferentes requerimientos del canal, tales como la eficiencia espectral o la robustez frente al ruido.
 
 Esta clasificación permite entender que la modulación analógica no corresponde a una única técnica, sino a un conjunto de métodos que comparten un principio común, la representación continua de la información mediante la alteración de parámetros de una señal portadora.
 
-De acuerdo con \cite{haykin2001communication}, en función del parámetro de la señal portadora que es modificado, es posible distinguir las siguientes técnicas principales:
+De acuerdo con \cite{haykin2001}, en función del parámetro de la señal portadora que es modificado, es posible distinguir las siguientes técnicas principales:
 
 \textbf{AM:} En la modulación en amplitud, la amplitud de la señal portadora varía en función de la señal mensaje, manteniendo constantes su frecuencia y fase.
 
@@ -216,7 +216,7 @@ s(t) = A_c \left(1 + \mu m(t)\right) \cos(2\pi f_c t)
 
 donde $A_c$ corresponde a la amplitud de la portadora, $f_c$ a su frecuencia, $\mu$ representa el índice de modulación y $m(t)$ la señal mensaje normalizada, cumpliendo típicamente $m(t) \in [-1,1]$. En esta expresión, el término $(1 + \mu m(t))$ actúa como una envolvente que define la variación de la amplitud de la señal portadora en función de la señal mensaje.
 
-El concepto de envolvente, según \cite{haykin2001communication}, puede definirse como la curva que delimita los valores máximos y mínimos de la señal modulada, reflejando directamente el comportamiento de la señal mensaje. De esta forma, la información contenida en $m(t)$ queda representada en la forma externa de la señal modulada, mientras que la portadora determina la oscilación de alta frecuencia.
+El concepto de envolvente, según \cite{haykin2001}, puede definirse como la curva que delimita los valores máximos y mínimos de la señal modulada, reflejando directamente el comportamiento de la señal mensaje. De esta forma, la información contenida en $m(t)$ queda representada en la forma externa de la señal modulada, mientras que la portadora determina la oscilación de alta frecuencia.
 
 El comportamiento de la señal AM se ilustra en la Figura \ref{fig:am_tiempo_frecuencia}, donde en el dominio del tiempo se observa la señal modulada junto con sus envolventes superior e inferior, las cuales siguen la forma de la señal mensaje.
 
@@ -239,7 +239,7 @@ A partir de la expresión de la señal modulada presentada en la ecuación \eqre
 
 donde $A_m$ corresponde a la amplitud máxima de la señal mensaje y $A_c$ a la amplitud de la portadora. Este parámetro determina el grado en que la señal mensaje influye sobre la señal modulada.
 
-Según \cite{haykin2001communication}, valores de $\mu$ menores que uno garantizan una modulación sin distorsión, mientras que valores superiores generan sobremodulación, lo que provoca la pérdida de información en la señal demodulada. En contraste, \cite{lathi2009modern} enfatiza que el índice de modulación no solo afecta la calidad de la señal, sino también la distribución de potencia entre la portadora y las bandas laterales.
+Según \cite{haykin2001}, valores de $\mu$ menores que uno garantizan una modulación sin distorsión, mientras que valores superiores generan sobremodulación, lo que provoca la pérdida de información en la señal demodulada. En contraste, \cite{lathi2009modern} enfatiza que el índice de modulación no solo afecta la calidad de la señal, sino también la distribución de potencia entre la portadora y las bandas laterales.
 
 Estas interpretaciones evidencian que el índice de modulación no es únicamente un parámetro matemático, sino un elemento clave en el análisis del comportamiento de la señal modulada.
 
@@ -247,7 +247,7 @@ Estas interpretaciones evidencian que el índice de modulación no es únicament
 
 La modulación digital se fundamenta en la representación de la información mediante un conjunto discreto de símbolos, a diferencia de la modulación analógica donde la señal es continua. En este contexto, la señal mensaje se describe como una secuencia de valores discretos, cada uno de los cuales corresponde a un símbolo transmitido durante un intervalo de tiempo determinado.
 
-En \cite{proakis2007digital}, se establece que cada símbolo puede asociarse a una forma de onda específica, permitiendo construir una señal modulada a partir de la concatenación de dichas formas de onda. Asimismo, en \cite{haykin2001communication} se destaca que esta representación discreta favorece la robustez frente al ruido y habilita la aplicación de técnicas avanzadas de procesamiento digital.
+En \cite{proakis2007digital}, se establece que cada símbolo puede asociarse a una forma de onda específica, permitiendo construir una señal modulada a partir de la concatenación de dichas formas de onda. Asimismo, en \cite{haykin2001} se destaca que esta representación discreta favorece la robustez frente al ruido y habilita la aplicación de técnicas avanzadas de procesamiento digital.
 
 De acuerdo con \cite{proakis2007digital}, en función del parámetro de la señal portadora que es modificado, es posible distinguir las siguientes técnicas principales:
 
@@ -276,186 +276,116 @@ El comportamiento de la modulación OOK en el dominio del tiempo se ilustra en l
 \label{fig:ask_ook}
 \end{figure}
 
-
-
 \section{Demodulación de señales}
 
-Habiendo abordado el proceso de modulación, tal como se presenta en la Figura \ref{fig:mapa_conceptual}, resulta necesario considerar el proceso complementario dentro de un sistema de comunicación. La demodulación corresponde al proceso mediante el cual se recupera la información contenida en una señal modulada, constituyendo la etapa complementaria a la modulación. Su estudio permite comprender cómo la información originalmente transmitida puede ser extraída a partir de una señal que ha sido transformada para su propagación a través de un medio físico. En este sentido, la demodulación se aborda como un proceso de reconstrucción de la señal de información a partir de las características de la señal recibida \cite{haykin2001communication}.
+Una vez abordado el proceso de modulación y de acuerdo con la secuencia presentada en la Figura \ref{fig:mapa_conceptual}, tras el proceso de modulación resulta necesario considerar la etapa complementaria dentro del sistema de comunicación, encargada de procesar la señal recibida.
 
 \subsection{Definición de demodulación}
 
-El concepto de demodulación puede abordarse considerando el propósito general de recuperación de la información en un sistema de comunicación. Bajo esta premisa, se define como el proceso mediante el cual se extrae la señal mensaje a partir de una señal modulada, mediante la inversión del mecanismo de modulación \cite{haykin2001communication}.
+El concepto de demodulación se establece como el proceso mediante el cual se extrae la señal de información a partir de una señal previamente modulada. Según Haykin, esta se define como la recuperación de la señal mensaje a partir de la señal modulada, mediante la inversión del mecanismo de modulación \cite{haykin2001}.
 
-Adicionalmente, en \cite{proakis2007digital} se establece que la demodulación puede entenderse como un proceso de estimación, en el cual se busca recuperar la información original en presencia de posibles perturbaciones introducidas por el canal.
-
-Estas perspectivas permiten interpretar la demodulación tanto como un proceso de inversión de la modulación en condiciones ideales, como un problema de recuperación de información en escenarios no ideales, donde factores como el ruido y la distorsión afectan la señal recibida.
+Asimismo, en \cite{proakis2007digital} se plantea que la demodulación puede interpretarse como un proceso de estimación, en el cual se busca recuperar la información original considerando la posible presencia de perturbaciones introducidas por el canal de transmisión, tales como ruido y distorsión.
 
 
 
 \subsection{Demodulación de AM}
 
-En el caso de la modulación en amplitud, la información se encuentra contenida en la envolvente de la señal modulada. Por esta razón, los métodos de demodulación buscan recuperar dicha envolvente o reconstruir la señal mensaje a partir de la interacción con la portadora.
-
-Según \cite{lathi2009modern}, los métodos de demodulación de AM pueden clasificarse en técnicas no coherentes, como la detección de envolvente, y técnicas coherentes, las cuales requieren sincronización con la señal portadora. Esta distinción resulta fundamental, ya que define el nivel de complejidad y precisión del proceso de recuperación de la señal.
-
 \subsubsection{Demodulación por detección de envolvente}
 
-La detección de envolvente es un método de demodulación no coherente que se basa en la extracción de la envolvente de la señal modulada. Dado que en AM la envolvente de la señal coincide con la forma de la señal mensaje, este método permite recuperar la información sin necesidad de conocer la fase de la portadora.
+La detección de envolvente constituye un método de demodulación no coherente, basado en la extracción directa de la envolvente de la señal modulada. En el caso de la modulación en amplitud, la envolvente de la señal sigue la forma de la señal mensaje, lo que permite recuperar la información sin requerir sincronización en fase con la portadora.
 
-Desde un punto de vista conceptual, la señal modulada puede representarse como:
+A partir de la expresión de la señal modulada definida en (\ref{eq:am}), se observa que la envolvente está dada por el término \( A_c (1 + \mu m(t)) \), el cual contiene la información de la señal mensaje. En consecuencia, al extraer dicha envolvente se obtiene una versión escalada de \( m(t) \). Este comportamiento puede observarse en la Figura \ref{fig:am_tiempo_frecuencia}, donde la envolvente superior e inferior delimitan la variación de la señal modulada en el dominio del tiempo.
 
-\[
-s(t) = A_c \left(1 + \mu m(t)\right) \cos(2\pi f_c t)
-\]
-
-La envolvente de esta señal está dada por el término \( A_c (1 + \mu m(t)) \), el cual contiene la información de la señal mensaje. Por lo tanto, al extraer dicha envolvente, es posible obtener una versión escalada de \( m(t) \).
-
-De acuerdo con \cite{haykin2001communication}, este método presenta la ventaja de ser sencillo y no requerir sincronización con la portadora, aunque su desempeño se ve limitado en condiciones donde existe sobremodulación o presencia significativa de ruido.
-
-% SUGERENCIA DE FIGURA:
-% Señal AM mostrando claramente la envolvente y cómo esta sigue a m(t).
-% Muy importante para comprensión visual.
+De acuerdo con \cite{haykin2001}, este método presenta la ventaja de su simplicidad y de no requerir sincronización con la portadora. Sin embargo, su desempeño se ve limitado en condiciones donde existe sobremodulación o presencia significativa de ruido.
 
 \subsubsection{Demodulación coherente}
 
-La demodulación coherente consiste en multiplicar la señal modulada por una señal portadora local que se encuentra sincronizada en frecuencia y fase con la portadora original. Este proceso permite trasladar el contenido espectral de la señal hacia bajas frecuencias, facilitando la recuperación de la señal mensaje.
+Por otro lado, la demodulación coherente se basa en la multiplicación de la señal modulada por una señal portadora local que se encuentra sincronizada en frecuencia y fase con la portadora original. Este proceso permite trasladar el contenido espectral de la señal hacia bajas frecuencias, facilitando la recuperación de la señal mensaje.
 
 Matemáticamente, este proceso puede expresarse como:
 
-\[
+\begin{equation}
 r(t) = s(t) \cdot \cos(2\pi f_c t)
-\]
+\end{equation}
 
-Al sustituir la expresión de \( s(t) \), se obtiene una señal compuesta por términos de baja y alta frecuencia. Mediante la aplicación de un filtrado pasa bajas, es posible eliminar los componentes de alta frecuencia y recuperar la señal mensaje.
+donde \( r(t) \) corresponde a la señal resultante del proceso de multiplicación, \( s(t) \) representa la señal modulada y \( f_c \) define la frecuencia de la portadora. Al sustituir la expresión de \( s(t) \) definida en (\ref{eq:am}), se obtiene una señal compuesta por componentes de baja y alta frecuencia. Mediante la aplicación de un filtro pasa bajas, es posible eliminar los términos de alta frecuencia y recuperar la señal mensaje.
 
-Según \cite{proakis2007digital}, la demodulación coherente ofrece una mayor precisión en la recuperación de la señal en comparación con la detección de envolvente, especialmente en presencia de ruido. Sin embargo, requiere sincronización precisa con la portadora, lo que incrementa su complejidad.
+Según \cite{proakis2007digital}, la demodulación coherente ofrece una mayor precisión en la recuperación de la señal en comparación con la detección de envolvente, especialmente en presencia de ruido. Sin embargo, requiere una sincronización precisa con la portadora, lo que incrementa la complejidad del sistema.
 
-% SUGERENCIA DE FIGURA:
-% Diagrama de bloques: señal AM -> multiplicador -> filtro pasa bajas -> salida m(t)
+\subsubsection{Filtrado en demodulación}
+
+El filtrado constituye un proceso fundamental en la recuperación de señales, ya que permite modificar el contenido espectral de una señal discreta con el objetivo de atenuar o eliminar componentes de frecuencia no deseadas. En el contexto de la demodulación, este proceso resulta esencial para aislar la información de interés a partir de señales que contienen múltiples componentes en frecuencia.
+
+De acuerdo con \cite{oppenheim1997}, un filtro puede describirse mediante una ecuación en diferencias de la forma:
+
+\begin{equation}
+y[n] = \sum_{k=0}^{M} b_k x[n-k] - \sum_{k=1}^{N} a_k y[n-k]
+\end{equation}
+
+donde \( x[n] \) representa la señal de entrada, \( y[n] \) la señal de salida, y \( b_k \), \( a_k \) corresponden a los coeficientes del sistema. Esta formulación permite modelar tanto filtros de respuesta finita como infinita, dependiendo de la estructura del sistema.
+
+En procesos como la demodulación coherente, el filtrado se emplea para eliminar los componentes de alta frecuencia generados durante la multiplicación con la portadora, conservando únicamente las componentes de baja frecuencia asociadas a la señal mensaje. Este comportamiento puede observarse en la Figura \ref{fig:filtrado_demod}, donde se muestra la señal posterior a la multiplicación junto con la señal filtrada, evidenciando la eliminación de las oscilaciones de alta frecuencia y la recuperación de la envolvente de baja frecuencia.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\linewidth]{demod_filtrado.png}
+\caption{Proceso de filtrado en demodulación coherente. Fuente: Elaboración propia.}
+\label{fig:filtrado_demod}
+\end{figure}
+
+En este sentido, el filtro pasa bajas cumple una función fundamental, ya que permite el paso de las componentes espectrales en banda base mientras atenúa aquellas ubicadas en frecuencias superiores. Según Mitra, el comportamiento ideal de un filtro pasa bajas consiste en preservar completamente las frecuencias por debajo de una frecuencia de corte \( f_c \) y eliminar aquellas por encima de este valor \cite{mitra2006digital}. No obstante, en implementaciones reales existe una transición gradual entre las bandas de paso y rechazo, lo que introduce efectos adicionales en la señal filtrada.
+
+Estas consideraciones evidencian que el filtrado constituye un elemento esencial dentro del proceso de demodulación, al permitir separar la información útil de las componentes introducidas durante el procesamiento de la señal. Este principio resulta igualmente relevante en distintos esquemas de demodulación, independientemente de si la información se representa de forma continua o discreta.
+
 
 \subsection{Demodulación de señales digitales}
 
-En la modulación digital, la información se encuentra representada mediante un conjunto discreto de símbolos. Por lo tanto, el proceso de demodulación consiste en determinar cuál de los posibles símbolos fue transmitido a partir de la señal recibida.
+En la modulación digital, la información se representa mediante un conjunto discreto de símbolos, por lo que el proceso de demodulación consiste en determinar cuál de los posibles símbolos fue transmitido a partir de la señal recibida.
 
-De acuerdo con \cite{proakis2007digital}, este proceso puede entenderse como un problema de decisión, en el cual se selecciona el símbolo más probable en función de la señal observada. En contraste, \cite{haykin2001communication} enfatiza que la demodulación digital implica la reconstrucción de la secuencia de símbolos mediante el análisis de la señal en intervalos de tiempo discretos.
+En este contexto, \cite{proakis2007digital} describe la demodulación como un problema de decisión, en el cual se selecciona el símbolo más probable en función de la señal observada. Asimismo, \cite{haykin2001} establece que este proceso implica la reconstrucción de la secuencia de símbolos mediante el análisis de la señal en intervalos de tiempo discretos.
 
-Estas perspectivas resaltan que la demodulación digital no busca recuperar una forma de onda continua, sino identificar correctamente los símbolos transmitidos, lo cual constituye la base de los sistemas de comunicación digital.
+Estas definiciones permiten establecer que la demodulación digital no se orienta a la reconstrucción directa de una forma de onda continua, sino a la identificación de los símbolos transmitidos, a partir de los cuales se puede reconstruir la señal de información original.
 
 \subsubsection{Recuperación de símbolos en señales ASK/OOK}
 
 En las técnicas de modulación por amplitud digital, como ASK y OOK, la información se encuentra codificada en los niveles de amplitud de la señal portadora. Por lo tanto, la recuperación de símbolos consiste en analizar la amplitud de la señal recibida durante cada intervalo de símbolo.
 
-Según \cite{lathi2009modern}, este proceso implica observar la señal en instantes específicos y comparar su amplitud con valores de referencia asociados a cada símbolo posible. En el caso de OOK, donde existen únicamente dos estados, la señal presenta una estructura particularmente simple: presencia de portadora para un símbolo lógico uno y ausencia para un símbolo lógico cero.
+Según \cite{lathi2009modern}, este proceso implica observar la señal en instantes específicos y comparar su amplitud con valores de referencia asociados a cada símbolo posible. En el caso de OOK, donde existen únicamente dos estados, la señal presenta una estructura particularmente simple,en donde la presencia de la portadora se asocia a un símbolo lógico uno, mientras que su ausencia corresponde a un símbolo lógico cero. 
 
 Sin embargo, la presencia de ruido y distorsión puede alterar la amplitud de la señal recibida, lo que introduce incertidumbre en el proceso de recuperación. Esto hace necesario definir criterios de decisión adecuados para garantizar una correcta interpretación de los símbolos.
 
-% SUGERENCIA DE FIGURA:
-% Señal OOK en el tiempo con intervalos de símbolo marcados.
-
 \subsubsection{Umbral de decisión}
 
-El umbral de decisión es un criterio utilizado para determinar el símbolo transmitido a partir de la señal recibida. En el caso de modulación binaria como OOK, este proceso consiste en comparar la amplitud de la señal con un valor de referencia.
+El umbral de decisión (threshold) es un criterio utilizado para determinar el símbolo transmitido a partir de la señal recibida. En el caso de modulación binaria como OOK, este proceso consiste en comparar la amplitud de la señal con un valor de referencia.
 
 Si se denota la señal recibida como \( r(t) \), el proceso de decisión puede representarse como:
 
-\[
+\begin{equation}
 \hat{b} =
 \begin{cases}
 1, & \text{si } r(t) \geq \gamma \\
 0, & \text{si } r(t) < \gamma
 \end{cases}
-\]
+\label{eq:decision_threshold}
+\end{equation}
 
-donde \( \gamma \) representa el umbral de decisión y \( \hat{b} \) el símbolo estimado. Este criterio permite clasificar la señal en uno de los posibles valores discretos.
+donde \( \gamma \) representa el umbral de decisión (threshold) y \( \hat{b} \) el símbolo estimado. Este criterio permite clasificar la señal en uno de los posibles valores discretos.
 
-De acuerdo con \cite{proakis2007digital}, la selección del umbral adecuado resulta fundamental para minimizar errores en la detección, especialmente en presencia de ruido. Por su parte, \cite{haykin2001communication} señala que el umbral óptimo depende de las características estadísticas del canal y de la señal.
+De acuerdo con \cite{proakis2007digital}, la selección del umbral adecuado resulta fundamental para minimizar errores en la detección, especialmente en presencia de ruido. Por su parte, \cite{haykin2001} complementa señalando que el umbral óptimo depende de las características de la señal y del tipo de transmisión.
 
-Estas consideraciones evidencian que la demodulación digital no solo implica la observación de la señal, sino también la aplicación de criterios de decisión que permitan interpretar correctamente la información transmitida.
+Estas consideraciones permiten establecer que el proceso de demodulación digital en esquemas como ASK y OOK se fundamenta en la evaluación de la señal recibida mediante criterios de decisión, los cuales condicionan directamente la correcta recuperación de los símbolos transmitidos.
 
-
-
-
-
-\section{Implementación digital de señales}
-
-La implementación digital de señales constituye una etapa fundamental en el procesamiento moderno de información, ya que permite trasladar los modelos definidos en el dominio continuo hacia entornos computacionales discretos. Este proceso implica no solo la representación de las señales en forma digital, sino también su manipulación mediante algoritmos que deben considerar limitaciones propias de los sistemas numéricos.
-
-\subsection{Representación discreta de señales}
-
-La representación discreta de señales se obtiene a partir del proceso de muestreo, mediante el cual una señal continua \( x(t) \) es transformada en una secuencia discreta \( x[n] \), definida como:
-
-\[
-x[n] = x(nT_s)
-\]
-
-donde \( T_s \) es el periodo de muestreo. Según \cite{oppenheim1999signals}, esta transformación permite analizar señales mediante herramientas digitales, siempre que la frecuencia de muestreo sea adecuada para preservar la información original.
-
-Sin embargo, \cite{mitra2006digital} señala que la representación digital no se limita al muestreo, sino que también involucra la cuantización, proceso mediante el cual los valores de amplitud son aproximados a un conjunto finito de niveles. Esta aproximación introduce errores inevitables que afectan la fidelidad de la señal.
-
-Estas perspectivas evidencian que la representación discreta es una aproximación del comportamiento continuo de la señal, cuya precisión depende tanto del muestreo como de la resolución numérica empleada.
-
-% SUGERENCIA DE FIGURA:
-% Señal continua vs señal discreta (muestras)
-
-\subsection{Procesamiento por bloques}
-
-El procesamiento por bloques consiste en segmentar una señal discreta en conjuntos finitos de muestras, los cuales son procesados de manera independiente. Este enfoque permite manejar señales de longitud arbitraria mediante estructuras computacionales limitadas.
-
-De acuerdo con \cite{smith1997dsp}, el procesamiento por bloques es ampliamente utilizado en sistemas digitales debido a su eficiencia computacional y su compatibilidad con arquitecturas de memoria finita. Por otro lado, \cite{oppenheim1999signals} destaca que este enfoque introduce desafíos asociados a la continuidad entre bloques, especialmente en operaciones como el filtrado.
-
-Desde una perspectiva ingenieril, el procesamiento por bloques permite implementar algoritmos complejos de manera eficiente, aunque requiere considerar efectos adicionales como la segmentación de la señal y posibles discontinuidades en los límites de cada bloque.
-
-% SUGERENCIA DE FIGURA:
-% Señal dividida en bloques consecutivos
-
-\subsection{Aproximaciones y limitaciones numéricas}
-
-La implementación digital de señales implica el uso de representaciones numéricas finitas, lo que introduce diversas fuentes de error. Entre las más relevantes se encuentran la cuantización, el redondeo y la saturación, las cuales afectan directamente la precisión de los resultados.
-
-Según \cite{mitra2006digital}, el error de cuantización puede modelarse como una señal de ruido aditiva, lo que permite analizar su impacto sobre el sistema. En contraste, \cite{oppenheim1999signals} enfatiza que los errores de redondeo, especialmente en sistemas de punto fijo, pueden acumularse a lo largo de múltiples operaciones, degradando progresivamente la señal.
-
-Estas limitaciones reflejan la necesidad de establecer compromisos entre precisión numérica y complejidad computacional. En consecuencia, el diseño de sistemas digitales de procesamiento de señales debe considerar cuidadosamente estos factores para garantizar un desempeño adecuado.
-
-\subsection{Filtrado digital}
-
-El filtrado digital es un proceso mediante el cual se modifica el contenido espectral de una señal discreta, permitiendo atenuar o eliminar componentes de frecuencia no deseadas. Este proceso resulta esencial en múltiples aplicaciones, incluyendo la recuperación de señales en etapas de demodulación.
-
-De acuerdo con \cite{oppenheim1999signals}, un filtro digital puede describirse mediante una ecuación en diferencias de la forma:
-
-\[
-y[n] = \sum_{k=0}^{M} b_k x[n-k] - \sum_{k=1}^{N} a_k y[n-k]
-\]
-
-donde \( x[n] \) es la señal de entrada, \( y[n] \) la señal de salida, y \( b_k \), \( a_k \) son los coeficientes del sistema. Esta formulación permite modelar tanto filtros finitos como infinitos en respuesta impulsional.
-
-Por su parte, \cite{smith1997dsp} destaca que el filtrado digital constituye una herramienta fundamental para la eliminación de ruido y la recuperación de información útil en sistemas de comunicación. En este contexto, su aplicación resulta particularmente relevante en procesos de demodulación, donde se requiere aislar la señal de interés a partir de componentes mezclados en frecuencia.
-
-% SUGERENCIA DE FIGURA:
-% Diagrama de filtro digital (entrada → sistema → salida)
-
-\subsubsection{Filtro pasa bajas}
-
-El filtro pasa bajas es un tipo de filtro digital que permite el paso de componentes de baja frecuencia mientras atenúa las componentes de alta frecuencia. Este comportamiento lo convierte en una herramienta esencial en sistemas de demodulación, donde la información suele encontrarse en la banda base.
-
-Según \cite{oppenheim1999signals}, el comportamiento ideal de un filtro pasa bajas consiste en preservar completamente las frecuencias por debajo de una frecuencia de corte \( f_c \) y eliminar aquellas por encima de este valor. No obstante, \cite{mitra2006digital} señala que en implementaciones reales existe una transición gradual entre las bandas de paso y rechazo, lo que introduce efectos adicionales en la señal filtrada.
-
-En procesos como la demodulación coherente, el filtro pasa bajas permite eliminar los componentes de alta frecuencia generados durante la mezcla con la portadora, conservando únicamente la información original. Esta función lo convierte en un elemento esencial dentro de la cadena de procesamiento de señales.
-
-% SUGERENCIA DE FIGURA:
-% Respuesta en frecuencia de un filtro pasa bajas
 
 
 \section{Sistemas embebidos para procesamiento de señales}
 
-Los sistemas embebidos constituyen una plataforma fundamental para la ejecución de algoritmos de procesamiento de señales en entornos físicos, permitiendo trasladar los modelos teóricos hacia aplicaciones reales. A diferencia de los sistemas de propósito general, estos sistemas se caracterizan por operar bajo restricciones específicas de hardware y tiempo, lo que condiciona directamente la forma en que se implementan las técnicas de procesamiento de señales.
-
-En este contexto, el análisis de los sistemas embebidos no se limita a su estructura, sino que se enfoca en comprender cómo sus características influyen en el diseño y ejecución de algoritmos asociados a procesos como la modulación y la demodulación.
+De acuerdo con la secuencia presentada en la Figura \ref{fig:mapa_conceptual}, tras abordar los fundamentos del procesamiento de señales, así como los procesos de modulación y demodulación, resulta necesario considerar el entorno en el cual estos algoritmos son implementados. En este contexto, los sistemas embebidos constituyen una plataforma fundamental para la ejecución de algoritmos de procesamiento de señales en entornos físicos, permitiendo trasladar los modelos teóricos hacia aplicaciones reales \cite{wolf2012computers}.
 
 \subsection{Definición de sistema embebido}
 
-El concepto de sistema embebido ha sido abordado desde diversas perspectivas. Según \cite{wolf2012computers}, un sistema embebido puede definirse como un sistema computacional diseñado para realizar una función específica dentro de un sistema mayor, operando bajo restricciones de recursos y con un comportamiento generalmente determinado por su aplicación.
+El concepto de sistema embebido ha sido abordado desde diversas perspectivas. Según Wolf, un sistema embebido puede definirse como un sistema computacional diseñado para realizar una función específica dentro de un sistema mayor, operando bajo restricciones de recursos y con un comportamiento generalmente determinado por su aplicación \cite{wolf2012computers}.
 
-Por otro lado, \cite{noergaard2005embedded} plantea que los sistemas embebidos se caracterizan por la integración de hardware y software en un entorno optimizado para cumplir tareas particulares, destacando la estrecha relación entre ambos componentes.
+Por otro lado, Noergaard plantea que los sistemas embebidos se caracterizan por la integración de hardware y software en un entorno optimizado para cumplir tareas particulares, destacando la estrecha relación entre ambos componentes \cite{noergaard2005embedded}.
 
 Estas definiciones coinciden en que un sistema embebido no es un sistema de propósito general, sino una solución orientada a una función específica, lo que implica que su diseño y operación están fuertemente condicionados por los requerimientos de la aplicación.
 
@@ -463,31 +393,16 @@ Estas definiciones coinciden en que un sistema embebido no es un sistema de prop
 
 Los sistemas embebidos operan bajo limitaciones inherentes a su arquitectura, las cuales influyen directamente en la implementación de algoritmos de procesamiento de señales. Entre las principales restricciones se encuentran la capacidad de procesamiento, la memoria disponible y la precisión numérica.
 
-De acuerdo con \cite{wolf2012computers}, la capacidad de procesamiento determina la cantidad de operaciones que pueden ejecutarse en un intervalo de tiempo determinado, lo que condiciona la complejidad de los algoritmos que pueden ser implementados. En paralelo, la memoria disponible limita el tamaño de los datos y estructuras que pueden manejarse, afectando directamente enfoques como el procesamiento por bloques.
+De acuerdo con \cite{wolf2012computers}, la capacidad de procesamiento determina la cantidad de operaciones que pueden ejecutarse en un intervalo de tiempo determinado, lo que condiciona la complejidad de los algoritmos que pueden ser implementados. En paralelo, la memoria disponible limita el tamaño de los datos y estructuras que pueden manejarse, afectando directamente estrategias como el procesamiento por bloques, el cual consiste en segmentar la señal en conjuntos finitos de muestras para su procesamiento independiente, permitiendo manejar señales de longitud arbitraria dentro de arquitecturas con memoria finita. Según Smith, este enfoque resulta eficiente desde el punto de vista computacional y se adapta naturalmente a sistemas con recursos limitados \cite{smith1997dsp}.
 
-Por su parte, \cite{mitra2006digital} señala que la precisión numérica, especialmente en sistemas de punto fijo, introduce errores asociados a la representación de valores, los cuales pueden impactar el comportamiento de los algoritmos de procesamiento de señales.
+Por su parte, \cite{mitra2006digital} señala que la precisión numérica, especialmente en sistemas de punto fijo, introduce errores asociados a la representación de valores. Estos errores, provocados por procesos como la cuantización, el redondeo y la saturación, generan desviaciones respecto al valor real de la señal, las cuales pueden acumularse a lo largo de múltiples operaciones y degradar progresivamente la calidad del procesamiento \cite{oppenheim1997}.
 
-Estas restricciones evidencian que la implementación de técnicas de procesamiento de señales en sistemas embebidos no depende únicamente del modelo teórico, sino también de las capacidades del entorno en el cual se ejecutan.
-
+Estas restricciones evidencian que la implementación de técnicas de procesamiento de señales en sistemas embebidos no depende únicamente del modelo teórico, sino también de las capacidades del entorno en el cual se ejecutan, lo que obliga a establecer compromisos entre precisión numérica, uso de memoria y complejidad computacional.
 \subsection{Procesamiento en tiempo real}
 
-El procesamiento en tiempo real es una característica fundamental en muchos sistemas embebidos, especialmente aquellos orientados al tratamiento de señales. En este contexto, un sistema se considera en tiempo real cuando es capaz de procesar la información dentro de un intervalo de tiempo determinado, cumpliendo con restricciones temporales estrictas.
+El procesamiento en tiempo real es una característica fundamental en muchos sistemas embebidos, especialmente aquellos orientados al tratamiento de señales. Un sistema se considera en tiempo real cuando es capaz de procesar la información dentro de un intervalo de tiempo determinado, cumpliendo con restricciones temporales estrictas.
 
-Según \cite{kopetz2011real}, los sistemas en tiempo real no solo deben producir resultados correctos, sino hacerlo dentro de un tiempo específico, lo que introduce una dimensión temporal en el diseño de los algoritmos. En contraste, \cite{noergaard2005embedded} destaca que el incumplimiento de estas restricciones puede comprometer el funcionamiento del sistema, incluso si los resultados son correctos desde el punto de vista lógico.
+De acuerdo con Kopetz, los sistemas en tiempo real se caracterizan no solo por la corrección de sus resultados, sino por la capacidad de producirlos dentro de un intervalo de tiempo previamente definido, lo que introduce una restricción temporal directa en el diseño de los algoritmos \cite{kopetz2011real}. En el caso del procesamiento de señales, esto implica que operaciones como la modulación, demodulación y filtrado deben ejecutarse a una velocidad suficiente para seguir el ritmo de adquisición de datos, lo que impone límites sobre la complejidad de los algoritmos utilizados.
 
-En el caso del procesamiento de señales, esto implica que operaciones como la modulación, demodulación y filtrado deben ejecutarse a una velocidad suficiente para seguir el ritmo de adquisición de datos, lo que impone límites sobre la complejidad de los algoritmos utilizados.
 
-% SUGERENCIA DE FIGURA:
-% Línea de tiempo mostrando adquisición → procesamiento → salida en tiempo real
-
-\subsection{Consideraciones de diseño en DSP embebido}
-
-El diseño de sistemas de procesamiento digital de señales en entornos embebidos requiere considerar de manera conjunta las restricciones de hardware y los requisitos de tiempo real. Esto implica establecer compromisos entre la precisión de los algoritmos y el costo computacional asociado a su implementación.
-
-De acuerdo con \cite{mitra2006digital}, muchos algoritmos de procesamiento de señales deben ser adaptados para reducir su complejidad, lo que puede implicar simplificaciones que afectan la precisión de los resultados. Por otro lado, \cite{smith1997dsp} destaca que la eficiencia computacional se convierte en un criterio central en el diseño, ya que permite maximizar el desempeño del sistema dentro de sus limitaciones.
-
-En este contexto, el diseño de algoritmos en sistemas embebidos no consiste únicamente en implementar modelos teóricos, sino en adaptarlos de manera que puedan ejecutarse de forma eficiente y confiable. Esto implica evaluar continuamente el impacto de decisiones como el tipo de representación numérica, la estructura de procesamiento y la complejidad de las operaciones.
-
-Estas consideraciones tienen implicaciones directas en la implementación de técnicas de modulación y demodulación, ya que determinan cómo se materializan los procesos analizados previamente. En consecuencia, el diseño en DSP embebido puede entenderse como un proceso de adaptación en el cual se busca preservar la funcionalidad del modelo teórico dentro de un entorno con restricciones definidas.
-
-En conjunto, los conceptos desarrollados a lo largo de este capítulo permiten establecer una comprensión integral del procesamiento de señales en el contexto de sistemas de comunicación. Desde la caracterización de las señales y su representación en distintos dominios, hasta los procesos de modulación y demodulación, se ha definido el marco teórico necesario para entender cómo la información puede ser transformada, transmitida y recuperada. Asimismo, la transición hacia la implementación digital y su ejecución en sistemas embebidos ha evidenciado la influencia de factores como la discretización, las limitaciones numéricas y las restricciones de hardware en el diseño de algoritmos de procesamiento de señales. Esta integración conceptual permite fundamentar el análisis de soluciones orientadas a la implementación de técnicas de modulación y demodulación en entornos reales, estableciendo así la base para el desarrollo del enfoque metodológico presentado en el capítulo siguiente.
+En síntesis, a lo largo de este capítulo se han establecido los fundamentos del procesamiento de señales, abordando su representación, así como los principios de modulación y demodulación tanto en esquemas analógicos como digitales. Adicionalmente, se han considerado los elementos asociados a su implementación en sistemas embebidos, destacando la influencia de las restricciones de hardware y de tiempo real sobre dichos procesos. Estos conceptos constituyen la base teórica sobre la cual se desarrollarán los algoritmos y técnicas que serán implementados en el contexto de este trabajo.
