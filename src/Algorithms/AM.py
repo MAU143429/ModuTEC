@@ -1,6 +1,7 @@
 import math
 import struct
 
+PARAM_ORDER = ["f_signal", "f_carrier", "mu"]
 
 class State:
     """Estado para AM (mantiene continuidad entre frames)."""

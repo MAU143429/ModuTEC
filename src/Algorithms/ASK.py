@@ -1,6 +1,7 @@
 import math
 import struct
 
+PARAM_ORDER = ["seed", "f_carrier", "threshold"]
 
 def _clamp(x, lo, hi):
     return lo if x < lo else hi if x > hi else x
