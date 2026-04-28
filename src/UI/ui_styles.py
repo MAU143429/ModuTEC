@@ -5,30 +5,72 @@
 DARK_WIDGET = "background-color: #1e1e1e; color: #ecf0f1;"
 
 DARK_INPUT = (
-    "background-color: #121212; color: #ecf0f1;"
-    "border: 1px solid #444; padding: 2px 4px;"
-    "font-family: Consolas, monospace; font-size: 12px;"
+    "QDoubleSpinBox {"
+    "  background-color: #2d2d2d;"      # mismo color base que botones
+    "  color: #e6e6e6;"
+    "  border: 1px solid #3c3c3c;"
+    "  border-radius: 4px;"
+    "  padding: 2px 6px;"
+    "  font-size: 12px;"
+    "}"
+    
+    "QDoubleSpinBox:hover {"
+    "  border: 1px solid #555;"
+    "}"
+    
+    "QDoubleSpinBox:focus {"
+    "  border: 1px solid #005f99;"
+    "  background-color: #333333;"
+    "}"
+    
+    "QDoubleSpinBox::up-button, QDoubleSpinBox::down-button {"
+    "  width: 14px;"
+    "  background: transparent;"
+    "}"
+    
+    "QDoubleSpinBox::up-arrow {"
+    "  image: url(src/assets/arrow_up.png);"   # opcional
+    "  width: 8px;"
+    "  height: 8px;"
+    "}"
+    
+    "QDoubleSpinBox::down-arrow {"
+    "  image: url(src/assets/arrow_down.png);" # opcional
+    "  width: 8px;"
+    "  height: 8px;"
+    "}"
 )
 
 DARK_BTN = (
     "QPushButton {"
-    "  background-color: #2c3e50; color: #ecf0f1;"
-    "  border: 1px solid #555; padding: 4px 10px;"
+    "  background-color: #2d2d2d;"
+    "  color: #e6e6e6;"
+    "  border: 1px solid #3c3c3c;"
+    "  border-radius: 6px;"
+    "  padding: 6px 12px;"
     "  font-size: 12px;"
     "}"
-    "QPushButton:hover   { background-color: #3d5166; }"
-    "QPushButton:pressed { background-color: #1a252f; }"
-    "QPushButton:disabled{ color: #666; background-color: #222; }"
+    
+        "QPushButton:hover {"
+    "  padding: 8px;"
+    "}"
+    
+    "QPushButton:pressed {"
+    "  background-color: #005f99;"
+    "}"
 )
 
 DARK_BTN_GREEN = (
     "QPushButton {"
-    "  background-color: #1a6b3a; color: #ecf0f1;"
-    "  border: 1px solid #2ecc71; padding: 4px 10px;"
-    "  font-size: 12px;"
+    "  background-color: #007acc;"
+    "  color: white;"
+    "  border-radius: 6px;"
+    "  padding: 6px 12px;"
+    "  font-weight: bold;"
     "}"
-    "QPushButton:hover   { background-color: #25a058; }"
-    "QPushButton:pressed { background-color: #0f4525; }"
+    "QPushButton:hover {"
+    "  background-color: #2899f5;"
+    "}"
 )
 
 DARK_BTN_RED = (
@@ -43,15 +85,40 @@ DARK_BTN_RED = (
 
 DARK_COMBO = (
     "QComboBox {"
-    "  background-color: #121212; color: #ecf0f1;"
-    "  border: 1px solid #444; padding: 2px 6px;"
+    "  background-color: #2d2d2d;"
+    "  color: #e6e6e6;"
+    "  border: 1px solid #3c3c3c;"
+    "  border-radius: 6px;"
+    "  padding: 4px 10px;"
     "  font-size: 12px;"
     "}"
-    "QComboBox QAbstractItemView {"
-    "  background-color: #1e1e1e; color: #ecf0f1;"
-    "  selection-background-color: #2c3e50;"
+    
+    "QComboBox:hover {"
+    "  border: 1px solid #555;"
     "}"
-    "QComboBox::drop-down { border: none; }"
+    
+    "QComboBox:focus {"
+    "  border: 1px solid #005f99;"
+    "}"
+    
+    "QComboBox::drop-down {"
+    "  border: none;"
+    "  width: 20px;"
+    "}"
+    
+    "QComboBox::down-arrow {"
+    "  image: url(assets/icons/arrow_down.png);"  # opcional
+    "  width: 10px;"
+    "  height: 10px;"
+    "}"
+    
+    "QComboBox QAbstractItemView {"
+    "  background-color: #1e1e1e;"
+    "  color: #ecf0f1;"
+    "  border: 1px solid #3c3c3c;"
+    "  selection-background-color: #005f99;"
+    "  selection-color: #ffffff;"
+    "}"
 )
 
 GROUPBOX_STYLE = (

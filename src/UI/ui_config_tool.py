@@ -8,14 +8,13 @@ import serial
 import serial.tools.list_ports
 
 from PyQt5 import QtCore, QtWidgets, QtGui
-
+from PyQt5.QtGui import QIcon
 from ui_styles import (
     DARK_BTN, DARK_INPUT, DARK_COMBO, GROUPBOX_STYLE, DIALOG_BG
 )
 
 
 class ConfigToolDialog(QtWidgets.QDialog):
-    """Pop-up for building / uploading a new config.json."""
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -27,6 +26,9 @@ class ConfigToolDialog(QtWidgets.QDialog):
         self.tech_paths = [None, None]
         self._last_config_path = None
         self._last_py_paths    = [None, None]
+        self.setWindowFlags(
+            self.windowFlags() & ~QtCore.Qt.WindowContextHelpButtonHint
+        )
 
         root = QtWidgets.QVBoxLayout(self)
         root.setContentsMargins(20, 16, 20, 16)
@@ -61,14 +63,16 @@ class ConfigToolDialog(QtWidgets.QDialog):
         btn_row.setSpacing(16)
         btn_row.addStretch()
 
-        self.btn_create = QtWidgets.QPushButton("💾  Crear archivo de configuración")
-        self.btn_create.setStyleSheet(self._big_btn_style("#2c3e50", "#3d5166"))
+        self.btn_create = QtWidgets.QPushButton(" Crear archivo de configuración")
+        self.btn_create.setIcon(QIcon("src/assets/create.png"))
+        self.btn_create.setStyleSheet(DARK_BTN)
         self.btn_create.setFixedHeight(38)
         self.btn_create.clicked.connect(self.create_config)
         btn_row.addWidget(self.btn_create)
 
-        self.btn_upload = QtWidgets.QPushButton("📤  Cargar nueva configuración")
-        self.btn_upload.setStyleSheet(self._big_btn_style("#1a4f6e", "#1f6a9a"))
+        self.btn_upload = QtWidgets.QPushButton(" Cargar nueva configuración")
+        self.btn_upload.setIcon(QIcon("src/assets/upload.png"))
+        self.btn_upload.setStyleSheet(DARK_BTN)
         self.btn_upload.setFixedHeight(38)
         self.btn_upload.setEnabled(False)
         self.btn_upload.clicked.connect(self.upload_config)
@@ -83,17 +87,6 @@ class ConfigToolDialog(QtWidgets.QDialog):
         self.status_lbl.setStyleSheet("color: #95a5a6; font-size: 12px;")
         root.addWidget(self.status_lbl)
 
-    # ── Style helpers ─────────────────────────────────────────────
-    @staticmethod
-    def _big_btn_style(base, hover):
-        return (
-            f"QPushButton {{ background-color: {base}; color: #ecf0f1;"
-            f"  border: 1px solid #555; padding: 6px 20px;"
-            f"  font-size: 13px; font-weight: bold; }}"
-            f"QPushButton:hover   {{ background-color: {hover}; }}"
-            f"QPushButton:pressed {{ background-color: #111; }}"
-            f"QPushButton:disabled{{ color: #555; background-color: #1a1a1a; }}"
-        )
 
     @staticmethod
     def _section_label(text):
@@ -106,7 +99,7 @@ class ConfigToolDialog(QtWidgets.QDialog):
 
     # ── Tech panel ────────────────────────────────────────────────
     def _make_tech_panel(self, idx):
-        panel = QtWidgets.QGroupBox(f"  Técnica {idx + 1}")
+        panel = QtWidgets.QGroupBox(f"  Technique {idx + 1}")
         panel.setStyleSheet(GROUPBOX_STYLE)
         lay = QtWidgets.QVBoxLayout(panel)
         lay.setSpacing(12)
@@ -114,14 +107,15 @@ class ConfigToolDialog(QtWidgets.QDialog):
 
         # Load button + filename
         load_row = QtWidgets.QHBoxLayout()
-        btn_load = QtWidgets.QPushButton("📂  Cargar archivo .py")
+        btn_load = QtWidgets.QPushButton(" Load .py file")
+        btn_load.setIcon(QIcon("src/assets/pyicon.png"))
         btn_load.setStyleSheet(DARK_BTN)
         btn_load.setFixedHeight(32)
         btn_load.clicked.connect(lambda _, i=idx: self.load_technique(i))
         load_row.addWidget(btn_load)
         lay.addLayout(load_row)
 
-        fn_lbl = QtWidgets.QLabel("— sin archivo cargado —")
+        fn_lbl = QtWidgets.QLabel("— file not loaded —")
         fn_lbl.setStyleSheet(
             "color: #555; font-size: 12px; font-style: italic;"
         )
@@ -136,10 +130,10 @@ class ConfigToolDialog(QtWidgets.QDialog):
 
         # Type selector
         type_row = QtWidgets.QHBoxLayout()
-        type_lbl = QtWidgets.QLabel("Tipo de técnica:")
+        type_lbl = QtWidgets.QLabel("Type of technique:")
         type_lbl.setStyleSheet("color: #95a5a6; font-size: 13px;")
         type_combo = QtWidgets.QComboBox()
-        type_combo.addItems(["analog", "digital"])
+        type_combo.addItems(["Analog", "Digital"])
         type_combo.setStyleSheet(DARK_COMBO)
         type_combo.setFixedHeight(28)
         type_row.addWidget(type_lbl)
@@ -148,14 +142,15 @@ class ConfigToolDialog(QtWidgets.QDialog):
         lay.addLayout(type_row)
 
         # Variables header
-        lay.addWidget(self._section_label("Parámetros y rangos"))
+        lay.addWidget(self._section_label("Parameters and ranges"))
 
         # Variable rows
         var_widgets = []
         for v in range(3):
             var_frame = QtWidgets.QFrame()
             var_frame.setStyleSheet(
-                "background-color: #181818; border: 1px solid #2a2a2a;"
+                "background: transparent;"
+                "border: 1px solid #2a2a2a;"
                 "border-radius: 4px;"
             )
             vf_lay = QtWidgets.QVBoxLayout(var_frame)
@@ -199,6 +194,7 @@ class ConfigToolDialog(QtWidgets.QDialog):
             lay.addWidget(var_frame)
             var_widgets.append((v_label, spin_min, spin_max))
 
+        
         lay.addStretch()
 
         panel._fn_lbl      = fn_lbl
@@ -208,13 +204,13 @@ class ConfigToolDialog(QtWidgets.QDialog):
 
     # ── System params panel ───────────────────────────────────────
     def _make_sys_panel(self):
-        panel = QtWidgets.QGroupBox("  Sistema")
+        panel = QtWidgets.QGroupBox("  System")
         panel.setStyleSheet(GROUPBOX_STYLE)
         lay = QtWidgets.QVBoxLayout(panel)
         lay.setContentsMargins(14, 18, 14, 14)
         lay.setSpacing(10)
 
-        lay.addWidget(self._section_label("Parámetros del sistema"))
+        lay.addWidget(self._section_label("System parameters"))
 
         def mk_field(label_text, lo, hi, val, dec=0):
             row = QtWidgets.QHBoxLayout()
@@ -232,13 +228,13 @@ class ConfigToolDialog(QtWidgets.QDialog):
             return row, sp
 
         fields_def = [
-            ("fs",          1000,   96000,  5000,   0),
-            ("n",           32,     4096,   256,    0),
-            ("amp",         1,      32767,  14000,  0),
-            ("baud",        9600,   921600, 115200, 0),
-            ("bit_rate",    1,      100000, 400,    1),
-            ("pattern_len", 4,      1024,   32,     0),
-            ("alpha",       0.001,  1.0,    0.08,   3),
+            ("Sample Rate",    1000,   96000,  5000,   0),
+            ("Frames",         32,     4096,   256,    0),
+            ("Amplitude",      1,      32767,  14000,  0),
+            ("Baud Rate",      9600,   921600, 115200, 0),
+            ("Bit Rate",       1,      100000, 400,    1),
+            ("Pattern Length", 4,      1024,   32,     0),
+            ("Alpha",          0.001,  1.0,    0.08,   3),
         ]
 
         self._sys_spins = {}
@@ -246,30 +242,43 @@ class ConfigToolDialog(QtWidgets.QDialog):
             row, sp = mk_field(name, lo, hi, val, dec)
             lay.addLayout(row)
             self._sys_spins[name] = sp
+            
+        
+        logo = QtWidgets.QLabel()
+        pixmap = QtGui.QPixmap("src/assets/logo.png") 
+        pixmap = pixmap.scaled(
+            170, 170,  # tamaño deseado
+            QtCore.Qt.KeepAspectRatio,
+            QtCore.Qt.SmoothTransformation
+        )
+        logo.setPixmap(pixmap)
+        logo.setAlignment(QtCore.Qt.AlignCenter)
 
+        lay.addWidget(logo)
+        
         lay.addStretch()
         return panel
 
     # ── Convenience refs ──────────────────────────────────────────
     @property
-    def sp_fs(self):          return self._sys_spins["fs"]
+    def sp_fs(self):          return self._sys_spins["Sample Rate"]
     @property
-    def sp_n(self):           return self._sys_spins["n"]
+    def sp_n(self):           return self._sys_spins["Frames"]
     @property
-    def sp_amp(self):         return self._sys_spins["amp"]
+    def sp_amp(self):         return self._sys_spins["Amplitude"]
     @property
-    def sp_baud(self):        return self._sys_spins["baud"]
+    def sp_baud(self):        return self._sys_spins["Baud Rate"]
     @property
-    def sp_bitrate(self):     return self._sys_spins["bit_rate"]
+    def sp_bitrate(self):     return self._sys_spins["Bit Rate"]
     @property
-    def sp_pattern_len(self): return self._sys_spins["pattern_len"]
+    def sp_pattern_len(self): return self._sys_spins["Pattern Length"]
     @property
-    def sp_alpha(self):       return self._sys_spins["alpha"]
+    def sp_alpha(self):       return self._sys_spins["Alpha"]
 
     # ── Load technique file ───────────────────────────────────────
     def load_technique(self, idx):
         path, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self, f"Cargar técnica {idx+1}", "", "Python files (*.py)"
+            self, f"Load technique {idx+1}", "", "Python files (*.py)"
         )
         if not path:
             return
@@ -278,8 +287,8 @@ class ConfigToolDialog(QtWidgets.QDialog):
         if param_names is None:
             QtWidgets.QMessageBox.warning(
                 self, "Error",
-                "No se pudo extraer los parámetros de compute_frame().\n"
-                "Asegúrate de que el archivo sigue la estructura ModuTEC."
+                "It could not extract parameters from compute_frame().\n"
+                "Make sure the file follows the ModuTEC structure."
             )
             return
 
@@ -301,7 +310,7 @@ class ConfigToolDialog(QtWidgets.QDialog):
             "file":   os.path.basename(path),
             "params": param_names,
         }
-        self.status_lbl.setText(f"Técnica {idx+1} cargada: {os.path.basename(path)}")
+        self.status_lbl.setText(f"Technique {idx+1} loaded: {os.path.basename(path)}")
 
     def _extract_params(self, path):
         try:
@@ -328,8 +337,8 @@ class ConfigToolDialog(QtWidgets.QDialog):
     def create_config(self):
         if not self.tech_data[0] or not self.tech_data[1]:
             QtWidgets.QMessageBox.warning(
-                self, "Faltan técnicas",
-                "Debes cargar los dos archivos .py antes de crear la configuración."
+                self, "Missing techniques",
+                "You must load both .py files before creating the configuration."
             )
             return
 
@@ -380,23 +389,23 @@ class ConfigToolDialog(QtWidgets.QDialog):
             with open(save_path, "w", encoding="utf-8") as f:
                 json.dump(config, f, indent=2)
         except Exception as e:
-            QtWidgets.QMessageBox.critical(self, "Error", f"No se pudo guardar:\n{e}")
+            QtWidgets.QMessageBox.critical(self, "Error", f"Could not save:\n{e}")
             return
 
         self._last_config_path = save_path
         self._last_py_paths    = list(self.tech_paths)
         self.btn_upload.setEnabled(True)
-        self.status_lbl.setText(f"✔  Configuración guardada en: {save_path}")
+        self.status_lbl.setText(f"✔  Configuration saved to: {save_path}")
 
     # ── Upload via mpremote ───────────────────────────────────────
     def upload_config(self):
         ports = [p.device for p in serial.tools.list_ports.comports()]
         if not ports:
-            QtWidgets.QMessageBox.warning(self, "Sin puertos", "No se detectaron puertos COM.")
+            QtWidgets.QMessageBox.warning(self, "No ports", "No COM ports detected.")
             return
 
         port, ok = QtWidgets.QInputDialog.getItem(
-            self, "Seleccionar puerto", "Puerto COM del dispositivo:", ports, 0, False
+            self, "Select port", "COM port of the device:", ports, 0, False
         )
         if not ok:
             return
@@ -406,15 +415,15 @@ class ConfigToolDialog(QtWidgets.QDialog):
         py2      = self._last_py_paths[1]
 
         if not cfg_path or not py1 or not py2:
-            QtWidgets.QMessageBox.warning(self, "Error", "Primero crea la configuración.")
+            QtWidgets.QMessageBox.warning(self, "Error", "First create the configuration.")
             return
 
         mpremote = shutil.which("mpremote")
         if not mpremote:
             QtWidgets.QMessageBox.critical(
-                self, "mpremote no encontrado",
-                "mpremote no está en el PATH del sistema.\n"
-                "Instálalo con:  pip install mpremote"
+                self, "mpremote not found",
+                "mpremote is not in the system PATH.\n"
+                "Install it with:  pip install mpremote"
             )
             return
 
@@ -425,7 +434,7 @@ class ConfigToolDialog(QtWidgets.QDialog):
             [mpremote, "connect", port, "reset"],
         ]
 
-        self.status_lbl.setText("⏳  Cargando archivos al dispositivo…")
+        self.status_lbl.setText("⏳  Loading files to device…")
         QtWidgets.QApplication.processEvents()
 
         errors = []
@@ -441,12 +450,12 @@ class ConfigToolDialog(QtWidgets.QDialog):
 
         if errors:
             QtWidgets.QMessageBox.critical(
-                self, "Errores al cargar",
-                "Algunos comandos fallaron:\n\n" + "\n\n".join(errors)
+                self, "Errors while loading",
+                "Some commands failed:\n\n" + "\n\n".join(errors)
             )
         else:
-            self.status_lbl.setText("✔  ¡Configuración cargada y dispositivo reiniciado!")
+            self.status_lbl.setText("✔  Configuration loaded and device reset!")
             QtWidgets.QMessageBox.information(
-                self, "Éxito",
-                "Archivos copiados y dispositivo reiniciado correctamente."
+                self, "Success",
+                "Files copied and device reset successfully."
             )

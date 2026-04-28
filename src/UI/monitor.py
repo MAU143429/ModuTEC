@@ -10,9 +10,11 @@ import pyqtgraph as pg
 
 from metrics        import analog_ncc, digital_ncc, ncc_color
 from serial_worker  import SerialParser, BAUD
-from ui_styles      import DARK_BTN, DARK_BTN_GREEN, DARK_BTN_RED, DARK_COMBO
+from ui_styles      import DARK_BTN, DARK_BTN_GREEN, DARK_BTN_RED, DARK_COMBO, DARK_WIDGET
 from ui_config_tool import ConfigToolDialog
 from ui_help        import HelpDialog
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QStyle
 
 # ─────────────────────────────────────────
 # Chunk counter (global across frames)
@@ -24,6 +26,7 @@ class TripleScope(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("ModuTEC Monitor")
+        self.setWindowIcon(QIcon("src/assets/logo.png"))
         self.resize(1400, 850)
 
         # Internal state
@@ -58,23 +61,28 @@ class TripleScope(QtWidgets.QMainWindow):
     def _build_toolbar(self):
         toolbar = QtWidgets.QWidget()
         toolbar.setFixedHeight(44)
-        toolbar.setStyleSheet("background-color: #161616; border-bottom: 1px solid #333;")
+        toolbar.setStyleSheet(
+            "background-color: #252526;"
+            "border-bottom: 1px solid #3c3c3c;"
+        )
         lay = QtWidgets.QHBoxLayout(toolbar)
         lay.setContentsMargins(10, 4, 10, 4)
         lay.setSpacing(8)
 
         # Help button — top left
-        self.btn_help = QtWidgets.QPushButton("?")
+        self.btn_help = QtWidgets.QPushButton()
+        self.btn_help.setIcon(QIcon("src/assets/help.png"))
         self.btn_help.setFixedSize(28, 28)
         self.btn_help.setStyleSheet(DARK_BTN)
-        self.btn_help.setToolTip("Ayuda / Guía de uso")
+        self.btn_help.setToolTip("Help / User Guide")
         self.btn_help.clicked.connect(self.show_help)
         lay.addWidget(self.btn_help)
 
         lay.addStretch()
-
+ 
+ 
         # COM dropdown
-        com_lbl = QtWidgets.QLabel("Puerto:")
+        com_lbl = QtWidgets.QLabel("Port:")
         com_lbl.setStyleSheet("color: #95a5a6; font-size: 12px;")
         lay.addWidget(com_lbl)
 
@@ -83,17 +91,18 @@ class TripleScope(QtWidgets.QMainWindow):
         self.com_combo.setStyleSheet(DARK_COMBO)
         lay.addWidget(self.com_combo)
 
-        btn_refresh = QtWidgets.QPushButton("⟳")
+        btn_refresh = QtWidgets.QPushButton()
+        btn_refresh.setIcon(QIcon("src/assets/refresh.png"))
         btn_refresh.setFixedSize(28, 28)
         btn_refresh.setStyleSheet(DARK_BTN)
-        btn_refresh.setToolTip("Actualizar puertos COM")
         btn_refresh.clicked.connect(self.refresh_ports)
         lay.addWidget(btn_refresh)
 
         lay.addSpacing(12)
 
         # Config Tool
-        self.btn_cfg = QtWidgets.QPushButton("Config Tool")
+        self.btn_cfg = QtWidgets.QPushButton(" Configuration Tool")
+        self.btn_cfg.setIcon(QIcon("src/assets/config.png"))
         self.btn_cfg.setStyleSheet(DARK_BTN)
         self.btn_cfg.clicked.connect(self.open_config_tool)
         lay.addWidget(self.btn_cfg)
@@ -164,7 +173,7 @@ class TripleScope(QtWidgets.QMainWindow):
         parent_layout.addWidget(self.settings_grid)
 
     def _build_ncc_log(self, parent_layout):
-        lbl = QtWidgets.QLabel("NCC Log")
+        lbl = QtWidgets.QLabel("Metrics Log")
         lbl.setAlignment(QtCore.Qt.AlignCenter)
         lbl.setStyleSheet(
             "color: #ecf0f1; font-size: 18px; font-weight: bold;"
@@ -188,20 +197,19 @@ class TripleScope(QtWidgets.QMainWindow):
     def refresh_ports(self):
         self.com_combo.clear()
         ports = list(serial.tools.list_ports.comports())
-        if not ports:
-            self.com_combo.addItem("— sin puertos —")
+        usb_ports = []
+        for p in ports:
+            desc = (p.description or "").lower()
+            hwid = (p.hwid or "").lower()
+            if "bluetooth" in desc:
+                continue
+            if "usb" in desc or "usb" in hwid:
+                usb_ports.append(p)
+        if not usb_ports:
+            self.com_combo.addItem("— No USB Serial Ports —")
             return
-        for p in sorted(ports, key=lambda x: x.device):
-            desc         = p.description or ""
-            manufacturer = p.manufacturer or ""
-            combined     = (desc + manufacturer).lower()
-            if any(kw in combined for kw in ("pico", "modutec", "raspberry", "rp2")):
-                friendly = f"{p.device} (ModuTEC Modulator / Raspberry Pi Pico)"
-            elif desc and desc != p.device:
-                friendly = f"{p.device} ({desc})"
-            else:
-                friendly = p.device
-            self.com_combo.addItem(friendly, userData=p.device)
+        for p in sorted(usb_ports, key=lambda x: x.device):
+            self.com_combo.addItem(p.device, userData=p.device)
 
     def _selected_port(self):
         return self.com_combo.itemData(self.com_combo.currentIndex())
@@ -219,15 +227,15 @@ class TripleScope(QtWidgets.QMainWindow):
         port = self._selected_port()
         if not port:
             QtWidgets.QMessageBox.warning(
-                self, "Sin puerto",
-                "Selecciona un puerto COM antes de iniciar el monitor."
+                self, "No port selected",
+                "Please select a COM port before starting the monitor."
             )
             return
         try:
             self.ser = serial.Serial(port, BAUD, timeout=0.001)
         except Exception as e:
             QtWidgets.QMessageBox.critical(
-                self, "Error al abrir puerto", f"No se pudo abrir {port}:\n{e}"
+                self, "Error opening port", f"Could not open {port}:\n{e}"
             )
             return
         self.parser.reset()
@@ -235,7 +243,7 @@ class TripleScope(QtWidgets.QMainWindow):
         self.btn_run.setText("STOP")
         self.btn_run.setStyleSheet(DARK_BTN_RED)
         self.com_combo.setEnabled(False)
-        self.setWindowTitle(f"ModuTEC Monitor | {port}")
+        self.setWindowTitle(f"ModuTEC Monitor | RUNNING - {port}")
 
     def _stop_monitor(self):
         self.running = False
@@ -302,7 +310,7 @@ class TripleScope(QtWidgets.QMainWindow):
         now = time.time()
         if now - self.last_fps_t > 1.0:
             port = self._selected_port() or "?"
-            self.setWindowTitle(f"ModuTEC Monitor | {port} | FPS: {self.frames}")
+            self.setWindowTitle(f"ModuTEC Monitor | RUNNING - {port} | FPS: {self.frames}")
             self.frames     = 0
             self.last_fps_t = now
 
