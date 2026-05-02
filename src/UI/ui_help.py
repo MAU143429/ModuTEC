@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtWidgets
-from ui_styles import DARK_BTN, DIALOG_BG
+from ui_styles import DARK_BTN, DIALOG_BG, LABEL_TITLE, LOG_BOX
 
 
 class HelpDialog(QtWidgets.QDialog):
@@ -17,23 +17,14 @@ class HelpDialog(QtWidgets.QDialog):
         lay.setContentsMargins(16, 16, 16, 16)
         lay.setSpacing(10)
 
-        title = QtWidgets.QLabel("Guía de uso — ModuTEC Monitor")
-        title.setStyleSheet(
-            "color: #ecf0f1; font-size: 15px; font-weight: bold;"
-            "border-bottom: 1px solid #444; padding-bottom: 6px;"
-        )
+        title = QtWidgets.QLabel("User Guide — ModuTEC Monitor")
+        title.setStyleSheet(LABEL_TITLE)
         title.setAlignment(QtCore.Qt.AlignCenter)
         lay.addWidget(title)
 
         text = QtWidgets.QTextEdit()
         text.setReadOnly(True)
-        text.setStyleSheet(
-            "background-color: #1e1e1e;"   # ← igual que el resto
-            "color: #ecf0f1;"
-            "font-family: Consolas, monospace;"
-            "font-size: 12px;"
-            "border: 1px solid #333;"
-        )
+        text.setStyleSheet(LOG_BOX)
         text.setHtml("""
 <style>
   h3  { color: #3498db; margin-bottom: 2px; }

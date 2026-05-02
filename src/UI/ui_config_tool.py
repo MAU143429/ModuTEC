@@ -1,16 +1,22 @@
 import os
 import ast
 import json
+import serial
 import shutil
 import subprocess
-
-import serial
-import serial.tools.list_ports
-
-from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtGui import QIcon
+import serial.tools.list_ports
+from PyQt5 import QtCore, QtWidgets, QtGui
 from ui_styles import (
-    DARK_BTN, DARK_INPUT, DARK_COMBO, GROUPBOX_STYLE, DIALOG_BG
+    DARK_BTN,
+    DARK_INPUT,
+    DARK_COMBO,
+    GROUPBOX_STYLE,
+    DIALOG_BG,
+    LABEL_MUTED,
+    LABEL_TITLE,
+    LABEL_VALUE,
+    CARD_STYLE
 )
 
 
@@ -37,10 +43,7 @@ class ConfigToolDialog(QtWidgets.QDialog):
         # ── Title ─────────────────────────────────────────────────
         title = QtWidgets.QLabel("ModuTEC Configuration Tool")
         title.setAlignment(QtCore.Qt.AlignCenter)
-        title.setStyleSheet(
-            "color: #ecf0f1; font-size: 20px; font-weight: bold;"
-            "border-bottom: 2px solid #3498db; padding-bottom: 8px;"
-        )
+        title.setStyleSheet(LABEL_TITLE)
         root.addWidget(title)
 
         # ── Three-column body ──────────────────────────────────────
@@ -63,14 +66,14 @@ class ConfigToolDialog(QtWidgets.QDialog):
         btn_row.setSpacing(16)
         btn_row.addStretch()
 
-        self.btn_create = QtWidgets.QPushButton(" Crear archivo de configuración")
+        self.btn_create = QtWidgets.QPushButton(" Create Configuration File")
         self.btn_create.setIcon(QIcon("src/assets/create.png"))
         self.btn_create.setStyleSheet(DARK_BTN)
         self.btn_create.setFixedHeight(38)
         self.btn_create.clicked.connect(self.create_config)
         btn_row.addWidget(self.btn_create)
 
-        self.btn_upload = QtWidgets.QPushButton(" Cargar nueva configuración")
+        self.btn_upload = QtWidgets.QPushButton("Upload Configuration")
         self.btn_upload.setIcon(QIcon("src/assets/upload.png"))
         self.btn_upload.setStyleSheet(DARK_BTN)
         self.btn_upload.setFixedHeight(38)
@@ -84,7 +87,7 @@ class ConfigToolDialog(QtWidgets.QDialog):
         # Status bar
         self.status_lbl = QtWidgets.QLabel("")
         self.status_lbl.setAlignment(QtCore.Qt.AlignCenter)
-        self.status_lbl.setStyleSheet("color: #95a5a6; font-size: 12px;")
+        self.status_lbl.setStyleSheet(LABEL_MUTED)
         root.addWidget(self.status_lbl)
 
 
@@ -148,31 +151,24 @@ class ConfigToolDialog(QtWidgets.QDialog):
         var_widgets = []
         for v in range(3):
             var_frame = QtWidgets.QFrame()
-            var_frame.setStyleSheet(
-                "background: transparent;"
-                "border: 1px solid #2a2a2a;"
-                "border-radius: 4px;"
-            )
+            var_frame.setStyleSheet(CARD_STYLE)
             vf_lay = QtWidgets.QVBoxLayout(var_frame)
             vf_lay.setContentsMargins(10, 8, 10, 8)
             vf_lay.setSpacing(6)
 
             v_label = QtWidgets.QLabel(f"Variable {v+1}:  —")
-            v_label.setStyleSheet(
-                "color: #ecf0f1; font-size: 13px; font-weight: bold;"
-                "background: transparent; border: none;"
-            )
+            v_label.setStyleSheet(LABEL_VALUE)
             vf_lay.addWidget(v_label)
 
             range_row = QtWidgets.QHBoxLayout()
             range_row.setSpacing(8)
 
             lbl_min = QtWidgets.QLabel("Min")
-            lbl_min.setStyleSheet("color: #95a5a6; font-size: 11px; background: transparent; border: none;")
+            lbl_min.setStyleSheet(LABEL_MUTED)
             spin_min = QtWidgets.QDoubleSpinBox()
 
             lbl_max = QtWidgets.QLabel("Max")
-            lbl_max.setStyleSheet("color: #95a5a6; font-size: 11px; background: transparent; border: none;")
+            lbl_max.setStyleSheet(LABEL_MUTED)
             spin_max = QtWidgets.QDoubleSpinBox()
 
             for sp in (spin_min, spin_max):
@@ -215,7 +211,7 @@ class ConfigToolDialog(QtWidgets.QDialog):
         def mk_field(label_text, lo, hi, val, dec=0):
             row = QtWidgets.QHBoxLayout()
             lbl = QtWidgets.QLabel(label_text)
-            lbl.setStyleSheet("color: #95a5a6; font-size: 13px;")
+            lbl.setStyleSheet(LABEL_MUTED)
             lbl.setFixedWidth(110)
             sp = QtWidgets.QDoubleSpinBox()
             sp.setRange(lo, hi)
@@ -343,7 +339,7 @@ class ConfigToolDialog(QtWidgets.QDialog):
             return
 
         save_path, _ = QtWidgets.QFileDialog.getSaveFileName(
-            self, "Guardar config.json", "config.json", "JSON (*.json)"
+            self, "Save config.json", "config.json", "JSON (*.json)"
         )
         if not save_path:
             return
@@ -395,19 +391,26 @@ class ConfigToolDialog(QtWidgets.QDialog):
         self._last_config_path = save_path
         self._last_py_paths    = list(self.tech_paths)
         self.btn_upload.setEnabled(True)
-        self.status_lbl.setText(f"✔  Configuration saved to: {save_path}")
+        self.status_lbl.setText(f"Configuration saved to: {save_path}")
 
     # ── Upload via mpremote ───────────────────────────────────────
     def upload_config(self):
-        ports = [p.device for p in serial.tools.list_ports.comports()]
-        if not ports:
-            QtWidgets.QMessageBox.warning(self, "No ports", "No COM ports detected.")
+        parent = self.parent()
+
+        if not parent or not hasattr(parent, "_selected_port"):
+            QtWidgets.QMessageBox.warning(
+                self, "Error",
+                "Could not access selected port from monitor."
+            )
             return
 
-        port, ok = QtWidgets.QInputDialog.getItem(
-            self, "Select port", "COM port of the device:", ports, 0, False
-        )
-        if not ok:
+        port = parent._selected_port()
+
+        if not port:
+            QtWidgets.QMessageBox.warning(
+                self, "No port selected",
+                "Please select a COM port in the monitor first."
+            )
             return
 
         cfg_path = self._last_config_path
@@ -415,7 +418,10 @@ class ConfigToolDialog(QtWidgets.QDialog):
         py2      = self._last_py_paths[1]
 
         if not cfg_path or not py1 or not py2:
-            QtWidgets.QMessageBox.warning(self, "Error", "First create the configuration.")
+            QtWidgets.QMessageBox.warning(
+                self, "Error",
+                "First create the configuration."
+            )
             return
 
         mpremote = shutil.which("mpremote")
@@ -434,7 +440,7 @@ class ConfigToolDialog(QtWidgets.QDialog):
             [mpremote, "connect", port, "reset"],
         ]
 
-        self.status_lbl.setText("⏳  Loading files to device…")
+        self.status_lbl.setText(f"Loading to {port}…")
         QtWidgets.QApplication.processEvents()
 
         errors = []
@@ -454,8 +460,8 @@ class ConfigToolDialog(QtWidgets.QDialog):
                 "Some commands failed:\n\n" + "\n\n".join(errors)
             )
         else:
-            self.status_lbl.setText("✔  Configuration loaded and device reset!")
+            self.status_lbl.setText(f"Loaded to {port} and reset!")
             QtWidgets.QMessageBox.information(
                 self, "Success",
-                "Files copied and device reset successfully."
+                f"Files copied and device reset on {port}."
             )

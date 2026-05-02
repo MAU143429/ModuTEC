@@ -1,0 +1,222 @@
+\begin{tikzpicture}[
+    scale=0.8,
+    transform shape,
+    every node/.style={
+        draw,
+        rounded corners,
+        align=center,
+        text width=2.0cm,
+        minimum height=0.6cm,
+        inner sep=2pt,
+        font=\scriptsize
+    },
+    main/.style={fill=blue!40, font=\bfseries},
+    secondary/.style={fill=blue!20},
+    neutral/.style={fill=gray!15},
+    arrow/.style={->, thick}
+]
+
+% ===== NIVEL 0 =====
+\node[main, text width=5cm,font=\small] (main) at (0,0) {Procesamiento de señales en sistemas embebidos};
+
+% ===== NIVEL 1 =====
+\node[secondary] (rep)   at (-8,-2) {Representación de señales};
+\node[secondary] (mod)   at (-2.5,-2)  {Modulación de señales};
+\node[secondary] (demod) at (2.5,-2)  {Demodulación de señales};
+\node[secondary] (emb)   at (8.5,-2)  {Sistemas embebidos};
+
+% ===== NIVEL 2 =====
+\node[neutral] (time) at (-9.5,-4) {Dominio del tiempo};
+\node[neutral] (freq) at (-6.5,-4) {Dominio de la frecuencia};
+
+\node[neutral] (modA) at (-3.7,-4) {Modulación analógica};
+\node[neutral] (modD) at (-1.2,-4)  {Modulación digital};
+
+\node[neutral] (env) at (1.2,-4) {Demodulación por envolvente};
+\node[neutral] (coh) at (3.7,-4) {Demodulación coherente};
+
+\node[neutral] (rt)   at (6,-4) {Ejecución en tiempo real};
+\node[neutral] (hw)   at (8.5,-4) {Restricciones de hardware};
+\node[neutral] (dsp)   at (11,-4) {Implementación de DSP};
+
+% ===== NIVEL 3 =====
+\node[neutral] (analog)  at (-9.5,-6.5) {Analógica};
+\node[neutral] (digital) at (-6.5,-6.5) {Digital};
+
+\node[neutral] (proc) at (7.3,-6) {Capacidad de procesamiento};
+\node[neutral] (mem)  at (9.9,-6) {Memoria};
+
+\node[secondary] (impl)  at (0,-6) {Implementación digital};
+
+
+% ===== NIVEL 4 =====
+
+\node[neutral] (sample) at (-8,-8.5) {Muestreo};
+\node[neutral] (disc)   at (-3,-8) {Señales discretas};
+\node[neutral] (block)  at (0,-8)  {Procesamiento por bloques};
+\node[neutral] (filter) at (3,-8)  {Filtrado digital};
+
+% ===== CONEXIONES ORTOGONALES =====
+
+% Nivel 0
+\draw[arrow] (main) -| (rep);
+\draw[arrow] (main) |- (mod);
+\draw[arrow] (main) |- (demod);
+\draw[arrow] (main) -| (emb);
+
+% Representación
+\coordinate (split_rep) at ($(rep)+(0,-1)$);
+
+\draw (rep) -- (split_rep);
+
+\draw (split_rep) -- ($(time |- split_rep)$);
+\draw (split_rep) -- ($(freq |- split_rep)$);
+
+\draw[arrow] ($(time |- split_rep)$) -- (time);
+\draw[arrow] ($(freq |- split_rep)$) -- (freq);
+
+% ===== PRIMER NIVEL (time + freq → barra superior) =====
+
+\coordinate (top_merge) at ($(time)!0.5!(freq)+(0,-1)$);
+
+% Bajadas
+\draw (time) -- ($(time |- top_merge)$);
+\draw (freq) -- ($(freq |- top_merge)$);
+
+% Barra horizontal
+\draw ($(time |- top_merge)$) -- ($(freq |- top_merge)$);
+
+
+% ===== SEGUNDO NIVEL (barra superior → barra inferior) =====
+
+\coordinate (bottom_split) at ($(top_merge)+(0,-0.5)$);
+
+\draw (top_merge) -- (bottom_split);
+
+% Barra inferior
+\draw (bottom_split) -- ($(analog |- bottom_split)$);
+\draw (bottom_split) -- ($(digital |- bottom_split)$);
+
+
+% ===== SALIDAS =====
+
+\draw[arrow] ($(analog |- bottom_split)$) -- (analog);
+\draw[arrow] ($(digital |- bottom_split)$) -- (digital);
+
+% Punto de unión arriba de sample
+\coordinate (merge_sample) at ($(sample)+(0,1)$);
+
+% Bajadas desde analog y digital hacia la misma altura
+\draw (analog) -- ($(analog |- merge_sample)$);
+\draw (digital) -- ($(digital |- merge_sample)$);
+
+% Barra horizontal
+\draw ($(analog |- merge_sample)$) -- ($(digital |- merge_sample)$);
+
+% Flecha final
+\draw[arrow] (merge_sample) -- (sample);
+
+
+% Modulación
+% Punto debajo de mod
+\coordinate (split_mod) at ($(mod)+(0,-1)$);
+
+% Bajada sin flecha
+\draw (mod) -- (split_mod);
+
+% Barra horizontal
+\draw (split_mod) -- ($(modA |- split_mod)$);
+\draw (split_mod) -- ($(modD |- split_mod)$);
+
+% Flechas hacia abajo
+\draw[arrow] ($(modA |- split_mod)$) -- (modA);
+\draw[arrow] ($(modD |- split_mod)$) -- (modD);
+
+% Demodulación
+% Punto intermedio
+\coordinate (split_demod) at ($(demod)+(0,-1)$);
+
+% Bajada sin flecha
+\draw (demod) -- (split_demod);
+
+% Barra horizontal
+\draw (split_demod) -- ($(env |- split_demod)$);
+\draw (split_demod) -- ($(coh |- split_demod)$);
+
+% Flechas hacia abajo
+\draw[arrow] ($(env |- split_demod)$) -- (env);
+\draw[arrow] ($(coh |- split_demod)$) -- (coh);
+
+
+% ===== BARRA DESDE MODULACIÓN Y DEMODULACIÓN HACIA IMPL =====
+
+% Nivel de la barra (ajusta altura si quieres)
+\coordinate (bar_impl) at ($(impl)+(0,1)$);
+
+% Bajadas desde los 4 nodos
+\draw (modA) -- ($(modA |- bar_impl)$);
+\draw (modD) -- ($(modD |- bar_impl)$);
+\draw (env)  -- ($(env  |- bar_impl)$);
+\draw (coh)  -- ($(coh  |- bar_impl)$);
+
+% Barra horizontal completa
+\draw ($(modA |- bar_impl)$) -- ($(coh |- bar_impl)$);
+
+% Flecha final al nodo
+\draw[arrow] (bar_impl) -- (impl);
+
+
+% Sistemas embebidos
+% ===== SPLIT DESDE emb (3 salidas) =====
+
+\coordinate (split_emb) at ($(emb)+(0,-1)$);
+
+% Bajada
+\draw (emb) -- (split_emb);
+
+% Barra horizontal (3 ramas)
+\draw (split_emb) -- ($(rt |- split_emb)$);
+\draw (split_emb) -- ($(hw |- split_emb)$);
+\draw (split_emb) -- ($(dsp |- split_emb)$);
+
+% Flechas hacia nodos
+\draw[arrow] ($(rt |- split_emb)$) -- (rt);
+\draw[arrow] ($(hw |- split_emb)$) -- (hw);
+\draw[arrow] ($(dsp |- split_emb)$) -- (dsp);
+
+
+
+
+% ===== SPLIT DESDE hw =====
+
+\coordinate (split_hw) at ($(hw)+(0,-1)$);
+
+% Bajada
+\draw (hw) -- (split_hw);
+
+% Barra horizontal
+\draw (split_hw) -- ($(proc |- split_hw)$);
+\draw (split_hw) -- ($(mem |- split_hw)$);
+
+% Flechas finales
+\draw[arrow] ($(proc |- split_hw)$) -- (proc);
+\draw[arrow] ($(mem |- split_hw)$) -- (mem);
+
+
+
+% Punto debajo de impl (baja 1 unidad)
+\coordinate (split) at ($(impl)+(0,-1)$);
+
+% Línea principal
+\draw (impl) -- (split);
+
+% Barra horizontal
+\draw (split) -- ($(disc |- split)$);
+\draw (split) -- ($(filter |- split)$);
+
+% Bajadas
+\draw[arrow] ($(disc |- split)$) -- (disc);
+\draw[arrow] (split) -- (block);
+\draw[arrow] ($(filter |- split)$) -- (filter);
+
+\end{tikzpicture}

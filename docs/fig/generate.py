@@ -1,91 +1,65 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.signal import butter, filtfilt, freqz
 
 # -----------------------------
-# Parámetros
+# Parámetros de la señal
 # -----------------------------
 fs = 5000
-t = np.arange(0, 0.2, 1/fs)
+t = np.arange(0, 1, 1/fs)
 
-fm = 10      # frecuencia mensaje
-fc = 100     # frecuencia portadora
+f1 = 50
+f2 = 120
 
-# -----------------------------
-# Señal mensaje
-# -----------------------------
-m = np.cos(2 * np.pi * fm * t)
-
-# Señal AM (simplificada)
-s = m * np.cos(2 * np.pi * fc * t)
+signal = np.sin(2*np.pi*f1*t) + 0.5*np.sin(2*np.pi*f2*t)
 
 # -----------------------------
-# Demodulación coherente
-# Multiplicación
+# FFT
 # -----------------------------
-r = s * np.cos(2 * np.pi * fc * t)
+N = len(signal)
+fft_vals = np.fft.fft(signal)
+fft_vals = np.abs(fft_vals) / N
+freqs = np.fft.fftfreq(N, 1/fs)
 
-# -----------------------------
-# Filtro pasa bajas
-# -----------------------------
-fcorte = 20  # frecuencia de corte (Hz)
-
-b, a = butter(4, fcorte / (fs/2))  # filtro Butterworth
-m_rec = filtfilt(b, a, r)
+mask = freqs >= 0
+freqs = freqs[mask]
+fft_vals = fft_vals[mask]
 
 # -----------------------------
-# Respuesta en frecuencia del filtro
+# Gráficas (LADO A LADO)
 # -----------------------------
-w, h = freqz(b, a, worN=1024, fs=fs)
+plt.figure(figsize=(12, 4))  # más ancho que alto
 
-# -----------------------------
-# FIGURA (2 columnas)
-# -----------------------------
-fig, axs = plt.subplots(1, 2, figsize=(12, 4))
+# 🔹 Tiempo (izquierda)
+plt.subplot(1, 2, 1)
 
-# ====================================================
-# SUBPLOT IZQUIERDA → DOMINIO DEL TIEMPO
-# ====================================================
-axs[0].plot(t, r, color='gray', linewidth=1, label='Señal tras multiplicación r(t)')
-axs[0].plot(t, m_rec, color='black', linewidth=2.5, label='Señal filtrada m(t)')
-axs[0].plot(t, m, 'r--', linewidth=1.5, label='Mensaje original (ref)')
+t_zoom = t[:1000]
+signal_zoom = signal[:1000]
 
-axs[0].set_title('Señal antes y después del filtrado')
-axs[0].set_xlabel('Tiempo (s)')
-axs[0].set_ylabel('Amplitud')
-axs[0].grid(True, linestyle='--', alpha=0.4)
-axs[0].legend(loc='upper right')
+plt.plot(t_zoom, signal_zoom, linewidth=1)
+plt.xlabel("Tiempo (s)")
+plt.ylabel("Amplitud")
+plt.title("Señal compuesta en el dominio del tiempo (f1 = 50 Hz, f2 = 120 Hz)")
+plt.grid(True)
 
-# ====================================================
-# SUBPLOT DERECHA → RESPUESTA EN FRECUENCIA
-# ====================================================
-axs[1].plot(w, abs(h), color='black', linewidth=2)
+# 🔹 Frecuencia (derecha)
+plt.subplot(1, 2, 2)
 
-# Línea de corte
-axs[1].axvline(fcorte, color='red', linestyle='--', label='Frecuencia de corte')
+freq_limit = 200
+mask_freq = freqs <= freq_limit
 
-# Componentes importantes
-axs[1].axvline(fm, color='green', linestyle='--', label='Mensaje (fm)')
-axs[1].axvline(2*fc, color='blue', linestyle='--', label='Alta frecuencia (2fc)')
+plt.plot(freqs[mask_freq], fft_vals[mask_freq], linewidth=1)
+plt.xlabel("Frecuencia (Hz)")
+plt.ylabel("Magnitud")
+plt.title("Espectro de magnitud de la señal compuesta")
+plt.grid(True)
 
-# Etiquetas visuales
-axs[1].text(fm, 0.9, 'mensaje', color='green')
-axs[1].text(2*fc, 0.3, '2fc', color='blue')
+# Anotaciones
+plt.text(50, 0.5, "50 Hz", ha='center')
+plt.text(120, 0.25, "120 Hz", ha='center')
 
-axs[1].set_title('Respuesta en frecuencia del filtro pasa bajas')
-axs[1].set_xlabel('Frecuencia (Hz)')
-axs[1].set_ylabel('|H(f)|')
-axs[1].set_xlim(0, 250)
-axs[1].grid(True, linestyle='--', alpha=0.4)
-axs[1].legend(loc='upper right')
-
-# -----------------------------
-# Ajuste de espacios
-# -----------------------------
-plt.suptitle('Filtrado en demodulación coherente')
-plt.subplots_adjust(wspace=0.25)
 plt.tight_layout()
 
 # Guardar
-plt.savefig('demod_filtrado.png', dpi=300)
+plt.savefig("tiempo_frecuencia_lado_a_lado.png", dpi=300)
+
 plt.show()

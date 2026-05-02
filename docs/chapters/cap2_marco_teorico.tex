@@ -1,8 +1,6 @@
 \chapter{Marco teórico}
 \label{ch:marco}
 
-\section{Introducción del capítulo}
-
 El análisis y procesamiento de señales constituye un elemento fundamental dentro de la ingeniería de computadores, particularmente en el diseño de sistemas digitales capaces de representar, transformar y transmitir información. En este contexto, la comprensión de los principios que rigen el comportamiento de las señales resulta indispensable para el desarrollo de técnicas que permitan su manipulación de manera controlada.
 
 De manera análoga, cuando el tratamiento de señales se aborda dentro del desarrollo de soluciones en entornos computacionales específicos, surgen consideraciones adicionales que deben ser tomadas en cuenta para su correcta aplicación. Estas condiciones introducen nuevos elementos en el análisis, los cuales difieren de aquellos presentes en entornos de desarrollo más generales, haciendo necesario ampliar la base conceptual desde la cual se estudian estos procesos.
@@ -15,10 +13,15 @@ Con el fin de organizar de manera estructurada los conceptos desarrollados en es
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\linewidth]{../fig/mapaconceptual.png}
-\caption{Mapa conceptual del marco teórico. Fuente: Elaboración Propia.}
+\resizebox{\textwidth}{!}{
+    \shorthandoff{<>}
+    \input{fig/mapa_conceptual.tex}
+    \shorthandon{<>}
+}
+\caption{Mapa conceptual del marco teórico. Fuente: Elaboración propia.}
 \label{fig:mapa_conceptual}
 \end{figure}
+
 
 Tal como se observa en la Figura \ref{fig:mapa_conceptual}, el desarrollo conceptual se estructura a partir de los fundamentos de procesamiento de señales, donde se establecen las bases para la representación de señales en distintos dominios. A partir de esta base, se introduce el proceso de modulación, considerando tanto enfoques analógicos como digitales, seguido por los mecanismos asociados a la demodulación de dichas señales.
 
@@ -56,7 +59,11 @@ Con el fin de complementar la representación matemática de las señales, es ne
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\linewidth]{../fig/onda_senoidal.png}
+\includegraphics[
+    width=\linewidth,
+    height=0.2\textheight,
+    keepaspectratio
+]{../fig/onda_senoidal.png}
 \caption{Parámetros fundamentales de una señal senoidal. Fuente: Elaboración Propia.}
 \label{fig:parametros_senal}
 \end{figure}
@@ -105,7 +112,7 @@ Tal como se presenta en la Figura \ref{fig:mapa_conceptual}, una vez establecida
 
 Según Lathi, en el estudio de sistemas de comunicación modernos, una señal analógica se caracteriza por tomar valores continuos tanto en el tiempo como en amplitud \cite{lathi2009modern}. Este tipo de señal es común en fenómenos físicos, donde las magnitudes varían de manera continua, como es el caso de señales eléctricas, acústicas o electromagnéticas.
 
-Por otra parte, una señal digital se define por tomar valores discretos en el tiempo y, en la mayoría de los casos, también en amplitud. Este tipo de representación es propia de los sistemas digitales, donde la información es tratada como una secuencia de valores que pueden ser almacenados, procesados y transmitidos mediante estructuras y algoritmos computacionales \cite{proakis2001digital}. En aplicaciones prácticas, este tipo de señales es ampliamente utilizado en sistemas de comunicación y procesamiento implementados en plataformas digitales \cite{stm32_comm}.
+Por otra parte, una señal digital se define por tomar valores discretos en el tiempo y, en la mayoría de los casos, también en amplitud. Este tipo de representación es propia de los sistemas digitales, donde la información es tratada como una secuencia de valores que pueden ser almacenados, procesados y transmitidos mediante estructuras y algoritmos computacionales \cite{proakis2007digital}. En aplicaciones prácticas, este tipo de señales es ampliamente utilizado en sistemas de comunicación y procesamiento implementados en plataformas digitales \cite{stm32_comm}.
 
 \subsection{Muestreo y discretización}
 
@@ -127,7 +134,11 @@ El proceso de muestreo se ilustra en la Figura \ref{fig:muestreo}, donde se obse
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\linewidth]{muestreo.png}
+\includegraphics[
+    width=\linewidth,
+    height=0.2\textheight,
+    keepaspectratio
+]{muestreo.png}
 \caption{Ejemplo de muestreo de una señal continua. Fuente: Elaboración Propia.}
 \label{fig:muestreo}
 \end{figure}
@@ -271,7 +282,11 @@ El comportamiento de la modulación OOK en el dominio del tiempo se ilustra en l
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\linewidth]{ask_ook.png}
+\includegraphics[
+    width=\linewidth,
+    height=0.2\textheight,
+    keepaspectratio
+]{ask_ook.png}
 \caption{Modulación digital por amplitud tipo OOK en el dominio del tiempo. Fuente: Elaboración Propia.}
 \label{fig:ask_ook}
 \end{figure}

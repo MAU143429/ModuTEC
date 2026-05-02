@@ -1,26 +1,26 @@
 import sys
 import time
 
-import numpy as np
 import serial
-import serial.tools.list_ports
-
-from PyQt5 import QtCore, QtWidgets, QtGui
-import pyqtgraph as pg
-
-from metrics        import analog_ncc, digital_ncc, ncc_color
-from serial_worker  import SerialParser, BAUD
-from ui_styles      import DARK_BTN, DARK_BTN_GREEN, DARK_BTN_RED, DARK_COMBO, DARK_WIDGET
-from ui_config_tool import ConfigToolDialog
-from ui_help        import HelpDialog
+import numpy as np
 from PyQt5.QtGui import QIcon
+import serial.tools.list_ports
 from PyQt5.QtWidgets import QStyle
+from ui_help        import HelpDialog
+from PyQt5 import QtCore, QtWidgets, QtGui
+from ui_config_tool import ConfigToolDialog
+from serial_worker  import SerialParser, BAUD
+from metrics        import analog_ncc, digital_ncc, ncc_color
+import pyqtgraph as pg
+from ui_styles import (
+    DARK_BTN, DARK_BTN_GREEN, DARK_BTN_RED,
+    DARK_COMBO,
+    TOOLBAR_STYLE, RIGHT_PANEL, SETTINGS_PANEL,
+    LABEL_TITLE, LABEL_SECTION, LABEL_MUTED, LABEL_VALUE,
+    LOG_BOX
+)
 
-# ─────────────────────────────────────────
-# Chunk counter (global across frames)
-# ─────────────────────────────────────────
 chunk_counter = 0
-
 
 class TripleScope(QtWidgets.QMainWindow):
     def __init__(self):
@@ -61,10 +61,7 @@ class TripleScope(QtWidgets.QMainWindow):
     def _build_toolbar(self):
         toolbar = QtWidgets.QWidget()
         toolbar.setFixedHeight(44)
-        toolbar.setStyleSheet(
-            "background-color: #252526;"
-            "border-bottom: 1px solid #3c3c3c;"
-        )
+        toolbar.setStyleSheet(TOOLBAR_STYLE)
         lay = QtWidgets.QHBoxLayout(toolbar)
         lay.setContentsMargins(10, 4, 10, 4)
         lay.setSpacing(8)
@@ -80,10 +77,9 @@ class TripleScope(QtWidgets.QMainWindow):
 
         lay.addStretch()
  
- 
         # COM dropdown
         com_lbl = QtWidgets.QLabel("Port:")
-        com_lbl.setStyleSheet("color: #95a5a6; font-size: 12px;")
+        com_lbl.setStyleSheet(LABEL_MUTED)
         lay.addWidget(com_lbl)
 
         self.com_combo = QtWidgets.QComboBox()
@@ -145,7 +141,7 @@ class TripleScope(QtWidgets.QMainWindow):
 
         # Right panel (25%)
         right_panel = QtWidgets.QWidget()
-        right_panel.setStyleSheet("background-color: #1e1e1e;")
+        right_panel.setStyleSheet(RIGHT_PANEL)
         right_lay = QtWidgets.QVBoxLayout(right_panel)
         right_lay.setContentsMargins(8, 8, 8, 8)
         right_lay.setSpacing(10)
@@ -159,14 +155,11 @@ class TripleScope(QtWidgets.QMainWindow):
     def _build_settings_panel(self, parent_layout):
         lbl = QtWidgets.QLabel("Current Settings")
         lbl.setAlignment(QtCore.Qt.AlignCenter)
-        lbl.setStyleSheet(
-            "color: #ecf0f1; font-size: 15px; font-weight: bold;"
-            "border-bottom: 1px solid #444; padding-bottom: 4px;"
-        )
+        lbl.setStyleSheet(LABEL_TITLE)
         parent_layout.addWidget(lbl)
 
         self.settings_grid = QtWidgets.QWidget()
-        self.settings_grid.setStyleSheet("background-color: #1e1e1e;")
+        self.settings_grid.setStyleSheet(SETTINGS_PANEL)
         self.grid_layout = QtWidgets.QGridLayout(self.settings_grid)
         self.grid_layout.setContentsMargins(4, 4, 4, 4)
         self.grid_layout.setSpacing(4)
@@ -175,19 +168,12 @@ class TripleScope(QtWidgets.QMainWindow):
     def _build_ncc_log(self, parent_layout):
         lbl = QtWidgets.QLabel("Metrics Log")
         lbl.setAlignment(QtCore.Qt.AlignCenter)
-        lbl.setStyleSheet(
-            "color: #ecf0f1; font-size: 18px; font-weight: bold;"
-            "border-bottom: 1px solid #444; padding-bottom: 4px;"
-        )
+        lbl.setStyleSheet(LABEL_SECTION)
         parent_layout.addWidget(lbl)
 
         self.log_box = QtWidgets.QTextEdit()
         self.log_box.setReadOnly(True)
-        self.log_box.setStyleSheet(
-            "background-color: #121212; color: #ecf0f1;"
-            "font-family: Consolas, monospace; font-size: 13px;"
-            "border: 1px solid #333;"
-        )
+        self.log_box.setStyleSheet(LOG_BOX)
         self.log_box.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         parent_layout.addWidget(self.log_box, stretch=1)
 
@@ -325,9 +311,9 @@ class TripleScope(QtWidgets.QMainWindow):
 
     def _add_row(self, row, label_text, value_text, value_color="#ecf0f1"):
         lbl = QtWidgets.QLabel(label_text)
-        lbl.setStyleSheet("color: #95a5a6; font-size: 13px;")
+        lbl.setStyleSheet(LABEL_MUTED)
         val = QtWidgets.QLabel(value_text)
-        val.setStyleSheet(f"color: {value_color}; font-size: 13px; font-weight: bold;")
+        val.setStyleSheet(LABEL_VALUE)
         val.setAlignment(QtCore.Qt.AlignRight)
         self.grid_layout.addWidget(lbl, row, 0)
         self.grid_layout.addWidget(val, row, 1)

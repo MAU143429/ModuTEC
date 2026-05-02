@@ -183,12 +183,18 @@
 %   overwrite some of the commands.
 % - The package subfigure caused that the pagebackrefs and index refs were set
 %   incorrectly.
+% ===== TIKZ GLOBAL (FUERA DE ifpdf) =====
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta,calc}
+
 
 \ifpdf
+
 %
 % final / draft document options
 \usepackage{graphicx}                   % for inserting pdf-graphics.
                                         % options final / draft
+
 \ifdraft{%
 % Use biber/biblatex
 \usepackage[backend=biber,
@@ -257,6 +263,7 @@
 
 \usepackage[active]{srcltx}             % insert links into the dvi to jump
 \usepackage{graphicx}                   % for inserting eps-graphics.
+
                                         % options final / draft
                                         % into the sources directly.
 \ifdraft{%
