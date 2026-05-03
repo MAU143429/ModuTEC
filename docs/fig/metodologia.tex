@@ -1,0 +1,83 @@
+\begin{tikzpicture}[
+    node distance=1.6cm and 2.5cm,
+    block/.style={
+        rectangle, 
+        draw=black, 
+        rounded corners, 
+        align=center, 
+        minimum width=3cm, 
+        minimum height=0.9cm,
+        fill=white
+    },
+    arrow/.style={->, thick}
+]
+
+% =========================
+% NODOS CENTRALES
+% =========================
+\node[block] (problem) {Definición del problema};
+\node[block, below of=problem] (spec) {Especificación del sistema};
+\node[block, below of=spec] (partition) {Particionamiento HW / SW};
+
+\node[block, below=2.5cm of partition] (integration) {Integración del sistema};
+\node[block, below of=integration] (validation) {Validación};
+
+% =========================
+% HW
+% =========================
+\node[block, below left=of partition] (hw_design) {Diseño HW};
+\node[block, below of=hw_design] (hw_impl) {Implementación HW};
+
+% =========================
+% SW
+% =========================
+\node[block, below right=of partition] (sw_design) {Diseño SW};
+\node[block, below of=sw_design] (sw_impl) {Implementación SW};
+
+% =========================
+% FLECHAS
+% =========================
+\draw[arrow] (problem) -- (spec);
+\draw[arrow] (spec) -- (partition);
+
+\draw[arrow] (partition) -- (hw_design);
+\draw[arrow] (partition) -- (sw_design);
+
+\draw[arrow] (hw_design) -- (hw_impl);
+\draw[arrow] (sw_design) -- (sw_impl);
+
+\draw[arrow] (hw_impl) -- (integration);
+\draw[arrow] (sw_impl) -- (integration);
+
+\draw[arrow] (integration) -- (validation);
+
+% Iteración
+%\draw[arrow, dashed] (validation.west) .. controls +(-3,1) and +(-3,-1) .. (partition.west);
+
+% =========================
+% FONDOS (CLAVE)
+% =========================
+
+% Hardware box
+\begin{scope}[on background layer]
+\node[draw=red!60, fill=red!5, rounded corners, fit=(hw_design) (hw_impl), inner sep=0.5cm] (hw_box) {};
+\end{scope}
+
+% Software box
+\begin{scope}[on background layer]
+\node[draw=blue!60, fill=blue!5, rounded corners, fit=(sw_design) (sw_impl), inner sep=0.5cm] (sw_box) {};
+\end{scope}
+
+% Proceso central
+\begin{scope}[on background layer]
+\node[draw=green!60, fill=green!5, rounded corners, fit=(problem) (validation), inner sep=0.7cm] (proc_box) {};
+\end{scope}
+
+% =========================
+% TÍTULOS
+% =========================
+\node[above=0.3cm of proc_box] {\textbf{FLUJO CENTRAL Y VERIFICACIONES}};
+\node[above=0.3cm of hw_box] {\textbf{HARDWARE}};
+\node[above=0.3cm of sw_box] {\textbf{SOFTWARE}};
+
+\end{tikzpicture}
