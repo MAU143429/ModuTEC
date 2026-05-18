@@ -1,0 +1,88 @@
+\begin{tikzpicture}[
+    font=\scriptsize,
+    >=Stealth,
+    phase/.style={draw, minimum width=0.65cm, minimum height=0.35cm},
+    arrow/.style={->, thick},
+]
+
+% Ejes
+\draw[->, thick] (0,0) -- (14,0) node[midway, below=0.35cm, font=\normalsize] {Tiempo calendario del proyecto};
+\draw[->, thick] (0,0) -- (0,6) node[midway, rotate=90, above=0.35cm, font=\normalsize] {Funcionalidades del software};
+
+% Leyenda
+\node[phase, fill=white] (c1) at (1.0,5.5) {};
+\node[right=0.2cm of c1] {Comunicación};
+
+\node[phase, fill=green!10] (c2) at (1.0,5.1) {};
+\node[right=0.2cm of c2] {Planificación};
+
+\node[phase, fill=green!25] (c3) at (1.0,4.7) {};
+\node[right=0.2cm of c3] {Modelado (análisis, diseño)};
+
+\node[phase, fill=green!45] (c4) at (1.0,4.3) {};
+\node[right=0.2cm of c4] {Construcción (código, pruebas)};
+
+\node[phase, fill=green!70] (c5) at (1.0,3.9) {};
+\node[right=0.2cm of c5] {Despliegue (entrega, retroalimentación)};
+
+% Incremento 1
+\node[font=\scriptsize] at (2.1,1.75) {Iteración \# 1};
+
+\node[phase, fill=white]   (i1a) at (2.0,1.25) {};
+\node[phase, fill=green!10] (i1b) at (3.00,1.15) {};
+\node[phase, fill=green!25] (i1c) at (4.00,1.05) {};
+\node[phase, fill=green!45] (i1d) at (5.00,0.95) {};
+\node[phase, fill=green!70] (i1e) at (6.00,0.85) {};
+
+\draw[arrow] (i1a) -- (i1b);
+\draw[arrow] (i1b) -- (i1c);
+\draw[arrow] (i1c) -- (i1d);
+\draw[arrow] (i1d) -- (i1e);
+
+\node[align=left] at (6.2,0.4) {Entrega Iteración \#1};
+
+% Incremento 2
+\node[font=\scriptsize] at (5.0,2.75) {Iteración \# 2};
+
+\node[phase, fill=white]   (i2a) at (4.7,2.30) {};
+\node[phase, fill=green!10] (i2b) at (5.7,2.20) {};
+\node[phase, fill=green!25] (i2c) at (6.7,2.10) {};
+\node[phase, fill=green!45] (i2d) at (7.7,2.00) {};
+\node[phase, fill=green!70] (i2e) at (8.7,1.90) {};
+
+\draw[arrow] (i2a) -- (i2b);
+\draw[arrow] (i2b) -- (i2c);
+\draw[arrow] (i2c) -- (i2d);
+\draw[arrow] (i2d) -- (i2e);
+
+\node[align=left] at (8.8,1.4) {Entrega Iteración \#2};
+
+% Puntos suspensivos
+\node[scale=2] at (7.2,3.0) {$\cdots$};
+
+% Incremento n
+\node[font=\scriptsize] at (8.0,4.0) {Iteración \# $n$};
+
+\node[phase, fill=white]   (ina) at (8.0,3.55) {};
+\node[phase, fill=green!10] (inb) at (9.00,3.45) {};
+\node[phase, fill=green!25] (inc) at (10.00,3.35) {};
+\node[phase, fill=green!45] (ind) at (11.00,3.25) {};
+\node[phase, fill=green!70] (ine) at (12.00,3.15) {};
+
+\draw[arrow] (ina) -- (inb);
+\draw[arrow] (inb) -- (inc);
+\draw[arrow] (inc) -- (ind);
+\draw[arrow] (ind) -- (ine);
+
+\node[align=left] at (11.9,2.7) {Entrega Iteración \# $n$};
+
+% Flecha Iteración 1 -> Iteración 2
+\draw[->, dashed, thick, black]
+(i1e.north east) .. controls +(0.8,0.6) and +(-0.8,-0.6) .. (i2a.south west);
+
+% Flecha Iteración 2 -> puntos suspensivos
+\draw[->, dashed, thick, black]
+(i2e.north east) .. controls +(-0.4,0.8) and +(-0.8,-0.4) .. (ina.south west);
+
+
+\end{tikzpicture}

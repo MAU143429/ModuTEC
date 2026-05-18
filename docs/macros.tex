@@ -61,6 +61,7 @@
 \usepackage{array}                      % extensions to tabular environment
 \usepackage{longtable}                  % supports extraordinary long tables
 \usepackage{tabularx}                   % supports tables with fixed width
+\usepackage{pdflscape}                   % allows to have landscape pages in pdf
 \usepackage{afterpage}                  % put something only after the page
 \usepackage{multirow}                   % supports multiple row grouping in 
                                         % tables
@@ -184,9 +185,17 @@
 % - The package subfigure caused that the pagebackrefs and index refs were set
 %   incorrectly.
 % ===== TIKZ GLOBAL (FUERA DE ifpdf) =====
+\usepackage[utf8]{inputenc}
 \usepackage{tikz}
-\usetikzlibrary{positioning, arrows.meta,calc, fit, backgrounds}
+\usepackage[american]{circuitikz}
+\usetikzlibrary{positioning, arrows.meta,calc, fit, backgrounds,shapes.geometric}
 
+
+\usepackage{xcolor}
+% Definición de colores para circuito
+\definecolor{c3v3}{rgb}{0.1,0.3,1}    % Azul para rail 3V3
+\definecolor{cgnd}{rgb}{0,0.6,0}       % Verde para GND
+\definecolor{csup}{rgb}{0.1,0.3,1}     % Azul para alimentación
 
 \ifpdf
 

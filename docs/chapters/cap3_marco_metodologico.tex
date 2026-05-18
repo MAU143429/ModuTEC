@@ -2,167 +2,200 @@
 \chapter{Marco metodológico}
 \label{ch:solucion}
 
-El desarrollo de sistemas embebidos orientados al procesamiento de señales requiere la adopción de un enfoque metodológico que permita gestionar de forma estructurada la interacción entre hardware y software, así como las restricciones de operación en tiempo real. En este contexto, la solución del problema se plantea mediante una estrategia que prioriza la descomposición del sistema en etapas funcionales, facilitando el análisis, diseño y validación progresiva de cada componente. De acuerdo con Heath [3], este tipo de sistemas demanda una integración controlada de sus elementos para garantizar coherencia en su comportamiento global, lo cual fundamenta la selección de un enfoque metodológico estructurado. En el presente capítulo se describe el marco metodológico adoptado, detallando la estrategia general de solución, la definición de las etapas del proceso, las consideraciones de implementación y los criterios de validación y verificación del sistema.
+El desarrollo de sistemas embebidos orientados al procesamiento de señales requiere la adopción de un enfoque metodológico que permita gestionar de forma estructurada la interacción entre hardware y software, así como las restricciones de operación en tiempo real. En este contexto, la solución del problema se plantea mediante una estrategia que prioriza la descomposición del sistema en etapas funcionales, facilitando el análisis, diseño y validación progresiva de cada componente. De acuerdo con Heath \cite{heath2002}, este tipo de sistemas demanda una integración controlada de sus elementos para garantizar coherencia en su comportamiento global, lo cual fundamenta la selección de un enfoque metodológico estructurado. En el presente capítulo se describe el marco metodológico adoptado, detallando la estrategia general de solución, la definición de las etapas del proceso, las consideraciones de implementación, los criterios de validación y verificación del sistema.
  
 \section{Estrategia general de solución}
 
+A partir del problema definido en la Sección \ref{sec:planteamiento_problema}, el cual establece la necesidad de implementar un sistema embebido capaz de ejecutar técnicas de modulación y demodulación analógica y digital bajo restricciones de operación reales, se plantea la adopción de una estrategia metodológica que permita estructurar de manera coherente el proceso de solución. En este contexto, la definición del enfoque de desarrollo resulta fundamental para garantizar que las decisiones de diseño se mantengan alineadas con los requerimientos del sistema y las limitaciones propias del entorno embebido.
+
 \subsection{Enfoque metodológico adoptado}
 
-El abordaje del problema se fundamenta en la adopción de un enfoque de co-diseño hardware/software orientado al desarrollo de sistemas embebidos con capacidades de procesamiento de señales en tiempo real. Este enfoque permite considerar de manera conjunta la definición de la arquitectura del sistema, la distribución de responsabilidades funcionales y las restricciones propias del entorno de ejecución desde etapas tempranas del proceso de desarrollo.
+La metodología de desarrollo adoptada es la iterativo-incremental, esta metodología está orientada a la construcción progresiva de sistemas mediante ciclos sucesivos de desarrollo, donde cada iteración incorpora nuevas funcionalidades o mejoras parciales sobre una versión previa del sistema. Según Pressman \cite{pressman2010}, este enfoque combina características del desarrollo secuencial y evolutivo, permitiendo que el producto se construya de manera gradual a través de incrementos funcionales que son analizados, implementados y evaluados de forma continua.
 
-En este contexto, el sistema es concebido como una integración de componentes interdependientes, donde las decisiones asociadas al procesamiento digital de señales y a la gestión de recursos computacionales no pueden ser tratadas de forma aislada. Por lo tanto, la estrategia adoptada prioriza una visión integral del sistema, en la cual el diseño se organiza de manera progresiva mediante la identificación de bloques funcionales y la definición de sus interacciones, manteniendo un nivel de abstracción adecuado que permita guiar el desarrollo sin incurrir en detalles de implementación.
+Dentro de este modelo, cada iteración contempla un conjunto de etapas fundamentales que incluyen comunicación, planificación, modelado, construcción y despliegue. La etapa de comunicación se enfoca en la identificación de necesidades y requerimientos del sistema. Posteriormente, la planificación establece las tareas y objetivos asociados al incremento correspondiente. El modelado comprende las actividades de análisis y diseño necesarias para estructurar la solución propuesta. Luego, durante la construcción, se desarrollan las funciones del sistema y se realizan pruebas para validar su funcionamiento. Finalmente, el despliegue permite obtener una versión funcional parcial que puede ser evaluada y retroalimentada antes de iniciar el siguiente ciclo de desarrollo \cite{pressman2010}.
 
-Adicionalmente, se incorpora un enfoque de desarrollo por etapas, en el cual el proceso de solución se estructura como una secuencia de transformaciones sobre la información, permitiendo establecer un flujo lógico que facilite la trazabilidad entre los objetivos del sistema y las decisiones de diseño adoptadas. Este planteamiento resulta particularmente adecuado en aplicaciones de procesamiento de señales, donde el comportamiento del sistema puede analizarse a partir de la evolución de la señal a través de distintos bloques conceptuales.
+Una de las principales características de esta metodología consiste en que el sistema no se construye completamente en una única etapa, sino que evoluciona mediante incrementos funcionales sucesivos. Esto permite detectar problemas de manera temprana, realizar ajustes progresivos y validar continuamente el comportamiento del sistema conforme avanza el desarrollo. Adicionalmente, el enfoque iterativo-incremental favorece la organización modular del proceso de ingeniería y facilita la incorporación gradual de mejoras dentro del sistema.
 
-\subsection{Justificación del enfoque}
-
-La selección de un enfoque de co-diseño hardware/software se justifica en función de las características del problema abordado, el cual involucra características propias de sistemas embebidos. En este tipo de sistemas, la eficiencia en el uso de los recursos computacionales, la latencia en el procesamiento y la coherencia del flujo de datos son factores determinantes que condicionan el diseño del sistema en su totalidad. De acuerdo con Heath [3], el desarrollo de sistemas embebidos requiere una integración coherente entre los componentes de hardware y software, de manera que las decisiones de diseño consideren simultáneamente las capacidades del dispositivo y las exigencias del procesamiento requerido. En este sentido, la adopción de dicho enfoque reduce inconsistencias entre las distintas capas del sistema y facilita la validación progresiva de su funcionamiento.
-
-Asimismo, el uso de un enfoque basado en etapas funcionales contribuye a mejorar la organización del proceso de desarrollo, permitiendo abordar la complejidad del sistema de forma estructurada. Esta estrategia facilita la identificación de puntos críticos dentro del flujo de procesamiento, así como la definición de criterios de evaluación asociados a cada etapa, lo cual resulta fundamental para garantizar el cumplimiento de los objetivos del sistema sin introducir dependencias innecesarias entre componentes.
-
-En consecuencia, la combinación de un enfoque de co-diseño con una estructuración por etapas permite establecer una base metodológica sólida para el desarrollo del sistema, asegurando coherencia en el diseño, claridad en el proceso de desarrollo y alineación con las restricciones propias del entorno embebido.
-%------------------------------------------------
-
-\section{Etapas del proceso metodológico}
-
-El proceso metodológico adoptado se estructura en una secuencia de etapas que permiten abordar el desarrollo del sistema de manera progresiva y controlada. Este enfoque facilita la organización del proceso de diseño, así como la identificación de dependencias entre los distintos componentes del sistema.
-
-La Figura \ref{fig:metodologia} presenta el diagrama general del proceso metodológico, el cual refleja el enfoque de co-diseño hardware/software adoptado. En este diagrama se representan las principales etapas del desarrollo, desde la definición inicial del problema hasta la validación del sistema, estableciendo un flujo lógico que guía la transformación de la información a través de cada fase.
+La Figura \ref{fig:iterativo} presenta una representación general del modelo iterativo-incremental descrito por Pressman \cite{pressman2010}. En ella se observa cómo cada iteración atraviesa un conjunto de etapas similares, generando al final de cada ciclo un incremento funcional del sistema que sirve como base para el siguiente proceso de desarrollo.
 
 \begin{figure}[H]
 \centering
 \resizebox{0.75\textwidth}{!}{
     \shorthandoff{<>}
+    \input{fig/iterativo.tex}
+    \shorthandon{<>}
+}
+\caption{Representación del enfoque iterativo-incremental. Fuente: Adaptado de Pressman \cite{pressman2010}.}
+\label{fig:iterativo}
+\end{figure}
+
+
+\subsection{Enfoque técnico adoptado}
+
+Como complemento al enfoque metodológico iterativo-incremental descrito anteriormente, el desarrollo del sistema se plantea mediante una estrategia de co-diseño hardware/software. Este enfoque establece un proceso orientado al desarrollo coordinado de ambos dominios, considerando desde etapas tempranas la interacción existente entre el procesamiento ejecutado por software y las restricciones impuestas por el hardware. De acuerdo con \cite{heath2002}, el co-diseño hardware/software permite estructurar el desarrollo de sistemas embebidos mediante una distribución funcional entre ambos dominios, facilitando la integración progresiva de los componentes del sistema y reduciendo problemas asociados a desacoplamientos durante etapas finales de implementación.
+
+Bajo este enfoque, el proceso inicia con la definición del problema y la especificación del sistema, seguido de una etapa de particionamiento donde se asignan responsabilidades específicas al hardware y al software conforme a los requerimientos funcionales y restricciones de operación. Posteriormente, el desarrollo de ambos dominios se realiza de manera paralela, permitiendo que las decisiones asociadas al sistema puedan ajustarse progresivamente conforme avanza el desarrollo. Finalmente, los componentes desarrollados convergen en etapas de integración y validación, donde se verifica el comportamiento global del sistema y la interacción entre sus distintos elementos.
+
+La Figura \ref{fig:metodologia} presenta una representación general del proceso de co-diseño hardware/software, donde se observan las etapas de planificación, seguido de la separación funcional entre los dominios de hardware y software, así como las etapas de integración y validación utilizadas para verificar el comportamiento conjunto del sistema.
+\begin{figure}[H]
+\centering
+\resizebox{0.55\textwidth}{!}{
+    \shorthandoff{<>}
     \input{fig/metodologia.tex}
     \shorthandon{<>}
 }
-\caption{Diagrama del proceso de Codiseño HW/SW. Fuente: Elaboración propia.}
+\caption{Proceso general de co-diseño hardware/software. Fuente: Elaboración propia.}
 \label{fig:metodologia}
 \end{figure}
 
-\subsection{Descripción de las etapas del desarrollo}
 
-A partir de la estructura mostrada en la Figura \ref{fig:metodologia}, el proceso se descompone en un conjunto de etapas que permiten abordar el problema de manera gradual, manteniendo un control sobre la evolución del sistema y su coherencia global.
+\subsection{Justificación del enfoque}
 
-\textbf{Definición del problema:}  
-Esta etapa establece el punto de partida del proceso, donde se delimitan los objetivos del sistema y las condiciones bajo las cuales debe operar. En el contexto del proyecto, esto implica identificar los requerimientos asociados al procesamiento de señales y las restricciones propias de un entorno embebido, particularmente en términos de recursos y comportamiento en tiempo real.
+La adopción de una metodología iterativo-incremental responde a la necesidad de desarrollar el sistema de manera progresiva, permitiendo incorporar y validar funcionalidades conforme avanza el proceso de desarrollo. En el contexto de la problemática planteada en la Sección \ref{sec:planteamiento_problema}, la implementación de técnicas de modulación y demodulación sobre un entorno embebido involucra ciertas restricciones, aspecto que requiere de un proceso continuo de ajuste y validación durante el desarrollo del sistema.
 
-\textbf{Especificación del sistema:}  
-Una vez definido el problema, se procede a establecer los requerimientos que guían el desarrollo. En esta fase se determinan las características funcionales que debe cumplir el sistema, así como condiciones generales de operación, permitiendo construir una visión clara del comportamiento esperado.
+A diferencia de enfoques secuenciales tradicionales, donde la integración y verificación del sistema se realizan principalmente en etapas finales, el desarrollo iterativo-incremental permite detectar limitaciones de manera temprana y realizar modificaciones progresivas sobre la solución conforme se identifican nuevos requerimientos o restricciones de operación. Esto resulta particularmente relevante en sistemas donde el comportamiento final depende de la interacción conjunta de distintos componentes.
 
-\textbf{Particionamiento hardware/software:}  
-Posteriormente, se realiza la asignación de responsabilidades entre los distintos componentes del sistema. Esta etapa resulta fundamental, ya que permite distribuir adecuadamente las tareas de procesamiento y control, considerando las limitaciones del hardware y las exigencias del procesamiento de señales.
+Como complemento a esta metodología, el co-diseño hardware/software permite adaptar el enfoque iterativo-incremental a las necesidades propias del desarrollo de sistemas embebidos, donde el comportamiento final depende directamente de la interacción entre hardware y software. La incorporación de este enfoque facilita que cada iteración del desarrollo contemple de manera conjunta las restricciones y necesidades presentes en ambos dominios, permitiendo evaluar progresivamente el impacto de las decisiones tomadas sobre el funcionamiento global del sistema.
 
-\textbf{Diseño del sistema:}  
-En esta fase se definen las soluciones conceptuales que permiten satisfacer los requerimientos establecidos. El sistema se organiza en bloques funcionales, estableciendo las relaciones entre ellos y definiendo la forma en que la información fluye a través del sistema. En esta etapa se considera de manera explícita la coexistencia de dos dominios de desarrollo, correspondientes al hardware y al software, los cuales deben ser diseñados de forma coordinada para garantizar compatibilidad y coherencia en el comportamiento del sistema.
+En enfoques centrados exclusivamente en software, las decisiones de diseño suelen asumirse bajo disponibilidad suficiente de recursos computacionales, condición que no necesariamente se cumple dentro del contexto embebido planteado. De forma similar, un enfoque centrado únicamente en hardware tiende a priorizar la eficiencia de ejecución, reduciendo la flexibilidad para adaptar o modificar los algoritmos y estructuras de procesamiento implementadas.
 
-\textbf{Implementación:}  
-Una vez definido el diseño, se procede a la materialización de las soluciones planteadas. En esta etapa, al igual que la anterior, el desarrollo se lleva a cabo de manera paralela en los dominios de hardware y software, permitiendo avanzar simultáneamente en la construcción de los distintos componentes del sistema. De esta manera logramos reducir las dependencias secuenciales entre etapas y facilita la detección temprana de inconsistencias, lo cual resulta especialmente relevante en el desarrollo dde sistemas de este tipo.
-
-\textbf{Integración:}  
-Posteriormente, los componentes desarrollados en paralelo se combinan para conformar el sistema completo. Esta fase implica la validación de la interacción entre los elementos de hardware y software, asegurando que el flujo de información y las interfaces definidas durante el diseño se mantengan consistentes. La integración constituye un punto clave dentro del proceso, ya que permite identificar posibles desajustes derivados del desarrollo concurrente.
-
-\textbf{Validación:}  
-Finalmente, se evalúa el comportamiento del sistema en su conjunto con respecto a los objetivos planteados inicialmente. En esta etapa se verifica tanto el desempeño individual de los componentes como su funcionamiento integrado, considerando las restricciones propias del sistema. 
-
-
-\section{Estrategia de implementación del sistema}
-
-\subsection{Adaptación de algoritmos al entorno embebido}
-
-A partir del enfoque metodológico adoptado, la implementación del sistema se orienta a trasladar los requerimientos definidos hacia una solución viable dentro de un entorno embebido. En este sentido, la adaptación de los algoritmos constituye un paso necesario para garantizar que las soluciones conceptuales definidas durante la etapa de diseño puedan ejecutarse bajo las restricciones del sistema.
-
-Esta adaptación no implica modificar el objetivo funcional de los algoritmos, sino ajustar su formulación para que sea consistente con las limitaciones de procesamiento, memoria y tiempo de respuesta. De esta forma, se asegura que el sistema mantenga coherencia entre lo planteado a nivel metodológico y su ejecución dentro del entorno real de operación.
-
-\subsection{Procesamiento por bloques}
-
-Como parte de la estrategia de implementación, se adopta un enfoque de procesamiento por bloques que permite materializar el flujo definido en la etapa metodológica. Este enfoque responde a la necesidad de estructurar el tratamiento de la información de forma ordenada y controlada, facilitando la ejecución del sistema dentro de un contexto de operación continua.
-
-El procesamiento por bloques permite establecer una correspondencia directa entre las etapas del proceso metodológico y las unidades de ejecución del sistema, manteniendo así la trazabilidad entre el diseño conceptual y su implementación. De esta manera, se evita una ejecución monolítica del sistema y se favorece una organización coherente con el enfoque de desarrollo por etapas previamente definido.
-
-\subsection{Organización del flujo de datos del sistema}
-
-La organización del flujo de datos se plantea como un mecanismo para preservar la coherencia del proceso metodológico durante la ejecución del sistema. En este sentido, la información se estructura de forma que su transformación a través de las distintas etapas refleje el flujo definido previamente, sin introducir dependencias innecesarias ni inconsistencias entre componentes.
-
-Adicionalmente, esta organización permite mantener una separación clara entre los distintos dominios del sistema, facilitando la integración de los desarrollos realizados en paralelo. De esta forma, el flujo de datos no solo cumple una función operativa, sino que actúa como elemento articulador entre las decisiones metodológicas adoptadas y su materialización dentro del sistema.
+La incorporación de un enfoque de co-diseño permite mitigar estas limitaciones mediante un proceso coordinado entre ambos dominios, facilitando que las decisiones relacionadas con procesamiento, comunicación y ejecución puedan evaluarse de manera conjunta conforme avanza el desarrollo. Esto favorece una mejor adaptación del sistema a las restricciones reales de operación y contribuye a mantener coherencia entre los requerimientos funcionales y las capacidades del entorno embebido.
 %------------------------------------------------
+\section{Estrategia de implementación}
+
+A partir de la metodología iterativo-incremental y del enfoque de co-diseño hardware/software definidos previamente, se establece una estrategia de implementación orientada al desarrollo progresivo del sistema integrando ambas estrategias. De manera que, cada iteración contempla un conjunto de etapas que permiten definir objetivos, desarrollar funcionalidades, integrar componentes y validar el comportamiento del sistema conforme avanzan las distintas fases del proyecto.
+
+Dentro de este proceso, el enfoque iterativo-incremental proporciona la estructura general de evolución del sistema, mientras que el co-diseño hardware/software permite coordinar el desarrollo de ambos dominios durante las etapas técnicas asociadas a diseño e implementación. De esta manera, cada incremento funcional del sistema incorpora procesos de análisis, desarrollo, integración y validación que facilitan el ajuste progresivo de la solución conforme se identifican nuevas restricciones o necesidades de operación.
+
+La Figura \ref{fig:metodologia2} presenta el proceso metodológico adoptado para el desarrollo del proyecto. En ella se observa la organización general de las etapas que conforman cada iteración, así como la interacción existente entre los dominios de hardware y software durante la etapa de desarrollo.
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{
+    \shorthandoff{<>}
+    \input{fig/metodologia2.tex}
+    \shorthandon{<>}
+}
+\caption{Proceso metodológico para el desarrollo del sistema. Fuente: Elaboración propia.}
+\label{fig:metodologia2}
+\end{figure}
+
+\subsection{Descripción de las etapas del proceso}
+
+El proceso metodológico se organiza en etapas que permiten estructurar el desarrollo progresivo del sistema conforme avanzan las distintas iteraciones. Cada una de estas etapas responde a objetivos específicos dentro del proceso general y mantiene una relación directa con las necesidades funcionales y restricciones asociadas al proyecto. A continuación, se describen las etapas que conforman el proceso.
+
+\textbf{Definición de objetivos:}
+En esta etapa se establecen los requerimientos y objetivos correspondientes a cada iteración del desarrollo. Se delimitan las funcionalidades que serán incorporadas o ajustadas dentro del sistema, así como las restricciones y criterios generales que orientan el proceso de implementación. Esta etapa permite mantener una evolución controlada del sistema conforme avanzan las iteraciones.
+
+\textbf{Etapa de desarrollo:}
+Corresponde a la fase principal de construcción del sistema y se encuentra organizada bajo un enfoque de co-diseño hardware/software. Inicialmente, se realiza un proceso de particionamiento funcional donde se distribuyen responsabilidades entre ambos dominios según las necesidades del sistema y las restricciones de operación identificadas. Posteriormente, las actividades de diseño e implementación de hardware y software se desarrollan de manera coordinada y paralela, permitiendo mantener coherencia entre procesamiento, ejecución e interacción de los distintos componentes del sistema.
+
+Dentro de esta etapa se contemplan actividades asociadas a adaptación algorítmica, implementación de procesamiento, organización del flujo de datos y adecuación progresiva de los componentes del sistema conforme evolucionan los requerimientos de cada iteración.
+
+\textbf{Integración y pruebas:}
+Una vez desarrollados los distintos componentes, se procede a su integración con el objetivo de conformar una versión funcional del sistema. Durante esta etapa se verifica la interacción entre hardware y software, permitiendo identificar posibles inconsistencias derivadas de su acoplamiento y evaluar el comportamiento general del sistema bajo condiciones de operación.
+
+\textbf{Análisis de resultados:}
+Posteriormente, se analizan los resultados obtenidos durante las pruebas realizadas sobre el sistema. Esta etapa permite determinar el grado de cumplimiento de los objetivos definidos para cada iteración, así como identificar ajustes necesarios relacionados con estabilidad, funcionamiento y desempeño general de la solución.
+
+\textbf{Retroalimentación:}
+Finalmente, los resultados obtenidos durante el análisis son utilizados como insumo para las siguientes iteraciones del desarrollo. Esta etapa permite incorporar mejoras progresivas sobre el sistema, redefinir objetivos cuando resulte necesario y mantener un proceso continuo de ajuste y validación conforme evoluciona la solución propuesta.
 
 \section{Estrategia de validación y verificación}
 
-\subsection{Criterios de validación y métricas asociadas}
+Como parte de las etapas de integración, pruebas y análisis de resultados descritas previamente dentro del proceso metodológico, se establece una estrategia de validación y verificación orientada a evaluar el cumplimiento de los objetivos definidos para cada iteración del desarrollo. Este proceso de validación se fundamenta en la definición de criterios de evaluación alineados con el problema abordado, de manera que no se limita únicamente a verificar las funcionalidades incorporadas durante cada iteración, sino también a garantizar que la integración progresiva de nuevos componentes y características mantenga la estabilidad, coherencia y funcionamiento general del sistema.
 
-La validación y verificación del sistema se plantean como un proceso orientado a comprobar el cumplimiento de los objetivos definidos en las etapas iniciales, así como la coherencia del comportamiento del sistema bajo las condiciones de operación establecidas. En este contexto, se definen criterios de evaluación que permiten analizar el desempeño del sistema desde distintas perspectivas, manteniendo un enfoque alineado con el marco metodológico adoptado.
+En primer lugar, se establece como criterio principal la capacidad de recuperación de la señal, entendida como la correspondencia entre la señal original y la señal obtenida tras el proceso de modulación y demodulación. Este criterio permite evaluar la calidad del procesamiento realizado mediante la aplicación de métricas de similitud y error entre señales.
+
+De forma complementaria, resulta necesario verificar que el procesamiento de la información se realice dentro de intervalos de tiempo adecuados, con el objetivo de garantizar la integridad y continuidad del flujo de datos. Para ello, se consideran mecanismos de medición y análisis orientados a evaluar tiempos de respuesta y latencia durante la ejecución del sistema.
+
+Adicionalmente, se incorpora como criterio la estabilidad del sistema, la cual se relaciona con la capacidad de mantener un comportamiento consistente ante variaciones en los parámetros de operación. Este aspecto permite identificar posibles degradaciones en el procesamiento y evaluar la robustez de la solución frente a condiciones de operación variables.
+
+En conjunto, esta estrategia de validación y verificación permite evaluar el sistema desde una perspectiva funcional y de desempeño, asegurando que la solución desarrollada responde de manera coherente a los requerimientos y restricciones establecidos para el proyecto.
+
+%------------------------------------------------
+
+\section{Herramientas y tecnologías consideradas}
+
+Para el desarrollo del proyecto se contempla el uso de distintas herramientas de software, bibliotecas, entornos de desarrollo y plataformas de apoyo. A continuación, se presentan las principales herramientas consideradas dentro del desarrollo de la solución.
 
 \begin{itemize}
-    \item \textbf{Recuperación de la señal:}  
-    Este criterio evalúa la capacidad del sistema para preservar la información contenida en la señal a lo largo del proceso de transformación. Para ello, se consideran medidas de similitud y error entre la señal original y la señal recuperada, tanto en el contexto analógico como digital, permitiendo determinar el grado de fidelidad del sistema con respecto al comportamiento esperado.
 
-    \item \textbf{Cumplimiento de operación en tiempo real:}  
-    Este criterio analiza la capacidad del sistema para procesar la información dentro de intervalos de tiempo compatibles con los requerimientos de operación. En este sentido, se evalúa el comportamiento temporal del sistema considerando el tiempo requerido para completar el ciclo de procesamiento, asegurando que se mantenga dentro de límites aceptables.
+\item \textbf{Python 3.11:} Definido como entorno principal para el desarrollo del sistema de monitoreo y procesamiento. Dentro de este entorno se incorporan bibliotecas como NumPy para operaciones matemáticas y procesamiento numérico, PySerial para comunicación serial entre el sistema embebido y el computador, y JSON para la administración de archivos de configuración.
 
-    \item \textbf{Estabilidad del sistema:}  
-    Este criterio evalúa la consistencia del comportamiento del sistema durante su ejecución continua. Se analiza la capacidad del sistema para mantener un funcionamiento estable a lo largo del tiempo, sin degradaciones significativas en su desempeño ni interrupciones en el flujo de procesamiento.
+\item \textbf{MicroPython:} Empleado como entorno de ejecución para el desarrollo de funciones embebidas, permitiendo el manejo de periféricos y la implementación de componentes asociados al procesamiento dentro del sistema.
+
+\item \textbf{PyQt5 y PyQtGraph:} Orientados al desarrollo de la interfaz gráfica y la visualización en tiempo real de señales y formas de onda dentro del sistema de monitoreo.
+
+\item \textbf{MATLAB:} Considerado como herramienta de apoyo para análisis matemático de señales, generación de gráficas y validación conceptual de ecuaciones relacionadas con técnicas de modulación, demodulación y métricas de evaluación.
+
+\item \textbf{Tinkercad:} Plataforma de apoyo para diseño preliminar de partes del sistema mediante el 3D Designer, así como para simulación del circuitos utilizando Tinkercad Circuit Simulator.
+
+\item \textbf{Entorno de desarrollo:} Compuesto principalmente por Windows 10 como sistema operativo base, Visual Studio Code como editor principal de programación y GitHub como plataforma de control de versiones y administración del código fuente.
+
 \end{itemize}
 
 %------------------------------------------------
+\section{Desglose del marco metodológico}
 
-\section{Herramientas y entorno de desarrollo}
+Con el fin de establecer una correspondencia directa entre los objetivos específicos del proyecto y el proceso metodológico seguido, se presenta la Tabla \ref{tab:objetivos}, en la cual se detallan las principales actividades, entregables, herramientas y estrategias de validación asociadas a cada objetivo. Esta relación permite evidenciar la forma en que cada componente del desarrollo contribuye al cumplimiento de los resultados planteados.
 
-\subsection{Lenguajes utilizados}
-
-El desarrollo del sistema se apoya en el uso de lenguajes de programación adecuados para cubrir las distintas necesidades del proyecto, considerando tanto el entorno embebido como las herramientas de apoyo para monitoreo y análisis. En este sentido, se emplean lenguajes que permiten un control adecuado sobre los recursos del sistema, así como una integración eficiente con los componentes de hardware.
-
-La selección de estos lenguajes responde a criterios de compatibilidad con la plataforma utilizada, facilidad de desarrollo y capacidad para implementar soluciones alineadas con los requerimientos del sistema. De esta forma, se asegura que el entorno de desarrollo contribuya a la construcción de una solución coherente con las restricciones y objetivos planteados.
-
-\subsection{Entorno de visualización}
-
-El sistema incorpora un entorno de visualización que permite observar el comportamiento de las señales a lo largo del proceso de transformación. Este entorno cumple una función fundamental dentro del proceso metodológico, ya que facilita la interpretación del funcionamiento del sistema y apoya las tareas de validación y verificación.
-
-La herramienta de visualización se diseña considerando la necesidad de representar información de manera clara y estructurada, permitiendo identificar variaciones en las señales y evaluar su evolución. De esta forma, se establece un vínculo entre la ejecución del sistema y su análisis, sin depender de detalles específicos de implementación.
-
-\subsection{Protocolo de comunicación}
-
-La interacción entre los distintos componentes del sistema se gestiona mediante un protocolo de comunicación que permite el intercambio de información de manera estructurada y confiable. Este protocolo define la forma en que los datos son organizados y transmitidos, asegurando coherencia en el flujo de información entre los elementos del sistema.
-
-Su diseño responde a la necesidad de mantener una comunicación consistente dentro de un entorno con recursos limitados, permitiendo integrar los distintos módulos sin introducir ambigüedades en la interpretación de los datos. De esta manera, el protocolo actúa como un elemento clave para garantizar la correcta articulación del sistema en su conjunto.
-
-%------------------------------------------------
-
-\section{Relación entre objetivos y desarrollo metodológico}
-
-\subsection{Tabla de correspondencia por objetivo específico}
+\renewcommand{\arraystretch}{1.2}
 
 \begin{table}[H]
 \centering
-\caption{Relación entre objetivos específicos y desarrollo metodológico. Fuente: Elaboración propia.}
-\label{tab:metodologia}
-\begin{tabular}{|p{2.5cm}|p{3cm}|p{3cm}|p{2.5cm}|p{2.5cm}|}
+\caption{Desglose del marco metodológico por objetivos.}
+\resizebox{\textwidth}{!}{ 
+\normalsize
+\begin{tabular}{|p{4cm}|p{2.7cm}|p{2.7cm}|p{2.7cm}|p{3.2cm}|}
 \hline
 \textbf{Objetivo} & \textbf{Actividades} & \textbf{Entregables} & \textbf{Herramientas} & \textbf{Validación} \\ \hline
 
-Integración de algoritmos en el sistema embebido &
-Adaptación de algoritmos al entorno embebido, definición de estructuras de procesamiento y ajuste de parámetros &
-Módulos funcionales de modulación y demodulación integrados &
-Lenguajes de programación, entorno embebido &
-Evaluación de recuperación de señal y consistencia funcional \\ \hline
+Integrar una versión simplificada de los algoritmos de modulación y demodulación en el sistema embebido, para el funcionamiento consistente de las técnicas en tiempo real, mediante ajustes en parámetros internos y estructuras de procesamiento.
+&
+Adaptación de algoritmos, ajuste de parámetros internos y validación progresiva del procesamiento.
+&
+Algoritmos integrados y funcionales dentro del entorno embebido.
+&
+Python 3.11, MicroPython y herramientas de análisis matemático y procesamiento de señales.
+&
+Verificación de recuperación de señal, estabilidad del procesamiento y comportamiento del sistema durante la ejecución en tiempo real.
+\\ \hline
 
-Visualización y análisis de señales &
-Definición del flujo de datos hacia el sistema externo y estructuración de la información transmitida &
-Herramienta de visualización para análisis de señales &
-Entorno de visualización, protocolo de comunicación &
-Análisis del comportamiento de las señales y coherencia del flujo de datos \\ \hline
+Crear un sistema para la visualización y el análisis de los resultados de modulación y demodulación, mediante el envío estructurado de bloques de señal por comunicación serial hacia un computador externo.
+&
+Desarrollo del sistema de comunicación serial e integración con la interfaz de monitoreo.
+&
+Sistema de visualización y monitoreo funcional.
+&
+PyQt5, PyQtGraph, PySerial y herramientas de comunicación serial.
+&
+Validación de integridad y continuidad del flujo de datos, así como coherencia visual entre las señales transmitidas y procesadas.
+\\ \hline
 
-Optimización del procesamiento y flujo de datos &
-Organización del procesamiento por bloques y estructuración del flujo de datos interno &
-Estrategia de procesamiento optimizada para operación continua &
-Estructura de procesamiento, entorno embebido &
-Evaluación de estabilidad del sistema y cumplimiento de operación continua \\ \hline
+Optimizar el procesamiento y flujo de datos de las señales dentro del dispositivo embebido, para un desempeño estable en condiciones de operación, mediante la disminución de la carga computacional.
+&
+Adecuación del flujo de datos, reducción de carga computacional y ajuste progresivo de estructuras de procesamiento.
+&
+Sistema optimizado para operación estable dentro del entorno embebido.
+&
+Python, MicroPython, herramientas de monitoreo del sistema y mecanismos de análisis de tiempos de ejecución.
+&
+Evaluación de tiempos de respuesta (Latencia), continuidad del procesamiento y estabilidad del sistema bajo distintas condiciones de operación.
+\\ \hline
 
-Evaluación de calidad del sistema &
-Definición de criterios de validación y métricas de desempeño &
-Conjunto de métricas para evaluación del sistema &
-Herramientas de análisis y visualización &
-Medición de precisión, estabilidad y desempeño temporal \\ \hline
+Evaluar la calidad de los procesos de modulación y demodulación ejecutados en el sistema embebido, para la obtención de métricas de precisión y estabilidad, mediante el análisis comparativo de señales y parámetros de desempeño.
+&
+Pruebas controladas, obtención de métricas y análisis comparativo entre señales.
+&
+Resultados de evaluación y métricas de desempeño del sistema.
+&
+Matlab, métricas de similitud y herramientas de análisis de señales.
+&
+Aplicación de métricas de similitud y error (NCC, RMSE etc.) entre señales para evaluar precisión, estabilidad y comportamiento general del sistema.
+\\ \hline
 
 \end{tabular}
+\label{tab:objetivos}
+}
 \end{table}

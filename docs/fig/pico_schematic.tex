@@ -1,0 +1,147 @@
+
+\definecolor{c3v3}{RGB}{0,90,200}
+\definecolor{cgnd}{RGB}{20,135,30}
+\definecolor{csig}{RGB}{160,0,0}
+
+\begin{circuitikz}[
+    american,
+    scale      = 1.0,
+    transform shape,
+    line width = 0.65pt,
+    font       = \small,
+]
+
+% ════════════════════════════════════════════════════════════════
+%  LAYOUT
+%
+%  Strategy: pots are vertical, mirror=wiper exits RIGHT.
+%  Wiper signal wire: goes right (offset from pot x), then drops
+%  to the Pico pin — the pin is at the SAME x as the wiper wire,
+%  so there is NO horizontal bottom segment and NO box artifact.
+%
+%  Pot positions (x of pot body):
+%    Pot1  x=4.5    Wiper exits to x=5.3   Pico ADC pin at x=5.3
+%    Pot2  x=7.5    Wiper exits to x=8.3   Pico ADC pin at x=8.3
+%    Pot3  x=10.5   Wiper exits to x=11.3  Pico ADC pin at x=11.3
+%
+%  GND connections (left terminal of pot with mirror):
+%    all on pot x (4.5 / 7.5 / 10.5) → GND rail below
+%
+%  3V3 connections (right terminal = top):
+%    all on pot x → 3V3 rail above
+%
+%  Pico box:  (0,0)–(16,3)
+%  Top pin stubs:
+%    3V3     x=1.8
+%    GP28_A2 x=5.3
+%    GP27_A1 x=8.3
+%    GP26_A0 x=11.3
+%    GP16    x=14.0
+%  Bottom GND: x=8.0
+%
+%  3V3 rail: y=9.8  x=1.8..11.8  (blue)
+%  GND rail: y=-2.0 x=0.5..14.8  (green)
+% ════════════════════════════════════════════════════════════════
+
+% ── PICO BOX ────────────────────────────────────────────────────
+\draw[thick, rounded corners=4pt]
+    (0,0) rectangle (16,3);
+\node[align=center] at (8,1.5)
+    {\normalsize\bfseries Raspberry Pi Pico};
+
+% Top pin stubs  (y=3 → y=3.35)
+\foreach \x/\lbl in {
+    1.8/{3V3},
+    5.3/{GP28\_A2},
+    8.3/{GP27\_A1},
+    11.3/{GP26\_A0},
+    14.0/{GP16}
+}{
+    \draw (\x,3) -- (\x,3.35);
+    \node[above, font=\ttfamily\scriptsize, rotate=60, anchor=west]
+        at (\x,3.3) {\lbl};
+}
+
+% Bottom GND stub
+\draw (8,0) -- (8,-0.35);
+\node[below, font=\ttfamily\scriptsize] at (8,-0.35) {GND};
+
+% Cosmetic side pins
+\foreach \y in {0.4,0.9,1.4,1.9,2.4,2.9}{
+    \draw (0,\y)  -- (-0.22,\y);
+    \draw (16,\y) -- (16.22,\y);
+}
+
+% ── 3V3 RAIL  (blue) ────────────────────────────────────────────
+\draw[c3v3, thick]
+    (1.8,3.35) -- (1.8,9.8) -- (10.5,9.8);
+
+% Taps to each pot top pin (y=8.8)  — pot x = 4.5, 7.5, 10.5
+\foreach \x in {4.5,7.5,10.5}{
+    \draw[c3v3, thick] (\x,9.8) -- (\x,8.8);
+    \fill[c3v3] (\x,9.8) circle (2.2pt);
+}
+
+% ── GND RAIL  (green) ───────────────────────────────────────────
+\draw[cgnd, thick]
+    (8,-0.35) -- (8,-2.0)
+    (4.5,-2.0) -- (14.5,-2.0);
+\node[ground, cgnd] at (8,-2.0) {};
+
+% Taps from GND rail up to pot bottom pins (y=5.2) — pot x = 4.5, 7.5, 10.5
+\foreach \x in {4.5,7.5,10.5}{
+    \draw[cgnd, thick] (\x,-2.0) -- (\x,5.2);
+    \fill[cgnd] (\x,-2.0) circle (2.2pt);
+}
+
+% GND tap for switch at x=14.5
+\draw[cgnd, thick] (14.5,-2.0) -- (14.5,6.5);
+\fill[cgnd] (14.5,-2.0) circle (2.2pt);
+
+% ── POTENTIOMETERS  (vertical, mirror → wiper exits right) ──────
+%  bottom = GND (left terminal with mirror)
+%  top    = 3V3 (right terminal with mirror)
+
+% ---- Pot 1  (ADC2 / GP28) ----
+\draw (4.5,5.2) to[pR, n=p1, mirror] (4.5,8.8);
+\node[left=4pt, font=\footnotesize\bfseries, align=right] at (4.1,8.0)
+    {Pot 1 \\ 10\,k$\Omega$};
+
+% Wiper → right to x=5.3 (same as ADC pin) → straight down to Pico
+\draw[csig, thick]
+    (p1.wiper) -- (5.3,6.85) -- (5.3,3.35);
+\fill[csig] (5.3,3.35) circle (2pt);
+
+% ---- Pot 2  (ADC1 / GP27) ----
+\draw (7.5,5.2) to[pR, n=p2, mirror] (7.5,8.8);
+\node[left=4pt, font=\footnotesize\bfseries, align=right] at (7.1,8.0)
+    {Pot 2 \\ 10\,k$\Omega$};
+
+\draw[csig, thick]
+    (p2.wiper) -- (8.3,6.85) -- (8.3,3.35);
+\fill[csig] (8.3,3.35) circle (2pt);
+
+% ---- Pot 3  (ADC0 / GP26) ----
+\draw (10.5,5.2) to[pR, n=p3, mirror] (10.5,8.8);
+\node[left=4pt, font=\footnotesize\bfseries, align=right] at (10.1,8.0)
+    {Pot 3 \\ 10\,k$\Omega$};
+
+\draw[csig, thick]
+    (p3.wiper) -- (11.3,6.85) -- (11.3,3.35);
+\fill[csig] (11.3,3.35) circle (2pt);
+
+% ── SWITCH S1  (SPST-NO) ────────────────────────────────────────
+% GP16 (x=14.0, y=3.35) → wire up → bottom of S1
+% Top of S1 → GND at x=14.5
+
+\draw[thick] (14.0,3.35) -- (14.0,4.8);
+\draw (14.0,4.8) to[spst] (14.0,6.5);
+
+% Top terminal → GND rail (green) via x=14.5
+\draw[cgnd, thick] (14.0,6.5) -- (14.5,6.5);
+% (14.5 already goes down to GND rail)
+
+\node[right=4pt, font=\footnotesize\bfseries] at (14.0,5.65) {S1};
+\node[right=4pt, font=\footnotesize\itshape]  at (14.0,5.05) {AM / ASK};
+
+\end{circuitikz}

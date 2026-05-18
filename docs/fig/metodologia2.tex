@@ -1,0 +1,145 @@
+\begin{tikzpicture}[
+    font=\normalsize,
+    block/.style={
+        rectangle,
+        draw=black,
+        rounded corners,
+        minimum width=2.8cm,
+        minimum height=1.3cm,
+        align=center,
+        fill=white
+    },
+    zone/.style={
+        draw,
+        dashed,
+        rounded corners,
+        inner sep=0.6cm
+    },
+    arrow/.style={->, thick}
+]
+
+% ==================================================
+% BLOQUES PRINCIPALES
+% ==================================================
+
+% Analisis
+\node[block] (analysis) at (-1,0)
+{Análisis y\\Especificación};
+
+% Particionamiento
+\node[block] (partition) at (5,0)
+{Particionamiento\\HW/SW};
+
+% Software
+\node[block] (sw_design) at (8.5,2)
+{Diseño SW};
+
+\node[block] (sw_impl) at (12,2)
+{Implementación\\SW};
+
+% Hardware
+\node[block] (hw_design) at (8.5,-2)
+{Diseño HW};
+
+\node[block] (hw_impl) at (12,-2)
+{Implementación\\HW};
+
+% Integracion
+\node[block] (integration) at (17.5,0)
+{Integración y\\evaluación};
+
+% Validacion
+\node[block] (validation) at (22.5,0)
+{Validación y\\Verificación};
+
+% ==================================================
+% FLECHAS
+% ==================================================
+
+\draw[arrow] (analysis) -- (partition);
+
+\draw[arrow] (partition) -- (sw_design);
+\draw[arrow] (partition) -- (hw_design);
+
+\draw[arrow] (sw_design) -- (sw_impl);
+\draw[arrow] (hw_design) -- (hw_impl);
+
+\draw[arrow] (sw_impl) -- (integration);
+\draw[arrow] (hw_impl) -- (integration);
+
+\draw[arrow] (integration) -- (validation);
+
+% Retroalimentacion
+\draw[arrow, dashed]
+(validation.north)
+.. controls +(0,6) and +(0,6)
+..
+node[above] {Retroalimentación}
+(analysis.north);
+
+% ==================================================
+% ZONAS
+% ==================================================
+
+\begin{scope}[on background layer]
+
+% Definicion objetivos
+\node[
+    zone,
+    fill=blue!10,
+    fit=(analysis),
+    minimum width=4cm,
+    minimum height=5cm,
+    label=below:{\ Definición de objetivos}
+] {};
+
+% Desarrollo general
+\node[
+    zone,
+    fill=cyan!15,
+    fit=(partition)(sw_design)(sw_impl)(hw_design)(hw_impl),
+    inner sep=1.3cm,
+    label=below:{\normalsize Etapa de Desarrollo}
+] {};
+
+% Software
+\node[
+    zone,
+    fill=green!15,
+    fit=(sw_design)(sw_impl),
+    inner sep=0.5cm,
+    label=above:{\normalsize Software}
+] {};
+
+% Hardware
+\node[
+    zone,
+    fill=green!15,
+    fit=(hw_design)(hw_impl),
+    inner sep=0.5cm,
+    label=below:{\normalsize Hardware}
+] {};
+
+% Integracion
+\node[
+    zone,
+    fill=purple!10,
+    fit=(integration),
+    minimum width=4cm,
+    minimum height=5cm,
+    label=below:{\normalsize Integración y Prueba}
+] {};
+
+% Validacion
+\node[
+    zone,
+    fill=red!10,
+    fit=(validation),
+    minimum width=4cm,
+    minimum height=5cm,
+    label=below:{\normalsize Análisis de Resultados}
+] {};
+
+\end{scope}
+
+\end{tikzpicture}
