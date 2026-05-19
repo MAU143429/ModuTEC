@@ -507,23 +507,26 @@ Como refinamiento, la configuración del sistema se externaliza mediante un arch
 La estructura de configuración se organiza en dos grupos principales: parámetros generales del sistema, como frecuencia de muestreo, tamaño de bloque y velocidad de transmisión serial; y parámetros específicos de cada técnica, incluyendo identificación del módulo, tipo de señal procesada y rangos de mapeo asociados a cada potenciómetro. Esta organización permite que la aplicación de monitoreo incorpore una herramienta visual capaz de modificar parámetros y regenerar automáticamente la configuración del sistema sin intervenir directamente sobre el firmware del microcontrolador.
 
 
+
+
 \subsection{Implementación del proceso de evaluación y análisis de desempeño}
 
 La disposición de un sistema funcional capaz de modular, demodular y visualizar señales en tiempo real no constituye por sí sola evidencia suficiente sobre la calidad del procesamiento realizado. La inspección visual de las formas de onda reconstruidas permite identificar anomalías groseras en el comportamiento del sistema, pero resulta insuficiente para caracterizar con precisión la fidelidad de reconstrucción, la estabilidad temporal del procesamiento y la sensibilidad del sistema ante variaciones en los parámetros de operación. Dos señales pueden mostrar formas visualmente similares y presentar, no obstante, diferencias significativas en amplitud, desplazamiento de fase o dispersión acumulada que un análisis puramente cualitativo no detecta. Por esta razón, la incorporación de un proceso de evaluación cuantitativa integrado al flujo operativo del sistema constituye uno de los principales objetivos dentro del desarrollo del proyecto.
 
-El problema central que este objetivo aborda consiste en definir un conjunto de métricas matemáticas complementarias que permitan caracterizar el desempeño del sistema desde perspectivas distintas y no redundantes. La complementariedad es un criterio determinante en la selección: una única métrica captura solamente una dimensión del problema, por lo que combinaciones mal seleccionadas pueden producir una evaluación sesgada o incompleta. En este contexto, el diseño del sistema de evaluación requiere identificar cuáles son las dimensiones de desempeño relevantes para el problema planteado, para poder seleccionar el conjunto de métricas más adecuado para cada dimensión.
+El problema principal consiste en definir un conjunto de métricas complementarias capaces de evaluar distintas dimensiones del comportamiento del sistema sin introducir redundancia entre indicadores. En consecuencia, la selección de métricas no depende únicamente de la facilidad de implementación, sino de la capacidad de cada indicador para caracterizar propiedades específicas asociadas a la calidad de reconstrucción y estabilidad del procesamiento continuo.
 
-A diferencia de las etapas previas del desarrollo, donde las restricciones computacionales del entorno embebido condicionaban directamente las decisiones de diseño algorítmico, la evaluación matemática se ejecuta íntegramente dentro de la aplicación de monitoreo en el entorno de escritorio. Esta distribución resulta determinante, ya que permite emplear formulaciones con mayor precisión numérica y operaciones vectorizadas sin imponer carga adicional sobre el microcontrolador. El módulo de métricas opera sobre los bloques de señal recibidos por comunicación serial, calculando los indicadores de desempeño en cada ciclo de actualización del monitor.
+A diferencia del procesamiento principal ejecutado sobre el RP2040, el cálculo de métricas se realiza completamente dentro de la aplicación de monitoreo en el entorno de escritorio. Esta separación permite utilizar operaciones vectorizadas y estructuras matemáticas más elaboradas sin afectar simultáneamente la estabilidad temporal del sistema embebido. Los indicadores son calculados directamente sobre los bloques de señal recibidos mediante comunicación serial, integrándose al flujo de adquisición y visualización implementado previamente en la Figura~\ref{fig:monitor_architecture}.
 
 \subsubsection{Selección de métricas de evaluación}
 
-El desempeño del sistema de modulación y demodulación puede caracterizarse a partir de tres dimensiones fundamentales: la similitud global entre la señal original y la señal reconstruida, la precisión numérica de la reconstrucción punto a punto, y la estabilidad temporal del procesamiento durante la ejecución continua por bloques. Cada una de estas dimensiones exige una aproximación matemática distinta, y la selección de métricas apropiadas requiere considerar tanto las propiedades formales de las métricas candidatas como su adecuación al tipo de señal procesada y a las características del entorno de operación.
+El desempeño del sistema se caracteriza a partir de tres dimensiones principales: similitud global entre señales, precisión de reconstrucción punto a punto y estabilidad temporal del procesamiento continuo. Cada una de estas dimensiones requiere métricas con propiedades matemáticas distintas, por lo que la selección de indicadores debe considerar simultáneamente el tipo de señal procesada y la información que se desea extraer del comportamiento del sistema.
 
-\textbf{Dimensión 1: Similitud global entre señales.} La primera dimensión busca cuantificar en qué medida la señal demodulada preserva la forma general de la señal original, con independencia de posibles diferencias de amplitud o desplazamiento en continua introducidos por el proceso de filtrado o por el acondicionamiento de la señal dentro del embebido. Para esta dimensión existen múltiples alternativas establecidas en la literatura de procesamiento de señales.
+\textbf{Dimensión 1: Similitud global entre señales.}  
+La primera dimensión busca evaluar en qué medida la señal demodulada conserva la forma general de la señal original, independientemente de variaciones moderadas de amplitud o componentes de continua introducidas por el proceso de filtrado.
 
-Una primera opción corresponde al coeficiente de determinación $R^2$, ampliamente utilizado en análisis de regresión como indicador de la fracción de varianza explicada por el modelo. Sin embargo, su interpretación asume una relación lineal entre las señales comparadas y es sensible a diferencias de escala absoluta, lo que lo hace menos robusto ante variaciones de amplitud sistemáticas introducidas por el procesamiento embebido \cite{kay1993fundamentals}. Una segunda alternativa corresponde a la coherencia espectral, que evalúa la similitud entre señales en el dominio de la frecuencia. Aunque esta métrica es apropiada para análisis estacionario de señales, su cálculo requiere transformadas de Fourier sobre ventanas suficientemente largas, lo que introduce latencia en la retroalimentación y resulta más adecuado para análisis post-procesado que para retroalimentación en tiempo real.
+Una alternativa posible corresponde al coeficiente de determinación $R^2$, ampliamente utilizado en análisis estadístico y regresión. Sin embargo, esta métrica asume una relación lineal estricta entre señales y resulta sensible a variaciones de escala absoluta, lo que limita su utilidad bajo señales cuya amplitud puede verse alterada por el propio proceso de demodulación \cite{kay1993fundamentals}. Otra alternativa corresponde a la coherencia espectral, orientada a comparar señales en el dominio de la frecuencia. Aunque este enfoque permite analizar similitud frecuencial, requiere ventanas temporales más extensas y operaciones de transformada que introducen latencia adicional sobre el proceso de evaluación.
 
-La métrica seleccionada para esta dimensión corresponde a la Correlación Cruzada Normalizada (NCC), formulada como la correlación de Pearson entre la señal original y la señal demodulada, centradas respecto a sus respectivas medias, tal como se expresa en la ecuación \ref{eq:ncc_analogico}.
+Otra alternativa considerada, es la Correlación Cruzada Normalizada (NCC), esta métrica proporciona un balance más adecuado entre sensibilidad estructural, estabilidad frente a variaciones de amplitud y complejidad de cálculo. En este caso, se define como la correlación de Pearson entre la señal original y la señal demodulada centradas respecto a sus respectivas medias, según se expresa en la ecuación \ref{eq:ncc_analogico}.
 
 \begin{equation}
 \text{NCC} = \frac{\displaystyle\sum_{i=1}^{N}(x_i - \bar{x})(y_i - \bar{y})}
@@ -532,9 +535,9 @@ La métrica seleccionada para esta dimensión corresponde a la Correlación Cruz
 \label{eq:ncc_analogico}
 \end{equation}
 
-La elección de NCC frente a las alternativas descritas se justifica en que la normalización respecto a las normas de ambas señales hace que el resultado sea invariante ante diferencias de escala y offset, lo cual resulta especialmente relevante en este contexto dado que el procesamiento de demodulación introduce componentes de continua y variaciones de amplitud que no constituyen degradación real de la técnica sino artefactos del acondicionamiento. El resultado está acotado en $[-1, 1]$, lo que facilita su interpretación como porcentaje de similitud al escalarlo al rango $[0, 100]$, y su cálculo requiere únicamente operaciones vectoriales básicas, compatibles con una actualización por bloque en tiempo real.
+La selección de NCC responde principalmente a su invariancia frente a diferencias de escala y offset, propiedad particularmente relevante debido a que la demodulación y el filtrado pueden introducir variaciones de amplitud que no necesariamente representan degradación real de la técnica.
 
-No obstante, la aplicación directa de NCC sobre señales digitales presenta una limitación fundamental. En la técnica ASK/OOK, la señal original corresponde a una secuencia binaria representada en formato NRZ, por lo que la correlación analógica entre la señal original y la demodulada puede verse influenciada por la forma de los pulsos reconstituidos y no reflejar fielmente la tasa de recuperación de bits. En este caso, la métrica más informativa consiste en comparar directamente la correspondencia lógica entre ambas señales, convirtiendo ambas a representación binaria mediante umbral de signo y calculando la fracción de bits correctamente recuperados, conforme se define en la ecuación \ref{eq:ncc_digital}.
+No obstante, la aplicación directa de NCC sobre señales digitales introduce una limitación importante. En ASK/OOK, la señal original corresponde a una secuencia binaria discreta, por lo que una correlación analógica convencional puede verse influenciada por la forma temporal de los pulsos reconstruidos y no reflejar correctamente la recuperación lógica de bits. Por lo tanto, la métrica se adapta hacia una comparación binaria directa entre estados lógicos, como se expresa en la ecuación \ref{eq:ncc_digital}.
 
 \begin{equation}
 \text{NCC}_{\text{digital}} = \frac{1}{N}\sum_{i=1}^{N}
@@ -542,11 +545,14 @@ No obstante, la aplicación directa de NCC sobre señales digitales presenta una
 \label{eq:ncc_digital}
 \end{equation}
 
-Esta diferenciación en el cálculo de NCC según el tipo de técnica activa es esencial, ya que aplicar la correlación analógica a señales digitales introduciría una evaluación estructuralmente incorrecta. La selección automática de la variante adecuada a partir del campo de identificación de técnica contenido en los metadatos del protocolo serial garantiza que la métrica sea siempre coherente con la naturaleza de la señal procesada.
+Esta diferenciación permite mantener coherencia entre la métrica utilizada y la naturaleza de la señal procesada, evitando interpretar señales binarias mediante criterios orientados originalmente a señales analógicas continuas.
 
-\textbf{Dimensión 2: Precisión numérica de la reconstrucción.} La segunda dimensión complementa la evaluación de similitud al medir cuán exactamente los valores de la señal demodulada coinciden con los valores de la señal original en cada instante. Una señal puede presentar alta correlación con la original ---conservando adecuadamente su forma general--- y aun así contener desviaciones sistemáticas de amplitud, errores de escala o distorsión en regiones específicas que el NCC no detecta por su naturaleza invariante a la escala.
+\textbf{Dimensión 2: Precisión numérica de la reconstrucción.}  
+La segunda dimensión evalúa el error punto a punto entre la señal original y la señal reconstruida. Aunque NCC permite cuantificar similitud estructural, una señal puede conservar adecuadamente su forma general y presentar simultáneamente desviaciones significativas de amplitud o distorsiones locales que la correlación no detecta debido a su invariancia a escala.
 
-Para esta dimensión, la alternativa más directa corresponde al Error Cuadrático Medio (RMSE), que cuantifica la raíz del error promedio cuadrático punto a punto entre ambas señales. Sin embargo, el RMSE en su forma estándar es dimensional y dependiente de la amplitud de la señal, lo que impide comparar resultados entre bloques procesados bajo diferentes configuraciones de parámetros o entre las dos técnicas implementadas, las cuales operan sobre señales con rangos dinámicos distintos. La normalización respecto al rango dinámico de la señal original resuelve esta limitación, dando lugar al Error Cuadrático Medio Normalizado (NRMSE), definido en la ecuación~\ref{eq:nrmse}.
+La alternativa más directa para esta dimensión corresponde al Error Cuadrático Medio (RMSE). Sin embargo, esta métrica depende directamente del rango dinámico de la señal analizada, dificultando la comparación entre bloques procesados bajo distintas configuraciones o entre técnicas con amplitudes diferentes.
+
+Para resolver esta limitación se selecciona el Error Cuadrático Medio Normalizado (NRMSE), definido en la ecuación \ref{eq:nrmse}.
 
 \begin{equation}
 \text{NRMSE} = \frac{\sqrt{\dfrac{1}{N}\displaystyle\sum_{i=1}^{N}(x_i - y_i)^2}}
@@ -554,11 +560,12 @@ Para esta dimensión, la alternativa más directa corresponde al Error Cuadráti
 \label{eq:nrmse}
 \end{equation}
 
-La adopción de NRMSE sobre RMSE se justifica precisamente en esta propiedad de invarianza al rango dinámico, que permite interpretar el error en términos relativos respecto a la excursión total de la señal de referencia. Adicionalmente, la implementación incorpora una etapa de compensación de desfase y ganancia previa al cálculo del error, con el propósito de desacoplar la degradación real introducida por el proceso de modulación y demodulación de los desplazamientos temporales y variaciones de amplitud asociados al filtrado pasa bajos aplicado durante la reconstrucción de la señal. De esta manera, el indicador refleja principalmente la fidelidad efectiva de reconstrucción y no distorsiones deterministas inherentes al procesamiento interno del sistema.
+La normalización respecto al rango dinámico permite interpretar el error de forma relativa y mantener comparabilidad entre distintos escenarios operativos. Adicionalmente, previo al cálculo del error se incorpora una etapa de compensación de desfase y ganancia orientada a desacoplar la degradación efectiva del sistema respecto a desplazamientos temporales o variaciones de amplitud introducidas por el filtrado pasa bajos utilizado durante la reconstrucción.
 
-\textbf{Dimensión 3: Estabilidad temporal del procesamiento continuo.} Las dos métricas anteriores caracterizan el desempeño del sistema en cada bloque individualmente, pero no capturan el comportamiento del sistema a lo largo del tiempo durante la ejecución continua. En un sistema que procesa señales mediante bloques secuenciales, es posible que el desempeño sea aceptable en promedio pero que exhiba variaciones significativas entre bloques consecutivos, lo cual evidenciaría inestabilidad en el procesamiento, problemas de sincronización serial o sensibilidad excesiva a las transiciones entre bloques.
+\textbf{Dimensión 3: Estabilidad temporal del procesamiento continuo.}  
+Las métricas anteriores permiten evaluar individualmente la calidad de cada bloque procesado, pero no describen cómo varía el desempeño del sistema durante la ejecución continua.
 
-Para esta dimensión se consideró el uso de la varianza temporal del NRMSE, que mediría directamente la dispersión del error de reconstrucción a lo largo del tiempo. Sin embargo, dado que NCC ya constituye el indicador principal de calidad del sistema, resulta más informativo y coherente evaluar la estabilidad sobre la misma métrica base, manteniendo consistencia semántica en la interpretación de los indicadores. La desviación estándar del historial de valores NCC entre bloques consecutivos cumple esta función, según se expresa en la ecuación \ref{eq:std_ncc}.
+Una posibilidad consiste en analizar directamente la variación temporal del NRMSE. Sin embargo, dado que NCC constituye el indicador principal de similitud del sistema, resulta más coherente evaluar la estabilidad utilizando la misma métrica base. De esta modo, la estabilidad temporal se caracteriza mediante la desviación estándar del historial de valores NCC registrados entre bloques consecutivos a través del tiempo, según se expresa en la ecuación \ref{eq:std_ncc}.
 
 \begin{equation}
 \sigma_{\text{NCC}} = \sqrt{\frac{1}{M}\sum_{i=1}^{M}
@@ -566,19 +573,22 @@ Para esta dimensión se consideró el uso de la varianza temporal del NRMSE, que
 \label{eq:std_ncc}
 \end{equation}
 
-donde $M$ representa la cantidad de bloques acumulados en el historial y $\overline{\text{NCC}}$ el promedio de los valores registrados. Una desviación estándar reducida indica que el desempeño del sistema se mantiene consistente entre bloques, mientras que valores elevados pueden evidenciar inestabilidad en el procesamiento, pérdida de sincronización en el protocolo serial o degradación temporal asociada a variaciones en los parámetros del embebido durante la ejecución.
-
-
-
-
+donde $M$ representa la cantidad de bloques considerados dentro del historial y $\overline{\text{NCC}}$ el promedio de correlación registrado. Valores reducidos de $\sigma_{\text{NCC}}$ indican que el desempeño permanece estable entre bloques consecutivos, mientras que desviaciones elevadas pueden evidenciar fluctuaciones temporales asociadas al procesamiento, sincronización serial o cambios sobre los parámetros operativos del sistema.
 
 \subsubsection{Integración dentro del flujo operativo del monitor}
 
-La integración de las métricas dentro del sistema de monitoreo requiere definir en qué punto del flujo de adquisición y visualización se realiza su cálculo, con qué periodicidad se actualizan y de qué forma se vinculan con los datos transmitidos por el embebido. Dado que el sistema recibe bloques de señal en forma continua y el protocolo serial transmite en cada frame las tres versiones sincronizadas de la señal, resulta natural vincular el cálculo de métricas directamente al evento de recepción de un nuevo frame, de forma que cada bloque procesado genere automáticamente una actualización de los indicadores de desempeño.
+La integración de métricas dentro del monitor requiere definir cómo vincular el cálculo matemático con el flujo continuo de adquisición implementado mediante frames seriales sincronizados. Debido a que cada frame contiene simultáneamente las tres etapas de la señal correspondientes a un mismo bloque temporal, el cálculo de métricas puede asociarse directamente al evento de recepción de un nuevo frame.
 
-Bajo este esquema, por cada frame recibido el sistema extrae los vectores correspondientes a la señal original y la señal demodulada, selecciona la variante de NCC adecuada según el tipo de técnica activa identificado en los metadatos del frame, y registra el resultado en el historial de bloques para el posterior cálculo de la desviación estándar. La decisión de realizar el cálculo sobre el bloque más recientemente recibido, en lugar de acumular múltiples bloques en un buffer extendido, responde a la necesidad de mantener retroalimentación en tiempo real sin introducir latencia adicional en el ciclo de actualización de la interfaz. El historial de valores NCC se conserva internamente como una ventana deslizante, permitiendo calcular $\sigma_{\text{NCC}}$ sobre la ventana acumulada sin requerir almacenamiento indefinido de señales pasadas.
+A partir de esto, cada actualización del monitor extrae automáticamente los bloques correspondientes a la señal original y la señal demodulada, selecciona la variante de NCC apropiada según la técnica activa identificada en los metadatos transmitidos por el sistema y registra el resultado dentro de un historial temporal utilizado posteriormente para calcular $\sigma_{\text{NCC}}$.
 
-En conjunto, la implementación de este proceso de evaluación proporciona al sistema un mecanismo de retroalimentación cuantitativa que complementa la visualización gráfica de señales y permite caracterizar objetivamente el comportamiento del sistema bajo distintas configuraciones de parámetros, técnicas activas y condiciones de operación del entorno embebido.
+La decisión de calcular las métricas inmediatamente después de recibir cada frame permite mantener retroalimentación continua sin introducir buffers extensos ni aumentar innecesariamente la latencia de actualización visual del sistema. Para ello, el historial de valores NCC se conserva mediante una ventana deslizante que limita la cantidad de muestras históricas almacenadas y evita crecimiento indefinido de memoria dentro de la aplicación de monitoreo.
+
+En conjunto, esta integración permite complementar la inspección visual de señales con un mecanismo de evaluación cuantitativa capaz de caracterizar objetivamente el comportamiento del sistema bajo distintas configuraciones de operación.
+
+
+
+
+
 
 
 \section{Análisis de los resultados obtenidos}
