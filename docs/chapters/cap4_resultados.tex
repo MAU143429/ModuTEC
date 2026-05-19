@@ -27,15 +27,16 @@ La aplicación de monitoreo se estructuró mediante módulos independientes de r
 
 A partir de la arquitectura definida para la solución propuesta, el proceso de desarrollo del sistema se orientó a la integración progresiva de los distintos componentes funcionales. A continuación, se describe el desarrollo realizado para cada uno de estos componentes, considerando las principales decisiones técnicas asociadas al sistema embebido, el procesamiento de señales, la comunicación de datos y la aplicación de monitoreo implementada para el proyecto.
 
+% === INICIO TAREA-1B ===
 
 \label{sec:adaptacion}
 \subsection{Adaptación de los algoritmos al entorno embebido}
 
-La adaptación de los algoritmos de modulación y demodulación al entorno embebido representa uno de los principales retos técnicos de la solución propuesta, debido a que las técnicas implementadas deben mantener funcionamiento continuo bajo restricciones asociadas a procesamiento, memoria, sincronización temporal y transmisión serial de datos. En este escenario, el problema no se limita únicamente a ejecutar ecuaciones de modulación y demodulación, sino a reorganizar las técnicas de procesamiento para mantener estabilidad operativa dentro de una arquitectura computacionalmente limitada.
+La adaptación de los algoritmos de modulación y demodulación al entorno embebido constituye el primer objetivo específico del desarrollo, ya que las técnicas implementadas deben mantener operación continua bajo restricciones de procesamiento, memoria, sincronización temporal y transmisión serial. En consecuencia, el problema no consiste únicamente en trasladar ecuaciones de modulación al microcontrolador, sino en reorganizar las técnicas para conservar estabilidad operativa dentro de una plataforma computacionalmente limitada.
 
 \subsubsection{Selección de la plataforma embebida}
 
-La selección de la plataforma embebida condiciona directamente la complejidad matemática permitida, la organización del procesamiento y la viabilidad temporal del sistema. Bajo este criterio, la plataforma seleccionada debe proporcionar capacidad suficiente para ejecutar procesamiento digital básico de señales, transmisión serial continua y adquisición de entradas analógicas, manteniendo simultáneamente bajo costo y simplicidad de integración.
+La selección de la plataforma embebida condiciona directamente la complejidad matemática permitida, la organización del procesamiento y la viabilidad temporal del sistema. La plataforma elegida debe sostener procesamiento digital básico de señales, transmisión serial continua y adquisición de entradas analógicas, manteniendo simultáneamente bajo costo y simplicidad de integración.
 
 La Tabla \ref{tab:placas_embebidas} presenta una comparación entre algunas de las plataformas consideradas durante esta etapa, utilizando información proveniente de las especificaciones oficiales de cada fabricante \cite{raspberrypiPicoDocs}.
 
@@ -43,6 +44,7 @@ La Tabla \ref{tab:placas_embebidas} presenta una comparación entre algunas de l
 \centering
 \caption{Comparación entre plataformas embebidas consideradas.}
 \label{tab:placas_embebidas}
+\resizebox{0.75\textwidth}{!}{
 \begin{tabular}{|>{\centering\arraybackslash}p{3.3cm}|>{\centering\arraybackslash}p{2.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{2.5cm}|>{\centering\arraybackslash}p{1.5cm}|}
 \hline
 \textbf{Plataforma} &
@@ -73,15 +75,16 @@ ESP32 &
 USB-UART &
 \$8 \\ \hline
 \end{tabular}
+}
 \end{table}
 
-En primera instancia, la plataforma Arduino Uno presenta restricciones importantes asociadas tanto a memoria como a capacidad de procesamiento para mantener generación, modulación, demodulación y transmisión continua de señales dentro de un mismo flujo operativo. La limitada cantidad de memoria SRAM disponible restringe significativamente el manejo simultáneo de buffers de señal, estructuras temporales de procesamiento y paquetes de transmisión serial, mientras que la frecuencia de operación del microcontrolador introduce limitaciones adicionales sobre la continuidad temporal requerida por el sistema. Bajo estas condiciones, la ejecución concurrente de procesos puede comprometer la estabilidad general del sistema.
+En primera instancia, Arduino Uno presenta restricciones importantes de memoria y frecuencia de operación para mantener generación, modulación, demodulación y transmisión continua dentro de un mismo flujo operativo. La cantidad limitada de SRAM dificulta el manejo simultáneo de buffers de señal, estructuras temporales y paquetes seriales, comprometiendo la continuidad requerida por el sistema.
 
-Por otro lado, aunque ESP32 proporciona mayores capacidades computacionales y una cantidad superior de memoria disponible, gran parte de su arquitectura se orienta hacia aplicaciones IoT y comunicación inalámbrica. Esto incorpora subsistemas y mecanismos de conectividad que no aportan ventajas directas para el problema abordado, pero sí aumentan la complejidad general de integración, configuración y administración del entorno embebido. Adicionalmente, parte del enfoque de la solución consiste en mantener una arquitectura computacional relativamente simple, donde el procesamiento digital y la sincronización temporal de señales representen el núcleo principal del sistema.
+Por su parte, el ESP32 ofrece mayor capacidad computacional y memoria disponible, aunque gran parte de su arquitectura se orienta a conectividad inalámbrica e integración IoT. Estos subsistemas no aportan ventajas directas para el problema abordado y aumentan la complejidad de integración para una solución centrada principalmente en procesamiento digital y comunicación serial.
 
-Seguidamente, la Raspberry Pi Pico representa una alternativa más balanceada entre capacidad computacional, disponibilidad de periféricos y costo de implementación. La plataforma proporciona capacidad suficiente para mantener procesamiento continuo de señales, lectura simultánea de entradas analógicas y transmisión serial estructurada sin incorporar complejidad adicional asociada a conectividad externa o subsistemas no requeridos. Adicionalmente, la integración directa de comunicación USB, la disponibilidad de GPIO suficientes para interacción física y la compatibilidad con MicroPython favorecen una arquitectura más unificada entre el entorno embebido y el sistema de monitoreo desarrollado.
+Por último, la Raspberry Pi Pico responde a un balance más adecuado entre capacidad de procesamiento, disponibilidad de periféricos, comunicación USB y costo de implementación. La plataforma proporciona recursos suficientes para sostener procesamiento continuo de señales y adquisición simultánea de entradas físicas sin incorporar complejidad adicional asociada a subsistemas externos no requeridos.
 
-Luego de evaluar las opciones disponibles, la Raspberry Pi Pico es la plataforma embebida seleccionada para el desarrollo de la solución propuesta, esta placa utiliza como núcleo principal el microcontrolador RP2040, cuyas características técnicas relevantes se presentan en la Tabla \ref{tab:rp2040_specs} \cite{raspberrypiPicoDocs}.
+Luego de evaluar las opciones disponibles, la Raspberry Pi Pico es la plataforma seleccionada para el desarrollo de la solución propuesta. Esta placa utiliza como núcleo principal el microcontrolador RP2040, cuyas características técnicas relevantes se presentan en la Tabla \ref{tab:rp2040_specs} \cite{raspberrypiPicoDocs}.
 
 \begin{table}[H]
 \centering
@@ -105,11 +108,12 @@ Lenguajes soportados & C/C++ y MicroPython \\ \hline
 
 \end{table}
 
-A pesar de que la Raspberry Pi Pico representa la alternativa más adecuada para los requerimientos del sistema, el entorno embebido continúa imponiendo restricciones importantes sobre la complejidad matemática permitida durante la ejecución continua del procesamiento. Las capacidades computacionales y de memoria del RP2040 limitan el uso de bibliotecas orientadas a procesamiento numérico intensivo, como NumPy o SciPy, debido a sus requerimientos de memoria y estructuras vectorizadas. Esta restricción obliga a apoyarse principalmente en operaciones aritméticas básicas, procesamiento secuencial y estructuras matemáticas simplificadas, condicionando a su vez las decisiones de diseño algorítmico que se abordarán en las seccionessiguientes.
+El uso de RP2040 junto con MicroPython condiciona simultáneamente las decisiones de implementación algorítmica. Bibliotecas orientadas a procesamiento numérico intensivo, como NumPy o SciPy, exceden el modelo de ejecución planteado para el sistema, por lo que la solución se apoya principalmente en operaciones aritméticas básicas, procesamiento secuencial y estructuras matemáticas simplificadas.
+
 
 \subsubsection{Integración física del modulador}
 
-Luego de seleccionar la plataforma embebida, se requiere definir un circuito que permita poner a disposición una estructura física mínima compuesta por elementos electrónicos que faciliten interactuar dinámicamente con las técnicas que se ejecutarán en el embebido. Bajo este criterio, el sistema se construye utilizando una estructura compuesta por la Raspberry Pi Pico, tres potenciómetros y un interruptor.
+Luego de seleccionar la plataforma embebida, resulta necesario definir una estructura física básica que permita interactuar directamente con el sistema durante su operación. Para ello, el modulador incorpora una Raspberry Pi Pico, tres potenciómetros y un interruptor como elementos principales de entrada y control.
 
 La Figura \ref{fig:pico_schematic} presenta el esquema general de conexión utilizado para la construcción del modulador físico.
 
@@ -122,13 +126,12 @@ La Figura \ref{fig:pico_schematic} presenta el esquema general de conexión util
     \label{fig:pico_schematic}
 \end{figure}
 
-Los tres potenciómetros se conectan a los canales ADC disponibles del RP2040 (GPIO 26, 27 y 28), mientras que el interruptor se conecta a un pin GPIO configurado con resistencia de pull-up interna. Esta configuración permite al sistema embebido adquirir de forma continua tres valores analógicos normalizados en el rango $[0,1]$ y un estado binario de selección de técnica, utilizando únicamente periféricos nativos del microcontrolador sin requerir componentes externos adicionales.
+Los tres potenciómetros se conectan a las entradas analógicas disponibles del RP2040 (GPIO 26, 27 y 28), mientras que el interruptor se conecta a un pin GPIO configurado mediante resistencia pull-up interna. Esta configuración establece una base mínima de interacción física para controlar el comportamiento general del sistema embebido sin requerir circuitería adicional externa.
+
 
 \subsubsection{Adaptación de la técnica AM}
 
-La adaptación de la técnica AM al entorno embebido representa una decisión crítica dentro del diseño de la solución, debido a que esta técnica puede implementarse con distintos niveles de complejidad matemática y, por tanto, con diferentes implicaciones sobre precisión, carga computacional y estabilidad temporal. Bajo este escenario, el problema no consiste únicamente en aplicar la ecuación clásica de modulación, sino en definir hasta qué punto resulta conveniente trasladar al microcontrolador una representación más completa del proceso de modulación y demodulación, considerando que el sistema debe ejecutar simultáneamente generación de señales, lectura de parámetros físicos, procesamiento continuo de bloques y transmisión serial hacia la aplicación de monitoreo.
-
-Para la etapa de modulación AM se consideran dos enfoques principales. El primero corresponde a una implementación con mayor acondicionamiento matemático sobre la señal, incorporando una etapa de normalización, control más estricto de amplitud y ajustes adicionales sobre la señal de información antes de aplicar la portadora. Bajo esta alternativa, la señal de información $m[n]$ no se utiliza directamente, sino que es previamente acondicionada para mantener su amplitud dentro de un rango controlado:
+La implementación de AM requiere definir qué nivel de complejidad matemática resulta conveniente trasladar al microcontrolador. Una primera posibilidad consiste en incorporar normalización dinámica y control explícito de amplitud antes de aplicar la portadora. En esta alternativa, la señal de información $m[n]$ es acondicionada mediante:
 
 \begin{equation}
 m_a[n] = \frac{m[n]}{\max(|m[n]|)}
@@ -144,11 +147,11 @@ s[n] = A_c \left(1 + \mu m_a[n]\right)\cos(2\pi f_c nT_s)
 
 donde $A_c$ representa la amplitud de la portadora, $\mu$ el índice de modulación, $f_c$ la frecuencia de portadora y $T_s$ el periodo de muestreo.
 
-Esta alternativa proporciona un mayor control matemático sobre la amplitud de la señal modulada y reduce el riesgo de sobre-modulación o saturación frente a variaciones de amplitud de la señal de entrada. Adicionalmente, el uso de una señal previamente acondicionada favorece un comportamiento más estable de la envolvente y contribuye a mantener una reconstrucción más controlada durante la demodulación.
+Esta formulación mejora el control sobre el rango dinámico de la señal modulada y reduce el riesgo de sobre-modulación. Sin embargo, exige recorrer bloques completos de muestras, calcular máximos y aplicar divisiones sucesivas, incrementando el costo de procesamiento por bloque.
 
-Sin embargo, este enfoque también incrementa considerablemente la carga de procesamiento dentro del entorno embebido. La normalización requiere recorrer bloques completos de muestras, calcular máximos, realizar divisiones sucesivas y mantener controles adicionales sobre el rango dinámico de la señal. Aunque estas operaciones resultan relativamente comunes en entornos de simulación o procesamiento DSP convencional, su ejecución continua dentro de MicroPython sobre un microcontrolador implica un aumento significativo en el costo computacional. En consecuencia, esta alternativa prioriza precisión matemática y acondicionamiento de señal, pero aproxima simultáneamente al sistema embebido a sus límites de procesamiento.
+Una segunda posibilidad consiste en simplificar directamente la representación discreta de la modulación y trasladar parte del control de amplitud hacia la propia generación de la señal de información. Este enfoque reduce operaciones de acondicionamiento previas y mantiene una estructura de cálculo más compacta, aunque depende de que la señal utilizada permanezca dentro de un rango previamente controlado.
 
-Como alternativa, la modulación puede representarse mediante una formulación discreta simplificada orientada a preservar únicamente el comportamiento funcional esencial de AM. En este contexto, la señal de información es generada directamente dentro de un rango previamente controlado, eliminando la necesidad de incorporar una etapa adicional de normalización dinámica por bloque. La modulación se expresa como:
+La implementación final adopta esta segunda alternativa, donde la señal de información se genera directamente dentro de un rango adecuado y no requiere normalización dinámica adicional. La modulación se expresa en la ecuación \eqref{eq:am_mod_embebido}.
 
 \begin{equation}
 s[n] = \left(1 + \mu m[n]\right)c[n]
@@ -162,15 +165,9 @@ c[n] = \cos(2\pi f_c nT_s)
 \label{eq:am_portadora}
 \end{equation}
 
-Esta formulación reduce el procesamiento requerido a operaciones elementales de suma, multiplicación y evaluación trigonométrica de la portadora. La principal ventaja de este enfoque corresponde a la disminución significativa de la carga computacional asociada al procesamiento continuo. Debido a que la arquitectura elimina etapas adicionales de acondicionamiento y control dinámico, el microcontrolador dispone de mayor margen operativo para sostener simultáneamente el procesamiento interno, la transmisión serial y la actualización continua de parámetros del sistema.
+El modelo seleccionado conserva el comportamiento funcional de AM utilizando únicamente suma, multiplicación y evaluación de portadora. Además, la señal de información es generada internamente por el propio sistema, por lo que no resulta necesario incorporar acondicionamiento dinámico sobre cada bloque de muestras.
 
-La diferencia entre ambas alternativas radica en que, la primera estrategia favorece la precisión matemática, control de amplitud y estabilidad formal sobre la señal modulada, pero incrementa el procesamiento requerido por bloque, mientras que, la segunda reduce parte de ese acondicionamiento adicional y prioriza simplicidad operativa y estabilidad temporal dentro del entorno embebido, conservando al mismo tiempo el comportamiento funcional fundamental de la técnica.
-
-Considerando que la señal de información utilizada dentro del sistema no proviene de una fuente externa arbitraria, sino que es generada internamente mediante parámetros controlados por el propio sistema, la arquitectura final se orienta hacia la formulación discreta simplificada. Esta decisión permite mantener una representación adecuada del fenómeno de modulación AM sin incorporar etapas adicionales de procesamiento que incrementen innecesariamente la carga computacional del microcontrolador. En consecuencia, el enfoque seleccionado proporciona un balance más adecuado entre representatividad funcional, estabilidad temporal y viabilidad computacional dentro del entorno embebido.
-
-La etapa de demodulación introduce una segunda decisión crítica asociada al mecanismo de recuperación de la señal de información. En este caso se consideran dos alternativas técnicamente viables: la demodulación por envolvente y la demodulación coherente. Ambos enfoques permiten recuperar la información contenida en la señal AM, aunque presentan diferencias importantes respecto a sensibilidad, complejidad y compatibilidad con la arquitectura general del sistema.
-
-La primera alternativa corresponde a la demodulación por envolvente. En este enfoque, la señal modulada es transformada en una señal positiva que permita aproximar su envolvente y posteriormente aplicar filtrado pasa bajos para recuperar la señal de información. De forma simplificada, este proceso puede representarse mediante:
+La recuperación de la señal introduce una segunda decisión asociada al mecanismo de demodulación. La detección por envolvente representa la opción más directa, ya que aproxima la envolvente de la señal modulada mediante rectificación y filtrado pasa bajos definidos en las ecuaciones \eqref{eq:am_envolvente_abs} y \eqref{eq:am_envolvente_lpf}.
 
 \begin{equation}
 e[n] = |s[n]|
@@ -184,11 +181,11 @@ seguido por:
 \label{eq:am_envolvente_lpf}
 \end{equation}
 
-La principal ventaja de esta estrategia consiste en que elimina la necesidad de utilizar una referencia local de portadora durante la recuperación. Esto simplifica parcialmente la arquitectura de detección y reduce la dependencia sobre mecanismos de sincronización explícita entre modulación y demodulación. Adicionalmente, la detección por envolvente mantiene una relación directa con arquitecturas clásicas de recuperación AM y permite implementar un proceso conceptualmente sencillo.
+Este mecanismo evita utilizar una referencia local de portadora, aunque la calidad de recuperación pasa a depender fuertemente del comportamiento de la envolvente y del filtrado posterior aplicado sobre la señal detectada.
 
-No obstante, este enfoque también introduce limitaciones importantes dentro del contexto del proyecto. La calidad de recuperación depende considerablemente del comportamiento de la envolvente detectada y del filtrado posterior aplicado sobre la señal. Variaciones sobre amplitud, componentes residuales de alta frecuencia o cambios sobre el índice de modulación pueden afectar la estabilidad de la envolvente estimada y generar distorsión sobre la señal recuperada. En consecuencia, aunque esta alternativa reduce parcialmente la complejidad asociada a sincronización, traslada gran parte del problema hacia el diseño del filtrado y la estabilidad de la detección de amplitud.
+Una alternativa corresponde a la demodulación coherente, donde la recuperación se realiza utilizando una referencia local de portadora equivalente a la empleada durante la modulación. Este mecanismo incorpora una etapa adicional de multiplicación, pero mantiene mayor control sobre la reconstrucción de la señal y reduce la dependencia respecto al comportamiento instantáneo de la envolvente detectada.
 
-La segunda alternativa corresponde a la demodulación coherente. Bajo este enfoque, la señal modulada es multiplicada directamente por una referencia local de portadora equivalente a la utilizada durante la modulación:
+La implementación final adopta esta segunda alternativa, multiplicando directamente la señal modulada por una referencia local de portadora.
 
 \begin{equation}
 y[n] = s[n] \cdot c[n]
@@ -202,20 +199,11 @@ y[n] = \left(1 + \mu m[n]\right)c^2[n]
 \label{eq:am_demod_coherente_expandida}
 \end{equation}
 
-Debido a que esta multiplicación genera simultáneamente componentes de baja y alta frecuencia, la señal resultante requiere una etapa posterior de filtrado pasa bajos:
+La multiplicación genera simultáneamente componentes de baja y alta frecuencia, por lo que posteriormente se aplica el mismo proceso de filtrado pasa bajos definido en la ecuación \eqref{eq:am_envolvente_lpf}, utilizando en este caso la señal $y[n]$ como entrada del filtro.
 
-\begin{equation}
-\hat{m}[n] = LPF\{y[n]\}
-\label{eq:am_demod_coherente_lpf}
-\end{equation}
+La utilización de demodulación coherente se favorece porque la portadora es generada internamente por el propio sistema y la referencia necesaria para recuperación ya se encuentra disponible. Esto evita incorporar mecanismos adicionales de sincronización y mantiene coherencia con la estructura utilizada durante la modulación.
 
-La principal ventaja de este enfoque corresponde al mayor control matemático que proporciona sobre el proceso de recuperación. Debido a que la detección utiliza una referencia conocida de portadora, la reconstrucción de señal resulta menos dependiente del comportamiento instantáneo de la envolvente y mantiene una recuperación más estable frente a variaciones moderadas de amplitud.
-
-Adicionalmente, dentro de la arquitectura propuesta, la portadora utilizada durante la modulación es generada internamente por el propio sistema embebido. Esto permite reutilizar directamente la referencia necesaria para la detección sin incorporar mecanismos complejos adicionales de sincronización, lo cual favorece la compatibilidad de este enfoque con la estructura general del sistema.
-
-Sin embargo, la demodulación coherente también incrementa la cantidad de operaciones requeridas durante el procesamiento continuo. La necesidad de realizar multiplicaciones adicionales por muestra y mantener la referencia de portadora implica un costo computacional mayor respecto a una detección por envolvente simple. Bajo este escenario, la decisión no depende únicamente del método de recuperación seleccionado, sino también del tipo de filtrado que el sistema puede sostener sin comprometer la estabilidad temporal del procesamiento continuo.
-
-Para la etapa de filtrado posterior se consideran igualmente dos alternativas. La primera consiste en utilizar filtros digitales de mayor selectividad frecuencial, capaces de proporcionar una reconstrucción más precisa de la señal recuperada. De forma general, esta alternativa puede representarse como:
+La etapa de filtrado posterior también presenta dos posibilidades. Un filtro digital de mayor orden ofrece mejor selectividad frecuencial y puede representarse de forma general mediante la ecuación \eqref{eq:am_filtro_fir}.
 
 \begin{equation}
 \hat{m}[n] = \sum_{k=0}^{M} b_k y[n-k]
@@ -224,9 +212,9 @@ Para la etapa de filtrado posterior se consideran igualmente dos alternativas. L
 
 donde $b_k$ representa los coeficientes del filtro y $M$ su orden.
 
-La ventaja de este enfoque corresponde al mayor control sobre la respuesta frecuencial del sistema y a la posibilidad de mejorar la calidad de reconstrucción de la señal. Sin embargo, este tipo de filtros incrementa considerablemente la cantidad de multiplicaciones, sumas y almacenamiento temporal requeridos durante el procesamiento continuo, aumentando simultáneamente el consumo de memoria y tiempo de ejecución.
+Aunque esta alternativa mejora la separación entre componentes frecuenciales, también incrementa la cantidad de multiplicaciones, accesos a memoria y almacenamiento temporal requeridos durante cada iteración. Estas características vuelven menos conveniente su integración dentro del flujo continuo de procesamiento planteado para el sistema.
 
-Como alternativa más ligera, la arquitectura propuesta incorpora un filtro pasa bajos recursivo de primer orden:
+Por esta razón, el filtrado finalmente se implementa mediante un filtro pasa bajos recursivo de primer orden, cuya salida depende únicamente del valor filtrado previo y de la muestra actual:
 
 \begin{equation}
 \hat{m}[n] = \hat{m}[n-1] + \alpha\left(y[n] - \hat{m}[n-1]\right)
@@ -235,34 +223,26 @@ Como alternativa más ligera, la arquitectura propuesta incorpora un filtro pasa
 
 donde $\alpha$ representa el coeficiente de suavizado asociado al filtro.
 
-Aunque esta estructura no proporciona el mismo nivel de selectividad que un filtro digital de mayor orden, reduce considerablemente el costo computacional asociado al procesamiento continuo y únicamente requiere conservar el estado previo de la salida filtrada. La continuidad entre bloques consecutivos se preserva manteniendo el estado del filtro entre iteraciones del ciclo principal, evitando discontinuidades en la señal recuperada.
-
-A partir de este análisis, la arquitectura final se orienta hacia una demodulación coherente complementada mediante un filtro pasa bajos recursivo de primer orden. Esta decisión permite evitar la alta dependencia de la detección por envolvente respecto al filtrado y comportamiento de amplitud, sin trasladar simultáneamente al microcontrolador una carga excesiva de procesamiento asociada a filtros digitales más complejos. En consecuencia, la solución seleccionada proporciona un balance adecuado entre estabilidad de recuperación, simplicidad matemática y viabilidad computacional dentro del entorno embebido.
+Este filtro únicamente conserva el estado previo de la salida filtrada y reduce significativamente la complejidad del procesamiento continuo. La continuidad entre bloques consecutivos se mantiene preservando el estado del filtro entre iteraciones del ciclo principal.
 
 \subsubsection{Adaptación de la técnica ASK/OOK}
 
-La adaptación de la técnica ASK/OOK introduce un problema distinto al presente en AM, debido a que el sistema requiere generar información digital continua sin depender de almacenamiento extensivo de datos ni comunicación permanente con fuentes externas. Debido a esto, la principal dificultad no consiste únicamente en aplicar la ecuación de modulación digital, sino en definir cómo construir una señal binaria continua compatible con las restricciones computacionales presentes.
+La implementación de ASK/OOK introduce un problema distinto al presente en AM, ya que el sistema requiere generar una señal digital continua sin depender de almacenamiento extensivo ni de una fuente externa de datos. La decisión principal se centra entonces en la forma de construir la secuencia binaria y en el mecanismo utilizado para recuperar los estados lógicos transmitidos.
 
-Una primera alternativa consiste en utilizar secuencias binarias precargadas dentro de memoria. Esto implica que la generación digital se basa en recorrer patrones previamente almacenados, simplificando parcialmente la arquitectura de generación de señal debido a que el sistema únicamente debe leer estados binarios previamente definidos, donde $b[n] \in \{0,1\}$.
+Una posibilidad consiste en utilizar secuencias binarias precargadas en memoria, donde la generación digital se limita a recorrer patrones previamente almacenados donde $b[n] \in \{0,1\}$. Esta solución simplifica la generación de señal, aunque restringe la variabilidad de la secuencia y aumenta el uso de memoria conforme crece el tamaño del patrón binario.
 
-La principal ventaja de esta estrategia corresponde a su simplicidad operacional. Debido a que los estados lógicos ya existen dentro de memoria, el procesamiento requerido para generar la señal digital resulta considerablemente bajo. Esto favorece la estabilidad temporal del sistema y reduce el costo computacional asociado a la generación continua de datos digitales.
-
-Sin embargo, esta alternativa también introduce limitaciones importantes sobre escalabilidad y flexibilidad de la señal generada. Conforme aumenta el tamaño de las secuencias binarias utilizadas, también aumenta el uso de memoria requerido por el sistema embebido. Adicionalmente, la reutilización continua de patrones estáticos limita considerablemente la variabilidad de la señal y reduce la capacidad del sistema para representar comportamientos digitales más dinámicos. Debido a esto, el sistema prioriza simplicidad y estabilidad operativa, pero sacrifica flexibilidad y capacidad de generación autónoma de información digital.
-
-Como segunda alternativa, se considera la generación pseudoaleatoria controlada mediante un valor de semilla (seed). En este enfoque, la señal digital no es almacenada explícitamente ni transmitida continuamente desde el exterior, sino generada matemáticamente dentro del propio entorno embebido utilizando estructuras ligeras de memoria y operaciones aritméticas simples.
-
-La generación pseudoaleatoria puede representarse mediante una relación recursiva discreta:
+Evitar almacenamiento explícito de secuencias extensas desplaza la generación de estados binarios hacia mecanismos construidos dinámicamente durante la ejecución del sistema. Bajo esta consideración, la señal digital se obtiene mediante generación pseudoaleatoria controlada por un valor de semilla y una relación recursiva discreta definida en la ecuación \eqref{eq:ask_lcg}.
 
 \begin{equation}
 r[n+1] = (a r[n] + c)\ \bmod\ M
 \label{eq:ask_lcg}
 \end{equation}
 
-donde $r[n]$ corresponde al estado pseudoaleatorio interno, mientras que $a$, $c$ y $M$ representan constantes asociadas al generador.
+donde $r[n]$ corresponde al estado pseudoaleatorio interno, mientras que $a$, $c$ y $M$ representan constantes asociadas a la función generadora.
 
-La principal ventaja de esta estrategia corresponde a que permite construir patrones digitales reproducibles utilizando únicamente un estado interno reducido y operaciones matemáticas elementales. Esto elimina la necesidad de almacenar secuencias binarias extensas y mantiene simultáneamente independencia operativa respecto al sistema externo. Adicionalmente, el uso de una semilla permite controlar la generación de patrones y reproducir secuencias idénticas bajo las mismas condiciones de inicialización, lo cual resulta particularmente útil para análisis comparativos y validación de comportamiento.
+Esta característica permite producir patrones reproducibles utilizando únicamente un estado interno reducido. El valor de la semilla define la secuencia generada y posibilita repetir condiciones de prueba bajo la misma configuración de operación.
 
-Sin embargo, la generación pseudoaleatoria no representa directamente estados binarios. Debido a esto, la arquitectura requiere incorporar un mecanismo de decisión que transforme los valores pseudoaleatorios generados en estados lógicos discretos. Para resolver este problema, la señal digital se obtiene mediante una comparación contra un umbral de decisión:
+La conversión hacia estados binarios discretos se realiza mediante comparación contra un umbral de decisión descrito en \eqref{eq:ask_threshold_embebido}.
 
 \begin{equation}
 b[n] =
@@ -284,11 +264,9 @@ s[n] = b[n] \cdot c[n]
 
 donde $b[n]$ corresponde a la señal binaria discreta y $c[n]$ a la portadora.
 
-La utilización de esta formulación permite mantener una arquitectura matemática considerablemente más simple que otros esquemas de modulación digital más complejos. Debido a que la técnica únicamente requiere activar o desactivar la portadora dependiendo del estado lógico transmitido, el procesamiento asociado a la modulación se reduce principalmente a operaciones de comparación y multiplicación. Esto favorece considerablemente la estabilidad temporal del sistema y disminuye el costo computacional asociado al procesamiento continuo de señal dentro del entorno embebido.
+La técnica únicamente requiere activar o desactivar la portadora según el estado lógico transmitido, por lo que el procesamiento queda reducido a generación pseudoaleatoria, comparación por umbral y multiplicación por portadora.
 
-La recuperación de señal digital introduce una segunda decisión crítica asociada al mecanismo de detección utilizado. Una primera alternativa corresponde a mecanismos avanzados de recuperación simbólica y sincronización digital. Bajo este enfoque, la detección incorpora estructuras orientadas a mantener alineamiento temporal continuo entre la señal recibida y el proceso de reconstrucción binaria, incluyendo recuperación de reloj, sincronización de símbolos y técnicas de detección digital más elaboradas.
-
-Conceptualmente, este tipo de arquitecturas puede representarse mediante un proceso general de sincronización simbólica:
+La demodulación de la señal digital introduce una segunda decisión asociada al mecanismo utilizado para recuperar los estados binarios transmitidos. Una posibilidad consiste en incorporar sincronización simbólica y recuperación de reloj como parte del proceso de detección. Conceptualmente, este tipo de arquitectura puede representarse la ecuación \eqref{eq:ask_symbol_sync}.
 
 \begin{equation}
 \hat{b}[k] = D\{s[n], \phi[n], T_b\}
@@ -297,13 +275,9 @@ Conceptualmente, este tipo de arquitecturas puede representarse mediante un proc
 
 donde $\phi[n]$ representa parámetros de sincronización temporal y $T_b$ el periodo simbólico asociado a cada bit.
 
-La principal ventaja de esta estrategia corresponde al mayor nivel de robustez frente a ruido, desalineamiento temporal y variaciones sobre el comportamiento de la señal recibida. Debido a que el sistema mantiene control explícito sobre sincronización de símbolos y recuperación temporal, la detección binaria puede conservar mayor precisión bajo condiciones más complejas de transmisión.
+Este tipo de detección ofrece mayor robustez frente a desalineamiento temporal y variaciones sobre la señal recibida, aunque incorpora estructuras adicionales de sincronización y control temporal. Sin embargo, la relación directa entre el estado binario y la presencia de portadora permite reutilizar el mismo principio de recuperación coherente empleado previamente en AM. Bajo esta organización, la señal modulada se multiplica nuevamente por una referencia local de portadora y posteriormente atraviesa una etapa de filtrado recursivo de primer orden basada en las ecuaciones \ref{eq:am_demod_coherente} y \ref{eq:am_lpf}. En este caso, el filtrado no busca reconstruir una señal analógica continua, sino suavizar la componente detectada antes de aplicar la decisión lógica.
 
-Sin embargo, estos mecanismos introducen estructuras considerablemente más complejas para mantener sincronización continua entre la señal recibida y el proceso de detección. La recuperación simbólica requiere procesamiento temporal adicional, almacenamiento de estados internos y control más elaborado sobre el flujo de datos digitales. En consecuencia, aunque esta alternativa proporciona mayor robustez matemática y estabilidad sobre la detección, también incrementa significativamente la carga computacional y la complejidad del sistema.
-
-Como alternativa, la arquitectura propuesta utiliza una estrategia coherente simplificada basada nuevamente en multiplicación directa entre la señal recibida y una portadora local, siguiendo el mismo principio matemático presentado en la ecuación \ref{eq:am_demod_coherente}. Posteriormente, la señal detectada se procesa mediante el mismo filtro pasa bajos recursivo de primer orden definido en la ecuación \ref{eq:am_lpf}. En este caso, la estructura no se utiliza para reconstruir una señal analógica continua, sino para suavizar la componente detectada antes de aplicar la decisión binaria. Esta reutilización del mismo esquema de filtrado permite mantener consistencia entre técnicas y reducir la complejidad de implementación dentro del entorno embebido.
-
-Finalmente, la decisión lógica se obtiene mediante comparación contra un umbral:
+Finalmente, la recuperación binaria se obtiene mediante comparación contra un umbral como se describe en \eqref{eq:ask_decision}.
 
 \begin{equation}
 b_d[n] =
@@ -314,13 +288,11 @@ b_d[n] =
 \label{eq:ask_decision}
 \end{equation}
 
-La principal ventaja de esta estrategia corresponde a que permite mantener una arquitectura considerablemente más ligera desde el punto de vista computacional. Debido a que la detección utiliza únicamente multiplicación directa, filtrado recursivo simple y comparación contra umbral, el sistema evita incorporar mecanismos avanzados de sincronización simbólica que podrían comprometer la estabilidad temporal del procesamiento continuo dentro del microcontrolador. Adicionalmente, dentro de la arquitectura propuesta, la portadora utilizada durante la modulación es generada internamente por el propio sistema embebido, lo que permite reutilizar directamente la referencia necesaria para la detección coherente sin requerir procesos adicionales de sincronización.
-
-La diferencia entre ambas alternativas no corresponde a que una resulte técnicamente superior de forma absoluta, sino al balance entre robustez matemática y viabilidad computacional que cada una representa. Los mecanismos avanzados de sincronización digital ofrecen mayor precisión y tolerancia frente a desalineamiento temporal, pero incrementan considerablemente la complejidad del procesamiento embebido. Por otro lado, la estrategia coherente simplificada reduce parte de esa robustez adicional, pero mantiene una arquitectura considerablemente más estable y compatible con las restricciones reales del sistema.
+La reutilización de la misma estructura de detección empleada en AM mantiene consistencia entre técnicas y evita incorporar mecanismos adicionales de sincronización simbólica dentro del flujo principal de procesamiento.
 
 \subsubsection{Integración de controles analógicos}
 
-A partir de la estructura física presentada en la Figura \ref{fig:pico_schematic}, los periféricos analógicos del sistema se reutilizan como una interfaz de control común para las distintas técnicas implementadas. Por esta razón, los potenciómetros identificados como pot1, pot2 y pot3 adquieren una funcionalidad distinta dependiendo de la técnica activa dentro del sistema.
+A partir de la estructura física presentada en la Figura \ref{fig:pico_schematic}, los periféricos analógicos del sistema se reutilizan como una interfaz de control común para las técnicas implementadas. Por esta razón, los potenciómetros identificados como pot1, pot2 y pot3 adquieren una funcionalidad distinta dependiendo de la técnica activa dentro del sistema.
 
 La Tabla \ref{tab:controles_analogicos} presenta la asignación funcional utilizada para cada técnica implementada.
 
@@ -328,6 +300,7 @@ La Tabla \ref{tab:controles_analogicos} presenta la asignación funcional utiliz
 \centering
 \caption{Asignación de controles analógicos por técnica implementada.}
 \label{tab:controles_analogicos}
+\resizebox{0.75\textwidth}{!}{
 \begin{tabular}{|>{\centering\arraybackslash}p{4cm}|>{\centering\arraybackslash}p{5cm}|>{\centering\arraybackslash}p{5cm}|}
 \hline
 \textbf{Control} & \textbf{AM} & \textbf{ASK/OOK} \\ \hline
@@ -335,20 +308,37 @@ pot1 & Frecuencia de mensaje & Valor de semilla \\ \hline
 pot2 & Frecuencia de portadora & Frecuencia de portadora \\ \hline
 pot3 & Índice de modulación $\mu$ & Umbral de decisión $\tau$ \\ \hline
 \end{tabular}
+}
 \end{table}
 
-La reutilización de la misma estructura física entre técnicas reduce complejidad de hardware y evita incorporar interfaces de control independientes para cada algoritmo implementado. Aunque cada parámetro adquiere un significado funcional distinto dependiendo de la técnica activa, la arquitectura de adquisición analógica permanece desacoplada de la lógica específica de modulación y demodulación.
+La reutilización de la misma estructura física reduce complejidad de hardware y evita implementar interfaces independientes para cada técnica. Aunque cada parámetro adquiere un significado distinto según la técnica activa controlada por el interruptor, la adquisición analógica permanece desacoplada de la lógica específica de modulación y demodulación.
 
 \label{sec:flow_control}
 \subsubsection{Manejo del flujo de datos}
 
-La ejecución continua del sistema requiere mantener un flujo organizado de datos entre las distintas etapas internas de procesamiento, desde la generación de la señal hasta su posterior transmisión hacia la aplicación de monitoreo. En este contexto, la arquitectura debe permitir que la señal original, la señal modulada y la señal demodulada permanezcan temporalmente disponibles dentro del entorno embebido para conservar sincronización entre todas las etapas del proceso.
+Las decisiones de implementación adoptadas para las técnicas AM y ASK/OOK introducen la necesidad de conservar simultáneamente distintas etapas de la señal durante la ejecución del sistema. Adicionalmente, el monitoreo continuo planteado por la solución requiere mantener disponibles tanto la señal original como sus versiones modulada y demodulada para permitir comparación temporal entre ellas.
 
-Para resolver este problema, la arquitectura se organiza mediante procesamiento por bloques, donde cada conjunto de muestras representa una unidad funcional completa de señal. Inicialmente se genera un bloque correspondiente a la señal original, el cual posteriormente es utilizado como entrada para la etapa de modulación. A partir de este bloque se construye una segunda representación asociada a la señal modulada y, seguidamente, una tercera representación correspondiente a la señal demodulada.
+Dadas estas condiciones, el procesamiento se organiza mediante bloques de muestras, donde cada unidad contiene la información necesaria para representar una etapa completa del flujo de señal. A partir del bloque asociado a la señal original se generan posteriormente las representaciones correspondientes a la señal modulada y la señal demodulada.
 
-En lugar de sobrescribir continuamente cada etapa de procesamiento, la arquitectura conserva simultáneamente las tres versiones de la señal dentro de buffers independientes. Esto permite mantener alineación temporal entre las distintas representaciones y evita pérdidas de coherencia entre el proceso de generación, modulación y recuperación de señal.
+Las tres versiones de la señal permanecen almacenadas simultáneamente en buffers independientes. Esta organización conserva alineación temporal entre las distintas etapas del procesamiento y evita inconsistencias entre generación, modulación y recuperación de señal durante la transmisión hacia el entorno de monitoreo.
 
-Una vez completado el procesamiento interno del bloque, las tres etapas de señal son agrupadas dentro de un mismo frame serial estructurado para posteriormente ser transmitidas hacia el sistema de monitoreo.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \subsection{Desarrollo del sistema de visualización y monitoreo}
 
