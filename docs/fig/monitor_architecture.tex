@@ -1,0 +1,39 @@
+\begin{tikzpicture}[
+    node distance=1.6cm and 1.8cm,
+    every node/.style={font=\small},
+    block/.style={
+        draw,
+        rounded corners,
+        minimum width=3.2cm,
+        minimum height=1cm,
+        align=center,
+        fill=blue!6,
+        draw=blue!40
+    },
+    arrow/.style={
+        -Latex,
+        semithick,
+        draw=blue!50
+    }
+]
+
+% Nodo principal
+\node[block] (serial) {Adquisición\\serial};
+
+\node[block, below=of serial] (recon) {Reconstrucción\\de señales};
+
+% Columnas inferiores
+\node[block, below left=of recon] (visual) {Visualización\\de señales};
+
+\node[block, below=of recon] (status) {Monitoreo\\operativo};
+
+\node[block, below right=of recon] (logs) {Gestión de\\logs};
+
+% Flechas principales
+\draw[arrow] (serial) -- (recon);
+
+\draw[arrow] (recon) -| (visual);
+\draw[arrow] (recon) -- (status);
+\draw[arrow] (recon) -| (logs);
+
+\end{tikzpicture}
