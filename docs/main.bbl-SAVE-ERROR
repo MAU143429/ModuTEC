@@ -664,6 +664,35 @@
       \verb https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html
       \endverb
     \endentry
+    \entry{kay1993fundamentals}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=19c66c9bb8003666a723e9405355c007}{%
+           family={Kay},
+           familyi={K\bibinitperiod},
+           given={Steven\bibnamedelima M.},
+           giveni={S\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Englewood Cliffs, NJ}%
+      }
+      \list{publisher}{1}{%
+        {Prentice Hall}%
+      }
+      \strng{namehash}{19c66c9bb8003666a723e9405355c007}
+      \strng{fullhash}{19c66c9bb8003666a723e9405355c007}
+      \strng{fullhashraw}{19c66c9bb8003666a723e9405355c007}
+      \strng{bibnamehash}{19c66c9bb8003666a723e9405355c007}
+      \strng{authorbibnamehash}{19c66c9bb8003666a723e9405355c007}
+      \strng{authornamehash}{19c66c9bb8003666a723e9405355c007}
+      \strng{authorfullhash}{19c66c9bb8003666a723e9405355c007}
+      \strng{authorfullhashraw}{19c66c9bb8003666a723e9405355c007}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Fundamentals of Statistical Signal Processing, Volume I: Estimation Theory}
+      \field{year}{1993}
+    \endentry
   \enddatalist
 \endrefsection
 \endinput

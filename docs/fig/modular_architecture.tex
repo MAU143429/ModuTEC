@@ -1,0 +1,54 @@
+\begin{tikzpicture}[
+    node distance=0.8cm and 1.4cm,
+    every node/.style={font=\small},
+    block/.style={
+        draw,
+        rounded corners,
+        minimum width=3.0cm,
+        minimum height=0.9cm,
+        align=center,
+        fill=blue!6,
+        draw=blue!40
+    },
+    main/.style={
+        draw,
+        rounded corners,
+        minimum width=4.2cm,
+        minimum height=1.2cm,
+        align=center,
+        fill=blue!6,
+        draw=blue!40
+    },
+    arrow/.style={
+        -Latex,
+        semithick,
+        draw=blue!50
+    }
+]
+
+% Técnicas
+\node[block] (am)  {Módulo AM};
+\node[block, below=0.6cm of am]  (ask) {Módulo ASK};
+\node[block, below=0.6cm of ask, dashed] (n)   {Módulo técnica $N$};
+
+% Interfaz
+\node[block, right=1.4cm of ask] (iface) {Interfaz genérica};
+
+% Módulo de procesamiento
+\node[main, right=1.4cm of iface] (proc) {Módulo de\\procesamiento};
+
+% config.json
+\node[block, above=0.8cm of proc] (cfg) {\texttt{config.json}};
+
+% Flechas técnicas → interfaz
+\draw[arrow] (am.east)  -| (iface.north);
+\draw[arrow] (ask.east) -- (iface.west);
+\draw[arrow] (n.east)   -| (iface.south);
+
+% Interfaz → procesamiento
+\draw[arrow] (iface.east) -- (proc.west);
+
+% config.json → procesamiento
+\draw[arrow] (cfg.south) -- (proc.north);
+
+\end{tikzpicture}

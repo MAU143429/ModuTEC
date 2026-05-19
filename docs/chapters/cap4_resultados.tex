@@ -313,7 +313,7 @@ pot3 & Índice de modulación $\mu$ & Umbral de decisión $\tau$ \\ \hline
 
 La reutilización de la misma estructura física reduce complejidad de hardware y evita implementar interfaces independientes para cada técnica. Aunque cada parámetro adquiere un significado distinto según la técnica activa controlada por el interruptor, la adquisición analógica permanece desacoplada de la lógica específica de modulación y demodulación.
 
-\label{sec:flow_control}
+\label{subsec:flow_control}
 \subsubsection{Manejo del flujo de datos}
 
 Las decisiones de implementación adoptadas para las técnicas AM y ASK/OOK introducen la necesidad de conservar simultáneamente distintas etapas de la señal durante la ejecución del sistema. Adicionalmente, el monitoreo continuo planteado por la solución requiere mantener disponibles tanto la señal original como sus versiones modulada y demodulada para permitir comparación temporal entre ellas.
@@ -324,11 +324,10 @@ Las tres versiones de la señal permanecen almacenadas simultáneamente en buffe
 
 
 
-% === INICIO TAREA-1C ===
 
 \subsection{Desarrollo del sistema de visualización y monitoreo}
 
-La implementación del sistema embebido requiere no solamente ejecutar los procesos de modulación y demodulación sobre el RP2040, sino también disponer de un mecanismo que permita observar continuamente el comportamiento de las señales procesadas durante la ejecución del sistema. Debido a esto, la visualización pasa a convertirse en un componente fundamental para verificar el funcionamiento de las técnicas implementadas y comparar simultáneamente la señal original, la modulada y la demodulada durante cada etapa del procesamiento.
+El segundo objetivo específico del proyecto corresponde al desarrollo de un sistema de visualización y monitoreo capaz de adquirir, reconstruir y representar continuamente las señales procesadas por el sistema embebido durante su ejecución. Por lo tanto, disponer de este sistema resulta fundamental para verificar el funcionamiento de las técnicas implementadas y analizar el comportamiento de las señales en cada etapa del procesamiento.
 
 A diferencia de un entorno de simulación, donde el procesamiento y la visualización se ejecutaban dentro de un mismo entorno local, en este proyecto el procesamiento principal ocurre sobre un sistema embebido y la visualización se realiza externamente. Esta separación introduce la necesidad de transmitir continuamente información hacia la aplicación de monitoreo para posteriormente reconstruir y representar las señales procesadas.
 
@@ -420,25 +419,21 @@ A diferencia del frame principal de señal mostrado en la Figura \ref{fig:frame_
 
 
 
-
-
-
 \subsection{Optimización del procesamiento y flujo de datos en el sistema embebido}
 
-La disposición de una arquitectura funcional para la ejecución continua de las técnicas de modulación y demodulación no garantiza por sí sola la estabilidad operativa del sistema embebido. Una vez establecidas las adaptaciones algorítmicas y la estructura básica de comunicación descritas en las Seccion \ref{sec:adaptacion}, la operación continua del sistema evidenció que distintos aspectos relacionados con la organización interna del procesamiento, la estructura del protocolo de transmisión serial y la parametrización del sistema requerían refinamientos adicionales para mejorar el rendimiento global bajo condiciones de operación sostenida. En consecuencia, el proceso de optimización se orienta hacia dos dimensiones: el refinamiento del flujo de procesamiento y la modularización estructural del sistema.
-
+La disposición de una arquitectura funcional para la ejecución continua de las técnicas de modulación y demodulación no garantiza por sí sola la estabilidad operativa del sistema embebido. Como parte del tercer objetivo específico del proyecto, orientado al refinamiento de la estabilidad temporal, organización interna y modularidad estructural del sistema, la operación continua evidenció variaciones asociadas al manejo de buffers, frecuencia de transmisión serial y organización del flujo interno de procesamiento. En consecuencia, el proceso de optimización se orienta hacia dos dimensiones principales: el refinamiento del flujo de datos y la reorganización estructural del sistema.
 \label{subsec:refinamiento_flujo}
 \subsubsection{Refinamiento del flujo de procesamiento y estabilidad temporal}
 
-La arquitectura de procesamiento por bloques establecida en la Sección \ref{sec:flow_control} permite organizar el flujo interno de datos en tres etapas sucesivas: generación, modulación y demodulación, preservando simultáneamente las tres representaciones de señal dentro de buffers independientes. Sin embargo, el análisis del comportamiento operativo del sistema identificó que la organización inicial de este flujo y la estructura del frame serial podían optimizarse para reducir ineficiencias asociadas a la asignación de estructuras temporales en la secuencia de empaquetado de datos.
+La arquitectura de procesamiento por bloques descrita en \ref{subsec:flow_control} permite conservar simultáneamente las representaciones original, modulada y demodulada dentro del sistema embebido. Sin embargo, el comportamiento observado durante la ejecución continua identificó que la organización inicial del flujo de procesamiento y la estructura utilizada para transmitir información todavía podían refinarse para favorecer una mayor uniformidad temporal durante la operación sostenida del sistema.
 
-Un aspecto de refinamiento corresponde al manejo de los buffers internos de señal. En el diseño inicial, cada iteración del ciclo de procesamiento generaba estructuras de datos intermedias de forma independiente, sin aprovechar la posibilidad de reutilizar espacios de memoria previamente reservados. Bajo las restricciones de la plataforma embebida, esta práctica incrementa innecesariamente la presión sobre la memoria SRAM disponible y aumenta la frecuencia de operaciones de asignación dentro del ciclo de procesamiento continuo. La alternativa adoptada consiste en reservar de forma estática los buffers asociados a las tres etapas de señal desde el inicio del programa y reutilizarlos en cada iteración sin reinicialización innecesaria de estructuras. Esta decisión reduce el costo asociado a la gestión dinámica de memoria y contribuye a mantener un comportamiento temporal más predecible durante la ejecución continua.
+Uno de los primeros aspectos de optimización corresponde al manejo interno de buffers. En la organización inicial, cada iteración del ciclo principal generaba estructuras temporales de forma independiente, aun cuando las etapas de procesamiento reutilizaban continuamente el mismo patrón de operación sobre bloques consecutivos de muestras. Esta estrategia incrementaba innecesariamente las operaciones de asignación de memoria dentro del ciclo continuo de procesamiento.
 
-Además del refinamiento del flujo de procesamiento, el análisis del sistema operando bajo condiciones continuas identificó factores adicionales que condicionan directamente la estabilidad temporal del procesamiento. Dos de ellos resultan especialmente determinantes: el tamaño del bloque de procesamiento $N$ y las limitaciones temporales inherentes a la ejecución de MicroPython sobre el microcontrolador RP2040.
+La arquitectura refinada reserva de manera estática los buffers asociados a las distintas etapas de señal desde el inicio de la ejecución y reutiliza las mismas estructuras durante cada iteración del sistema. Esta reorganización reduce la cantidad de asignaciones dinámicas dentro del flujo principal y favorece un comportamiento temporal más uniforme durante el procesamiento continuo de bloques.
 
-Dentro de la arquitectura propuesta, el parámetro $N$ define la cantidad de muestras procesadas y transmitidas durante cada iteración completa del ciclo principal. En consecuencia, este parámetro controla simultáneamente la cantidad de información contenida en cada frame serial, el tamaño de los buffers internos y la frecuencia con la que el sistema debe ejecutar operaciones de generación, modulación, demodulación y transmisión hacia la aplicación de monitoreo.
+Además, se identificó que el tamaño del bloque de procesamiento $N$ condiciona directamente el comportamiento temporal del flujo de adquisición, modulación, demodulación y transmisión serial. Dentro de la arquitectura propuesta, este parámetro define simultáneamente la cantidad de muestras procesadas por iteración, el tamaño de los buffers internos y la cantidad de información transmitida durante cada actualización hacia el monitor.
 
-La selección de $N$ representa una decisión de ingeniería con implicaciones directas sobre variables interdependientes como la latencia de visualización, la carga computacional por ciclo de procesamiento y la frecuencia de actualización de la interfaz gráfica. Debido a esta dependencia mutua, no existe un único valor universalmente óptimo, ya que el comportamiento del sistema cambia significativamente conforme varía el tamaño de bloque utilizado.
+La selección de un valor de $N$ establece un balance directo entre frecuencia de actualización visual, latencia percibida, carga computacional instantánea y frecuencia de transmisión serial. Debido a esta dependencia mutua, el comportamiento operativo del sistema cambia significativamente conforme varía el tamaño de bloque utilizado.
 
 Con el fin de observar las implicaciones operativas asociadas al tamaño de bloque, la Tabla \ref{tab:comparacion_n} presenta una comparación general del comportamiento del sistema bajo escenarios de $N$ reducido y $N$ elevado.
 
@@ -482,23 +477,35 @@ Respuesta más gradual \\ \hline
 \end{tabular}
 \end{table}
 
-Como puede observarse, ambos escenarios presentan ventajas y restricciones distintas dependiendo de las prioridades operativas del sistema. Mientras valores reducidos de $N$ favorecen una respuesta visual más inmediata y una interacción más dinámica con los parámetros físicos del sistema, valores elevados permiten disminuir la frecuencia de operaciones administrativas y estabilizar parcialmente el comportamiento temporal del procesamiento continuo. Debido a ello, el tamaño de bloque no puede tratarse como un parámetro fijo universal, ya que su selección condiciona directamente el balance entre latencia, estabilidad y carga computacional dentro del entorno embebido.
+La comparación evidencia que el tamaño de bloque no puede tratarse como un parámetro universal fijo, ya que modifica simultáneamente la latencia de visualización, la carga de transmisión y la estabilidad general del sistema. Adicionalmente, la ejecución interpretada de MicroPython introduce una segunda restricción directamente relacionada con este balance operacional, donde la sobrecarga asociada a operaciones iterativas, manipulación continua de buffers y empaquetado serial adquiere mayor relevancia conforme aumenta la frecuencia de iteraciones requerida por bloques pequeños o la cantidad de muestras procesadas en bloques elevados.
 
-MicroPython introduce además una restricción adicional sobre este balance operacional. A diferencia de implementaciones compiladas en C o C++, la ejecución interpretada incrementa la sobrecarga temporal asociada a operaciones matemáticas iterativas, empaquetado serial y manipulación continua de buffers dentro del ciclo principal. Esta condición adquiere mayor relevancia conforme aumenta la frecuencia de iteraciones requerida por bloques pequeños o la cantidad de muestras procesadas por bloques grandes.
-
-A partir de este análisis, resulta preferible definir el tamaño de bloque $N$ como un parámetro configurable externamente, en lugar de fijarlo como una constante interna del firmware. Esta decisión permite adaptar dinámicamente el comportamiento temporal del sistema según las necesidades de operación, priorizando distintos criterios como estabilidad, latencia o capacidad de respuesta sin requerir modificaciones sobre la lógica principal de procesamiento.
+A partir de este comportamiento, resulta preferible tratar $N$ como un parámetro configurable externamente y no como una constante fija dentro del firmware. Esta decisión permite adaptar dinámicamente el comportamiento operativo del sistema dependiendo de si se prioriza estabilidad temporal, capacidad de respuesta o frecuencia de actualización visual.
 
 \subsubsection{Optimización de modularidad estructural del sistema}
 
-La segunda dimensión de optimización corresponde a la modularidad estructural del sistema embebido. El diseño de arquitectura inicial de la Figura \ref{fig:arquitectura} organiza el procesamiento dentro de un módulo principal complementado por módulos independientes para cada técnica implementada. Aunque esta organización resulta funcional, inicialmente no se establecía una interfaz genérica que permitiera tratar cada técnica bajo una estructura modular uniforme, por lo que la escalabilidad del sistema resultaba limitada. Bajo este enfoque, la integración de nuevas técnicas obliga a realizar modificaciones directas sobre el módulo principal de procesamiento, incrementando la complejidad de mantenimiento y el riesgo de introducir errores de integración.
+La segunda dimensión de optimización corresponde a la reorganización estructural del sistema embebido. Conforme las técnicas implementadas comienzan a compartir mecanismos comunes de adquisición, transmisión y configuración, las diferencias internas asociadas al procesamiento de cada técnica eran resueltas directamente desde el módulo principal mediante estructuras condicionales específicas para cada caso.
 
-El refinamiento adoptado establece una arquitectura modular basada en una interfaz genérica para los módulos de cada técnica. Bajo este esquema, cada implementación encapsula internamente sus variables de continuidad y parámetros de procesamiento, manteniendo una estructura estandarizada de interacción con el módulo principal. Esto permite desacoplar la lógica de procesamiento general de los detalles internos de cada técnica, facilitando la incorporación de nuevos módulos sin alterar la lógica central del sistema.
+Aunque esta organización resulta funcional durante etapas iniciales de implementación, el crecimiento progresivo de responsabilidades dentro del módulo principal incrementa el acoplamiento entre la lógica global del sistema y los detalles internos de cada técnica. Al incorporar nuevas variantes de modulación obliga a modificar directamente el flujo principal de procesamiento, dificultando el mantenimiento y la escalabilidad.
 
-Otro aspecto de optimización corresponde a la parametrización externa del sistema. Debido a las decisiones de modularidad adoptadas y al refinamiento del flujo de procesamiento descrito en la Sección \ref{subsec:refinamiento_flujo}, surge la necesidad de reorganizar la gestión de configuraciones del sistema. Inicialmente, parámetros como la frecuencia de muestreo $F_s$, el tamaño de bloque $N$ y los rangos de mapeo asociados a los potenciómetros se encontraban definidos directamente dentro del firmware del microcontrolador, lo que implicaba modificar y recargar el sistema embebido ante cualquier ajuste operativo.
+El refinamiento establece el uso de una estructura basada en una interfaz genérica para los módulos de procesamiento, donde cada técnica encapsula internamente sus variables de continuidad, parámetros y lógica de procesamiento, manteniendo simultáneamente una estructura uniforme de interacción con el módulo principal del sistema. La Figura~\ref{fig:modular_architecture} ilustra esta organización, donde cualquier módulo de técnica nueva puede integrarse al sistema sin modificar el flujo principal, siempre que respete la interfaz de módulo definida.
 
-Como refinamiento, se incorpora un archivo de configuración en formato JSON gestionado desde la aplicación de monitoreo. Esta abstracción permite separar los parámetros de operación de la lógica de procesamiento implementada en el sistema embebido, centralizando la configuración del sistema en un único archivo externo.
+\begin{figure}[H]
+    \centering
+    \resizebox{0.82\textwidth}{!}{
+        \input{fig/modular_architecture.tex}
+    }
+    \caption{Arquitectura modular desacoplada del sistema de procesamiento. Fuente: Elaboración propia.}
+    \label{fig:modular_architecture}
+\end{figure}
 
-La configuración se organiza en dos categorías principales: parámetros generales del sistema, como frecuencia de muestreo, tamaño de bloque, velocidad de transmisión serial y parámetros globales de operación; y parámetros específicos de cada técnica, incluyendo identificación del módulo, tipo de señal procesada y rangos de mapeo asociados a cada potenciómetro. Esta organización permite que la aplicación de monitoreo incorpore una herramienta visual de configuración capaz de modificar parámetros y regenerar automáticamente el archivo de configuración sin intervenir directamente sobre el firmware del microcontrolador.
+La arquitectura resultante desacopla la lógica global de adquisición y transmisión respecto a los detalles internos de cada técnica implementada. Esta separación permite incorporar nuevos módulos sin modificar el flujo principal de procesamiento y mantiene uniforme la interacción entre configuración, adquisición de parámetros y ejecución de técnicas de modulación y demodulación.
+
+La reorganización estructural del sistema también introduce la necesidad de desacoplar los parámetros de configuración respecto al firmware embebido. Inicialmente, parámetros como la frecuencia de muestreo $F_s$, el tamaño de bloque $N$ y los rangos de mapeo asociados a los potenciómetros se encontraban definidos directamente dentro del código del microcontrolador, obligando a modificar y recargar el firmware ante cualquier ajuste operativo.
+
+Como refinamiento, la configuración del sistema se externaliza mediante un archivo JSON administrado desde la aplicación de monitoreo. Esta abstracción centraliza la parametrización operativa fuera del firmware y separa la configuración general del sistema respecto a la lógica de procesamiento implementada dentro del entorno embebido. Como se observa en la Figura~\ref{fig:modular_architecture}, el \texttt{config.json} se comunica directamente con el módulo de procesamiento, manteniendo la configuración operativa desacoplada de la lógica interna de cada técnica.
+
+La estructura de configuración se organiza en dos grupos principales: parámetros generales del sistema, como frecuencia de muestreo, tamaño de bloque y velocidad de transmisión serial; y parámetros específicos de cada técnica, incluyendo identificación del módulo, tipo de señal procesada y rangos de mapeo asociados a cada potenciómetro. Esta organización permite que la aplicación de monitoreo incorpore una herramienta visual capaz de modificar parámetros y regenerar automáticamente la configuración del sistema sin intervenir directamente sobre el firmware del microcontrolador.
+
 
 \subsection{Implementación del proceso de evaluación y análisis de desempeño}
 
@@ -560,6 +567,9 @@ Para esta dimensión se consideró el uso de la varianza temporal del NRMSE, que
 \end{equation}
 
 donde $M$ representa la cantidad de bloques acumulados en el historial y $\overline{\text{NCC}}$ el promedio de los valores registrados. Una desviación estándar reducida indica que el desempeño del sistema se mantiene consistente entre bloques, mientras que valores elevados pueden evidenciar inestabilidad en el procesamiento, pérdida de sincronización en el protocolo serial o degradación temporal asociada a variaciones en los parámetros del embebido durante la ejecución.
+
+
+
 
 
 \subsubsection{Integración dentro del flujo operativo del monitor}
