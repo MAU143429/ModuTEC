@@ -1,12 +1,10 @@
 \chapter{Descripción del trabajo realizado}
 
-El presente capítulo describe el proceso de desarrollo e integración de la solución propuesta para el sistema de monitoreo y análisis de técnicas de modulación y demodulación implementado en el proyecto. Se abordan las principales decisiones de ingeniería adoptadas durante la construcción de la solución, considerando aspectos asociados al procesamiento digital de señales, integración hardware/software, comunicación de datos, modularidad y restricciones propias del entorno utilizado.
-
-Inicialmente, se presenta una descripción general de la arquitectura de la solución y de la interacción entre sus principales componentes funcionales. Posteriormente, se describe el proceso seguido para el desarrollo de cada uno de los objetivos específicos del proyecto, enfatizando los criterios técnicos considerados durante la implementación y refinamiento progresivo del sistema. Finalmente, se realiza un análisis de los resultados obtenidos a partir del comportamiento funcional de la solución.
+El presente capítulo describe el proceso de desarrollo e integración de la solución propuesta para el sistema de monitoreo y análisis de técnicas de modulación y demodulación implementado en el proyecto. Se abordan las principales decisiones de ingeniería adoptadas durante la construcción de la solución, considerando aspectos asociados al procesamiento digital de señales, integración hardware/software, comunicación de datos, modularidad y restricciones propias del entorno utilizado. La organización del capítulo sigue el orden de los objetivos específicos del proyecto: adaptación de algoritmos al entorno embebido, desarrollo del sistema de visualización y monitoreo, optimización del flujo de procesamiento e implementación del proceso de evaluación y análisis de desempeño, finalizando con el análisis de los resultados obtenidos.
 
 \section{Descripción de la arquitectura de la solución}
 
-La solución propuesta se estructuró a partir de una arquitectura modular orientada a separar las principales responsabilidades funcionales del sistema, incluyendo adquisición de entradas, procesamiento de señales, transmisión de datos y visualización de información. Esta organización permitió distribuir el procesamiento entre el sistema embebido y la aplicación de monitoreo, facilitando la integración entre ambos entornos y manteniendo una estructura de funcionamiento más organizada y escalable.
+La solución propuesta se estructuró a partir de una arquitectura modular que separa las responsabilidades funcionales del sistema en cuatro dominios: adquisición de entradas, procesamiento de señales, transmisión de datos y visualización de información. Esta distribución define una frontera explícita entre el sistema embebido, responsable del procesamiento principal, y la aplicación de monitoreo, encargada de la reconstrucción, visualización y configuración del sistema.
 
 La Figura \ref{fig:arquitectura} presenta la arquitectura general de la solución propuesta y la interacción existente entre los principales módulos funcionales del sistema.
 
@@ -21,9 +19,9 @@ La Figura \ref{fig:arquitectura} presenta la arquitectura general de la solució
 \label{fig:arquitectura}
 \end{figure}
 
-A nivel general, la arquitectura se compone de un dispositivo modulador basado en controles analógicos, un sistema embebido encargado del procesamiento principal de señales, un mecanismo de transmisión serial para el intercambio de información y una aplicación de monitoreo orientada a la reconstrucción, visualización y configuración del sistema. Dentro del sistema embebido se estableció una separación funcional entre los módulos de gestión de entradas, generación de señales, procesamiento de modulación y demodulación, integración de algoritmos y empaquetamiento de datos, permitiendo desacoplar las diferentes responsabilidades asociadas al flujo de procesamiento.
+Dentro del sistema embebido se estableció una separación funcional entre los módulos de gestión de entradas, generación de señales, procesamiento de modulación y demodulación, integración de algoritmos y empaquetamiento de datos. Esta organización desacopla las responsabilidades asociadas al flujo de procesamiento y permite que cada módulo opere sobre una función bien delimitada dentro de la cadena de señal. La comunicación serial actúa como interfaz de salida del sistema embebido hacia el entorno externo, transportando la información procesada hacia la aplicación de monitoreo.
 
-De manera complementaria, la aplicación de monitoreo se estructuró mediante módulos independientes de recepción y reconstrucción de datos, visualización de señales y configuración general del sistema, permitiendo mantener separadas las tareas asociadas al procesamiento gráfico, interpretación de información y control operativo.
+La aplicación de monitoreo se estructuró mediante módulos independientes de recepción y reconstrucción de datos, visualización de señales y configuración general del sistema. Esta separación mantiene desacopladas las tareas asociadas al procesamiento gráfico, la interpretación de información recibida y el control operativo del sistema, facilitando la integración entre ambos entornos sin introducir dependencias cruzadas entre sus responsabilidades funcionales.
 
 \section{Descripción del proceso de solución}
 
