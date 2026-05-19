@@ -107,11 +107,11 @@ Lenguajes soportados & C/C++ y MicroPython \\ \hline
 
 \end{table}
 
-A pesar de que la Raspberry Pi Pico representa la alternativa más adecuada para los requerimientos del sistema, el entorno embebido continúa imponiendo restricciones importantes sobre la complejidad matemática permitida durante la ejecución continua del procesamiento. Las capacidades computacionales y de memoria del RP2040 limitan el uso de bibliotecas orientadas a procesamiento numérico intensivo, como NumPy o SciPy, debido a sus requerimientos de memoria y estructuras vectorizadas. Esta restricción obliga a apoyarse principalmente en operaciones aritméticas básicas, procesamiento secuencial y estructuras matemáticas simplificadas, condicionando a su vez las decisiones de diseño algorítmico descriptas en las subsecciones siguientes.
+A pesar de que la Raspberry Pi Pico representa la alternativa más adecuada para los requerimientos del sistema, el entorno embebido continúa imponiendo restricciones importantes sobre la complejidad matemática permitida durante la ejecución continua del procesamiento. Las capacidades computacionales y de memoria del RP2040 limitan el uso de bibliotecas orientadas a procesamiento numérico intensivo, como NumPy o SciPy, debido a sus requerimientos de memoria y estructuras vectorizadas. Esta restricción obliga a apoyarse principalmente en operaciones aritméticas básicas, procesamiento secuencial y estructuras matemáticas simplificadas, condicionando a su vez las decisiones de diseño algorítmico que se abordarán en las seccionessiguientes.
 
 \subsubsection{Integración física del modulador}
 
-Luego de seleccionar la plataforma embebida, se requiere definir un circuito que permita poner a disposición una estructura física mínima compuesta por elementos electrónicos que permitan interactuar dinámicamente con las técnicas que se ejecutarán en el embebido. Bajo este criterio, el sistema se construye utilizando una estructura compuesta por la Raspberry Pi Pico, tres potenciómetros y un interruptor.
+Luego de seleccionar la plataforma embebida, se requiere definir un circuito que permita poner a disposición una estructura física mínima compuesta por elementos electrónicos que faciliten interactuar dinámicamente con las técnicas que se ejecutarán en el embebido. Bajo este criterio, el sistema se construye utilizando una estructura compuesta por la Raspberry Pi Pico, tres potenciómetros y un interruptor.
 
 La Figura \ref{fig:pico_schematic} presenta el esquema general de conexión utilizado para la construcción del modulador físico.
 
@@ -438,175 +438,301 @@ La principal ventaja de esta arquitectura corresponde a que desacopla el comport
 
 \subsection{Optimización del procesamiento y flujo de datos en el sistema embebido}
 
-La disposición de una arquitectura funcional para la ejecución continua de las técnicas de modulación y demodulación no garantiza por sí sola la estabilidad operativa del sistema embebido. Una vez establecidas las adaptaciones algorítmicas y la estructura básica de comunicación descritas en las Seccion\ref{sec:adaptacion}, la operación continua del sistema evidenció que distintos aspectos relacionados con la organización interna del procesamiento, la estructura del protocolo de transmisión serial y la parametrización del sistema requerían refinamientos adicionales para mejorar el rendimiento global bajo condiciones de operación sostenida. En consecuencia, el proceso de optimización se orienta hacia tres dimensiones complementarias: el refinamiento del flujo de procesamiento y comunicación serial, la mejora de la estabilidad temporal del ciclo de ejecución y la modularización estructural del sistema.
+La disposición de una arquitectura funcional para la ejecución continua de las técnicas de modulación y demodulación no garantiza por sí sola la estabilidad operativa del sistema embebido. Una vez establecidas las adaptaciones algorítmicas y la estructura básica de comunicación descritas en las Seccion \ref{sec:adaptacion}, la operación continua del sistema evidenció que distintos aspectos relacionados con la organización interna del procesamiento, la estructura del protocolo de transmisión serial y la parametrización del sistema requerían refinamientos adicionales para mejorar el rendimiento global bajo condiciones de operación sostenida. En consecuencia, el proceso de optimización se orienta hacia dos dimensiones: el refinamiento del flujo de procesamiento y la modularización estructural del sistema.
 
-\subsubsection{Refinamiento del flujo de procesamiento y comunicación serial}
+\label{subsec:refinamiento_flujo}
+\subsubsection{Refinamiento del flujo de procesamiento y estabilidad temporal}
 
-La arquitectura de procesamiento por bloques establecida en la Sección \ref{sec:flow_control} permite organizar el flujo interno de datos en tres etapas sucesivas: generación, modulación y demodulación, preservando simultáneamente las tres representaciones de señal dentro de buffers independientes. Sin embargo, el análisis del comportamiento operativo del sistema identificó que la organización inicial de este flujo y la estructura del frame serial podían optimizarse para reducir ineficiencias asociadas a la asignación de estructuras temporales, la secuencia de empaquetado de datos y el mecanismo de sincronización utilizado en la recepción.
+La arquitectura de procesamiento por bloques establecida en la Sección \ref{sec:flow_control} permite organizar el flujo interno de datos en tres etapas sucesivas: generación, modulación y demodulación, preservando simultáneamente las tres representaciones de señal dentro de buffers independientes. Sin embargo, el análisis del comportamiento operativo del sistema identificó que la organización inicial de este flujo y la estructura del frame serial podían optimizarse para reducir ineficiencias asociadas a la asignación de estructuras temporales en la secuencia de empaquetado de datos.
 
-Un primer aspecto de refinamiento corresponde al manejo de los buffers internos de señal. En el diseño inicial, cada iteración del ciclo de procesamiento generaba estructuras de datos intermedias de forma independiente, sin aprovechar la posibilidad de reutilizar espacios de memoria previamente reservados. Bajo las restricciones de la plataforma embebida, esta práctica incrementa innecesariamente la presión sobre la memoria SRAM disponible y aumenta la frecuencia de operaciones de asignación dentro del ciclo de procesamiento continuo. La alternativa adoptada consiste en reservar de forma estática los buffers asociados a las tres etapas de señal desde el inicio del programa y reutilizarlos en cada iteración sin reinicialización innecesaria de estructuras. Esta decisión reduce el costo asociado a la gestión dinámica de memoria y contribuye a mantener un comportamiento temporal más predecible durante la ejecución continua.
+Un aspecto de refinamiento corresponde al manejo de los buffers internos de señal. En el diseño inicial, cada iteración del ciclo de procesamiento generaba estructuras de datos intermedias de forma independiente, sin aprovechar la posibilidad de reutilizar espacios de memoria previamente reservados. Bajo las restricciones de la plataforma embebida, esta práctica incrementa innecesariamente la presión sobre la memoria SRAM disponible y aumenta la frecuencia de operaciones de asignación dentro del ciclo de procesamiento continuo. La alternativa adoptada consiste en reservar de forma estática los buffers asociados a las tres etapas de señal desde el inicio del programa y reutilizarlos en cada iteración sin reinicialización innecesaria de estructuras. Esta decisión reduce el costo asociado a la gestión dinámica de memoria y contribuye a mantener un comportamiento temporal más predecible durante la ejecución continua.
 
-Un segundo aspecto de refinamiento afecta directamente a la estructura del protocolo de comunicación serial hacia la aplicación de monitoreo. El diseño del protocolo establece una separación explícita entre dos tipos de información transmitida: los metadatos de configuración del sistema y los frames de señal procesada. Los metadatos incluyen la identificación de la técnica activa, la asignación funcional de los potenciómetros y los parámetros generales del sistema, mientras que los frames de señal transportan las tres etapas de procesamiento en formato binario compacto. Ambos tipos de mensaje utilizan secuencias de sincronización independientes, lo que permite que la aplicación receptora los distinga e interprete de forma diferenciada sin ambigüedad.
+Además del refinamiento del flujo de procesamiento, el análisis del sistema operando bajo condiciones continuas identificó factores adicionales que condicionan directamente la estabilidad temporal del procesamiento. Dos de ellos resultan especialmente determinantes: el tamaño del bloque de procesamiento $N$ y las limitaciones temporales inherentes a la ejecución de MicroPython sobre el microcontrolador RP2040.
 
-Una decisión clave dentro de este protocolo corresponde a la transmisión condicional de metadatos. Dado que la configuración del sistema permanece estable mientras la técnica activa no cambia, el envío de metadatos se realiza únicamente cuando se detecta un cambio en la técnica seleccionada mediante el interruptor físico. Esta estrategia evita saturar el canal serial con información redundante en cada ciclo de procesamiento y reserva el ancho de banda disponible exclusivamente para la transmisión continua de frames de señal durante la operación normal del sistema.
+Dentro de la arquitectura propuesta, el parámetro $N$ define la cantidad de muestras procesadas y transmitidas durante cada iteración completa del ciclo principal. En consecuencia, este parámetro controla simultáneamente la cantidad de información contenida en cada frame serial, el tamaño de los buffers internos y la frecuencia con la que el sistema debe ejecutar operaciones de generación, modulación, demodulación y transmisión hacia la aplicación de monitoreo.
 
-El frame de señal se construye como una estructura binaria compacta que concatena un encabezado de control con los tres bloques de muestras correspondientes a la señal original, modulada y demodulada:
+La selección de $N$ representa una decisión de ingeniería con implicaciones directas sobre variables interdependientes como la latencia de visualización, la carga computacional por ciclo de procesamiento y la frecuencia de actualización de la interfaz gráfica. Debido a esta dependencia mutua, no existe un único valor universalmente óptimo, ya que el comportamiento del sistema cambia significativamente conforme varía el tamaño de bloque utilizado.
 
-\begin{equation}
-\text{Frame} = \texttt{HDR} \parallel \text{payload}_m \parallel \text{payload}_{mod} \parallel \text{payload}_{dem}
-\label{eq:frame_serial}
-\end{equation}
-
-donde $\parallel$ denota concatenación secuencial de bloques binarios. El encabezado incluye el identificador de técnica activa, la cantidad de muestras por bloque, la frecuencia de muestreo y los valores actuales de los tres potenciómetros. La codificación binaria de cada muestra utiliza el tipo entero de 16 bits con signo (\texttt{int16}), seleccionado como equilibrio entre rango dinámico y tamaño de transmisión. Esta representación compacta reduce el tamaño total del frame transmitido en comparación con alternativas basadas en texto o punto flotante de mayor precisión, optimizando el uso del ancho de banda serial disponible.
-
-La decisión de agrupar las tres etapas de señal dentro de un mismo frame responde a una restricción funcional de la aplicación de monitoreo. Dado que el sistema visualiza simultáneamente la señal original, la modulada y la demodulada en tiempo real, un esquema que transmita cada etapa de forma independiente introduciría desalineamiento temporal entre los bloques graficados. La transmisión unificada garantiza que los tres bloques correspondan siempre al mismo intervalo temporal de procesamiento, permitiendo que la aplicación los grafique de forma sincronizada sin mecanismos adicionales de alineación en recepción.
-
-La Tabla~\ref{tab:frame_serial} resume la estructura del frame serial utilizado por el sistema.
+Con el fin de observar las implicaciones operativas asociadas al tamaño de bloque, la Tabla \ref{tab:comparacion_n} presenta una comparación general del comportamiento del sistema bajo escenarios de $N$ reducido y $N$ elevado.
 
 \begin{table}[H]
 \centering
-\caption{Estructura del frame serial transmitido por el sistema embebido.}
-\label{tab:frame_serial}
-\begin{tabular}{|>{\centering\arraybackslash}p{4.5cm}|>{\centering\arraybackslash}p{6cm}|>{\centering\arraybackslash}p{2.8cm}|}
+\footnotesize
+\caption{Implicaciones operativas asociadas al tamaño de bloque $N$}
+\label{tab:comparacion_n}
+\begin{tabular}{|p{4.9cm}|p{4.9cm}|p{4.9cm}|}
 \hline
-\textbf{Campo} & \textbf{Descripción} & \textbf{Tamaño} \\ \hline
-Sincronización de datos & Secuencia fija de inicio de frame de señal & 4 bytes \\ \hline
-Identificador de técnica & Técnica activa en el ciclo actual & 1 byte \\ \hline
-Cantidad de muestras & Valor de $N$ por bloque & 2 bytes \\ \hline
-Frecuencia de muestreo & Valor de $F_s$ del sistema & 2 bytes \\ \hline
-Valores de potenciómetros & Estado actual de pot1, pot2, pot3 & 12 bytes \\ \hline
-Señal original & $N$ muestras en formato int16 & $2N$ bytes \\ \hline
-Señal modulada & $N$ muestras en formato int16 & $2N$ bytes \\ \hline
-Señal demodulada & $N$ muestras en formato int16 & $2N$ bytes \\ \hline
+\textbf{Aspecto} & \textbf{$N$ reducido (64-256)} & \textbf{$N$ elevado (512-1024)} \\ \hline
+
+Frecuencia de actualización visual &
+Mayor frecuencia de actualización &
+Menor frecuencia de actualización \\ \hline
+
+Latencia percibida por el usuario &
+Menor latencia &
+Mayor latencia \\ \hline
+
+Cantidad de transmisiones seriales &
+Mayor cantidad de frames por segundo &
+Menor cantidad de frames por segundo \\ \hline
+
+Sobrecarga de empaquetado y sincronización &
+Mayor frecuencia de operaciones administrativas &
+Menor frecuencia de operaciones administrativas \\ \hline
+
+Carga computacional instantánea por iteración &
+Menor cantidad de muestras por ciclo &
+Mayor cantidad de muestras por ciclo \\ \hline
+
+Estabilidad temporal del procesamiento &
+Mayor sensibilidad a variaciones temporales &
+Comportamiento más uniforme \\ \hline
+
+Capacidad de respuesta ante cambios de parámetros &
+Respuesta más inmediata &
+Respuesta más gradual \\ \hline
+
 \end{tabular}
 \end{table}
 
-En el lado receptor, la aplicación de monitoreo busca activamente la secuencia de sincronización al inicio de cada frame antes de proceder a la interpretación del contenido. Dado que el tamaño de cada bloque de muestras es conocido a partir del campo correspondiente del encabezado, la separación de las tres etapas de señal dentro del payload puede realizarse directamente mediante índices de desplazamiento fijo, eliminando la necesidad de marcadores internos adicionales entre bloques.
+Como puede observarse, ambos escenarios presentan ventajas y restricciones distintas dependiendo de las prioridades operativas del sistema. Mientras valores reducidos de $N$ favorecen una respuesta visual más inmediata y una interacción más dinámica con los parámetros físicos del sistema, valores elevados permiten disminuir la frecuencia de operaciones administrativas y estabilizar parcialmente el comportamiento temporal del procesamiento continuo. Debido a ello, el tamaño de bloque no puede tratarse como un parámetro fijo universal, ya que su selección condiciona directamente el balance entre latencia, estabilidad y carga computacional dentro del entorno embebido.
 
-\subsubsection{Optimización de estabilidad temporal y modularidad}
+MicroPython introduce además una restricción adicional sobre este balance operacional. A diferencia de implementaciones compiladas en C o C++, la ejecución interpretada incrementa la sobrecarga temporal asociada a operaciones matemáticas iterativas, empaquetado serial y manipulación continua de buffers dentro del ciclo principal. Esta condición adquiere mayor relevancia conforme aumenta la frecuencia de iteraciones requerida por bloques pequeños o la cantidad de muestras procesadas por bloques grandes.
 
-Además del refinamiento del protocolo de comunicación, el análisis del sistema operando bajo condiciones continuas identificó factores adicionales que condicionan la estabilidad temporal del procesamiento. Dos de ellos resultan especialmente determinantes: el tamaño del bloque de procesamiento $N$ y las limitaciones temporales inherentes a la ejecución de MicroPython sobre el microcontrolador RP2040.
+A partir de este análisis, resulta preferible definir el tamaño de bloque $N$ como un parámetro configurable externamente, en lugar de fijarlo como una constante interna del firmware. Esta decisión permite adaptar dinámicamente el comportamiento temporal del sistema según las necesidades de operación, priorizando distintos criterios como estabilidad, latencia o capacidad de respuesta sin requerir modificaciones sobre la lógica principal de procesamiento.
 
-La selección del tamaño de bloque $N$ representa una decisión de ingeniería con implicaciones directas sobre tres variables interdependientes: la latencia de visualización, la carga computacional por ciclo de procesamiento y la frecuencia de actualización de la interfaz gráfica. Un bloque de mayor tamaño reduce la frecuencia de iteraciones del ciclo principal y, en consecuencia, disminuye la sobrecarga asociada a la inicialización repetida de estructuras y operaciones de empaquetado serial. Sin embargo, incrementa simultáneamente el tiempo requerido para completar cada ciclo de procesamiento, lo que introduce mayor latencia entre la modificación de un parámetro físico —mediante potenciómetro— y su reflejo visual en la aplicación de monitoreo. Por otro lado, un bloque excesivamente pequeño reduce la latencia pero incrementa la frecuencia de operaciones de transmisión serial y empaquetado, lo que puede comprometer la estabilidad temporal del sistema bajo las limitaciones del intérprete de MicroPython.
+\subsubsection{Optimización de modularidad estructural del sistema}
 
-MicroPython introduce una restricción fundamental sobre la ejecución de operaciones matemáticas iterativas dentro de ciclos de procesamiento continuo. A diferencia de implementaciones compiladas en C o C++, la interpretación dinámica del código genera una sobrecarga de ejecución no despreciable por cada iteración del ciclo de procesamiento de muestras. Esta sobrecarga se acumula a medida que aumenta el número de muestras procesadas por bloque, limitando la frecuencia máxima de actualización sostenible sin comprometer la estabilidad temporal del sistema. En consecuencia, el balance entre tamaño de bloque, latencia y frecuencia de actualización no puede determinarse exclusivamente desde consideraciones matemáticas teóricas, sino que requiere validación empírica bajo las condiciones reales de ejecución sobre el hardware seleccionado.
+La segunda dimensión de optimización corresponde a la modularidad estructural del sistema embebido. El diseño de arquitectura inicial de la Figura \ref{fig:arquitectura} organiza el procesamiento dentro de un módulo principal complementado por módulos independientes para cada técnica implementada. Aunque esta organización resulta funcional, inicialmente no se establecía una interfaz genérica que permitiera tratar cada técnica bajo una estructura modular uniforme, por lo que la escalabilidad del sistema resultaba limitada. Bajo este enfoque, la integración de nuevas técnicas obliga a realizar modificaciones directas sobre el módulo principal de procesamiento, incrementando la complejidad de mantenimiento y el riesgo de introducir errores de integración.
 
-A partir de este análisis, la arquitectura del sistema define el tamaño de bloque como un parámetro configurable externamente, en lugar de fijarlo como constante dentro del código del microcontrolador. Esta decisión permite ajustar el comportamiento temporal del sistema en función de las condiciones de operación sin requerir modificaciones sobre la lógica de procesamiento interna, favoreciendo la adaptabilidad del sistema frente a distintos escenarios de uso.
+El refinamiento adoptado establece una arquitectura modular basada en una interfaz genérica para los módulos de cada técnica. Bajo este esquema, cada implementación encapsula internamente sus variables de continuidad y parámetros de procesamiento, manteniendo una estructura estandarizada de interacción con el módulo principal. Esto permite desacoplar la lógica de procesamiento general de los detalles internos de cada técnica, facilitando la incorporación de nuevos módulos sin alterar la lógica central del sistema.
 
-La segunda dimensión de optimización corresponde a la modularidad estructural del sistema embebido. El diseño inicial organiza el procesamiento dentro de un archivo principal complementado por archivos independientes para cada técnica implementada. Aunque esta organización resulta funcional, no establece una interfaz genérica que permita incorporar técnicas adicionales de forma sistemática. La ausencia de una estructura común obliga a realizar modificaciones sobre el archivo principal cada vez que se integra una nueva técnica, incrementando el riesgo de introducir errores de integración y dificultando el mantenimiento del sistema a medida que aumenta la cantidad de técnicas soportadas.
+Otro aspecto de optimización corresponde a la parametrización externa del sistema. Debido a las decisiones de modularidad adoptadas y al refinamiento del flujo de procesamiento descrito en la Sección \ref{subsec:refinamiento_flujo}, surge la necesidad de reorganizar la gestión de configuraciones del sistema. Inicialmente, parámetros como la frecuencia de muestreo $F_s$, el tamaño de bloque $N$ y los rangos de mapeo asociados a los potenciómetros se encontraban definidos directamente dentro del firmware del microcontrolador, lo que implicaba modificar y recargar el sistema embebido ante cualquier ajuste operativo.
 
-El refinamiento adoptado establece una arquitectura modular basada en una interfaz genérica para los archivos de técnica. Bajo este esquema, cada técnica implementa una clase de estado (\texttt{State}) que encapsula las variables de continuidad entre bloques consecutivos, y una función de cómputo (\texttt{compute\_frame}) con firma estandarizada que recibe los parámetros del sistema y devuelve las tres etapas de señal procesadas. El archivo principal puede así invocar las operaciones de modulación y demodulación mediante carga dinámica de módulos, sin conocer los detalles internos de implementación de cada técnica. Esta decisión permite incorporar futuras técnicas de modulación con únicamente desarrollar el archivo correspondiente bajo el formato establecido, sin modificar la lógica central del sistema. La Tabla \ref{tab:modular_iface} resume la estructura genérica adoptada para los archivos de técnica.
+Como refinamiento, se incorpora un archivo de configuración en formato JSON gestionado desde la aplicación de monitoreo. Esta abstracción permite separar los parámetros de operación de la lógica de procesamiento implementada en el sistema embebido, centralizando la configuración del sistema en un único archivo externo.
 
-\begin{table}[H]
-\centering
-\caption{Interfaz genérica establecida para los módulos de técnica en el sistema embebido.}
-\label{tab:modular_iface}
-\begin{tabular}{|>{\centering\arraybackslash}p{5.5cm}|>{\centering\arraybackslash}p{8cm}|}
-\hline
-\textbf{Elemento} & \textbf{Responsabilidad} \\ \hline
-\texttt{PARAM\_ORDER} & Lista ordenada de parámetros esperados por la técnica, utilizada para la generación automática de configuración \\ \hline
-\texttt{State} & Clase que encapsula el estado de continuidad entre bloques consecutivos (fases, filtros, contadores) \\ \hline
-\texttt{compute\_frame(state, params, sys\_cfg)} & Función de cómputo principal: recibe el estado, los parámetros mapeados y la configuración del sistema; retorna los tres payloads de señal \\ \hline
-\end{tabular}
-\end{table}
-
-La definición de la clase \texttt{State} con atributos de continuidad entre bloques resulta especialmente relevante para garantizar la coherencia de fase entre iteraciones sucesivas del ciclo de procesamiento. Sin este mecanismo, el reinicio de las variables de fase en cada bloque introduciría discontinuidades en la señal generada que se manifestarían como artefactos visuales en la interfaz de monitoreo y afectarían la precisión de las métricas de evaluación.
-
-La tercera dimensión de optimización aborda la parametrización del sistema mediante un archivo de configuración externo en formato JSON. La motivación principal de esta decisión deriva de la necesidad de separar los parámetros de operación del sistema de la lógica de procesamiento implementada en el código. En el diseño inicial, parámetros como la frecuencia de muestreo $F_s$, el tamaño de bloque $N$ y los rangos de mapeo de los potenciómetros para cada técnica se encuentran definidos directamente dentro del código del microcontrolador, lo que implica que cualquier ajuste sobre estos valores requiere modificar y recargar el firmware del dispositivo.
-
-La incorporación del archivo \texttt{config.json} resuelve este problema al centralizar en un único archivo todos los parámetros configurables del sistema. El archivo define dos categorías de parámetros: los parámetros generales del sistema —frecuencia de muestreo, tamaño de bloque, velocidad de transmisión serial, amplitud de referencia, tasa de bit y longitud de patrón para técnicas digitales— y los parámetros específicos de cada técnica, que incluyen la identificación, el archivo de implementación, el tipo de señal procesada y los rangos de mapeo asociados a cada potenciómetro. Esta organización permite que la aplicación de monitoreo incorpore una herramienta interactiva de configuración que posibilita al usuario modificar estos parámetros de forma visual y regenerar el archivo de configuración sin intervenir directamente sobre el código del microcontrolador.
-
-Desde la perspectiva del sistema embebido, el archivo \texttt{config.json} es leído durante la inicialización del programa y sus valores se utilizan para configurar dinámicamente los rangos de operación de cada potenciómetro según la técnica activa. Adicionalmente, el mismo archivo es empleado para realizar la carga dinámica de los módulos de técnica, determinando en tiempo de inicialización qué algoritmos estarán disponibles durante la ejecución sin requerir modificación del código principal. Esto permite que un mismo hardware físico opere con distintos rangos paramétricos y distintas técnicas según la configuración seleccionada, sin requerir reconfiguraciones manuales del firmware. La Tabla \ref{tab:config_json} presenta los parámetros incluidos en el archivo de configuración del sistema.
-
-\begin{table}[H]
-\centering
-\caption{Parámetros definidos en el archivo de configuración \texttt{config.json}.}
-\label{tab:config_json}
-\begin{tabular}{|>{\centering\arraybackslash}p{3cm}|>{\centering\arraybackslash}p{5cm}|>{\centering\arraybackslash}p{5.5cm}|}
-\hline
-\textbf{Categoría} & \textbf{Parámetro} & \textbf{Descripción} \\ \hline
-\multirow{5}{*}{General} & \texttt{fs} & Frecuencia de muestreo del sistema \\ \cline{2-3}
- & \texttt{n} & Tamaño del bloque de procesamiento \\ \cline{2-3}
- & \texttt{baud} & Velocidad de transmisión serial \\ \cline{2-3}
- & \texttt{amp} & Amplitud de referencia para codificación int16 \\ \cline{2-3}
- & \texttt{alpha} & Coeficiente del filtro pasa bajos recursivo \\ \hline
-\multirow{5}{*}{Por técnica} & \texttt{id} & Identificador de la técnica \\ \cline{2-3}
- & \texttt{file} & Archivo de implementación del módulo \\ \cline{2-3}
- & \texttt{type} & Tipo de señal procesada (analog / digital) \\ \cline{2-3}
- & \texttt{pot[k].min / max} & Rango de mapeo del potenciómetro $k$ \\ \cline{2-3}
- & \texttt{pot[k].param} & Nombre del parámetro asociado al potenciómetro $k$ \\ \hline
-\end{tabular}
-\end{table}
-
-En conjunto, las optimizaciones descritas en esta subsección responden a un conjunto de restricciones técnicas identificadas durante la operación real del sistema. La reutilización de buffers y la codificación compacta de muestras reducen la presión sobre la memoria disponible y el ancho de banda serial. El refinamiento del protocolo de sincronización fortalece la robustez de la comunicación frente a condiciones de desalineamiento temporal. La parametrización del tamaño de bloque proporciona un mecanismo de ajuste adaptable frente a las limitaciones temporales de MicroPython. La modularización por técnicas facilita la extensibilidad del sistema sin comprometer la estabilidad del núcleo de procesamiento. Y la incorporación del archivo de configuración desacopla los parámetros operativos del código, favoreciendo una administración más flexible y mantenible del sistema embebido en su conjunto.
-
+La configuración se organiza en dos categorías principales: parámetros generales del sistema, como frecuencia de muestreo, tamaño de bloque, velocidad de transmisión serial y parámetros globales de operación; y parámetros específicos de cada técnica, incluyendo identificación del módulo, tipo de señal procesada y rangos de mapeo asociados a cada potenciómetro. Esta organización permite que la aplicación de monitoreo incorpore una herramienta visual de configuración capaz de modificar parámetros y regenerar automáticamente el archivo de configuración sin intervenir directamente sobre el firmware del microcontrolador.
 
 \subsection{Implementación del proceso de evaluación y análisis de desempeño}
 
-La disposición de un sistema funcional capaz de modular, demodular y visualizar señales en tiempo real no constituye por sí sola evidencia suficiente sobre la calidad del procesamiento realizado. Sin una estrategia de evaluación cuantitativa integrada al flujo operativo del sistema, la verificación del correcto funcionamiento de las técnicas implementadas queda limitada a la inspección visual de las formas de onda, lo cual resulta insuficiente para caracterizar con precisión la fidelidad de reconstrucción, la estabilidad temporal del procesamiento y la sensibilidad del sistema ante variaciones de parámetros. Por esta razón, la implementación de un proceso de evaluación matemática representa un objetivo específico independiente dentro del desarrollo del proyecto, orientado a proporcionar retroalimentación objetiva y continua sobre el desempeño del sistema durante su ejecución en tiempo real.
+La disposición de un sistema funcional capaz de modular, demodular y visualizar señales en tiempo real no constituye por sí sola evidencia suficiente sobre la calidad del procesamiento realizado. La inspección visual de las formas de onda reconstruidas permite identificar anomalías groseras en el comportamiento del sistema, pero resulta insuficiente para caracterizar con precisión la fidelidad de reconstrucción, la estabilidad temporal del procesamiento y la sensibilidad del sistema ante variaciones en los parámetros de operación. Dos señales pueden mostrar formas visualmente similares y presentar, no obstante, diferencias significativas en amplitud, desplazamiento de fase o dispersión acumulada que un análisis puramente cualitativo no detecta. Por esta razón, la incorporación de un proceso de evaluación cuantitativa integrado al flujo operativo del sistema constituye uno de los principales objetivos dentro del desarrollo del proyecto.
 
-A diferencia de las etapas previas del desarrollo, donde las restricciones computacionales del entorno embebido condicionaban directamente las decisiones de diseño algorítmico, la evaluación matemática se ejecuta íntegramente dentro de la aplicación de monitoreo en el entorno de escritorio. Esta distribución permite emplear métricas con mayor precisión numérica sin imponer carga adicional sobre el microcontrolador, aprovechando las capacidades de procesamiento del entorno externo para realizar cálculos vectorizados sobre los bloques de señal recibidos.
+El problema central que este objetivo aborda consiste en definir un conjunto de métricas matemáticas complementarias que permitan caracterizar el desempeño del sistema desde perspectivas distintas y no redundantes. La complementariedad es un criterio determinante en la selección: una única métrica captura solamente una dimensión del problema, por lo que combinaciones mal seleccionadas pueden producir una evaluación sesgada o incompleta. En este contexto, el diseño del sistema de evaluación requiere identificar cuáles son las dimensiones de desempeño relevantes para el problema planteado, para poder seleccionar el conjunto de métricas más adecuado para cada dimensión.
 
-\subsubsection{Selección e integración de métricas de evaluación}
+A diferencia de las etapas previas del desarrollo, donde las restricciones computacionales del entorno embebido condicionaban directamente las decisiones de diseño algorítmico, la evaluación matemática se ejecuta íntegramente dentro de la aplicación de monitoreo en el entorno de escritorio. Esta distribución resulta determinante, ya que permite emplear formulaciones con mayor precisión numérica y operaciones vectorizadas sin imponer carga adicional sobre el microcontrolador. El módulo de métricas opera sobre los bloques de señal recibidos por comunicación serial, calculando los indicadores de desempeño en cada ciclo de actualización del monitor.
 
-La selección de las métricas de evaluación responde a la necesidad de caracterizar el desempeño del sistema desde perspectivas complementarias: la similitud global entre señales, la precisión numérica de la reconstrucción y la estabilidad temporal del procesamiento continuo. Un único indicador resulta insuficiente para capturar todas estas dimensiones simultáneamente, ya que métricas orientadas a similitud de forma pueden no reflejar desviaciones de amplitud, mientras que métricas de error puntual no capturan degradación en la coherencia temporal entre bloques.
+\subsubsection{Selección de métricas de evaluación}
 
-La primera métrica seleccionada corresponde a la Correlación Cruzada Normalizada (NCC), cuya formulación permite medir el grado de similitud entre la señal original y la señal demodulada evaluando la correspondencia en la forma general de ambas señales. La elección de NCC como métrica principal se justifica en que su normalización permite comparar resultados entre configuraciones con distintas amplitudes o parámetros internos, entregando un indicador porcentual de similitud independiente de la escala absoluta de las señales. No obstante, la aplicación de esta métrica requiere adaptaciones según el tipo de señal procesada.
+El desempeño del sistema de modulación y demodulación puede caracterizarse a partir de tres dimensiones fundamentales: la similitud global entre la señal original y la señal reconstruida, la precisión numérica de la reconstrucción punto a punto, y la estabilidad temporal del procesamiento durante la ejecución continua por bloques. Cada una de estas dimensiones exige una aproximación matemática distinta, y la selección de métricas apropiadas requiere considerar tanto las propiedades formales de las métricas candidatas como su adecuación al tipo de señal procesada y a las características del entorno de operación.
 
-Para la técnica AM, cuya señal de información corresponde a una onda analógica continua, se aplica la correlación de Pearson entre señal original y señal demodulada, centradas respecto a su media:
+\textbf{Dimensión 1: Similitud global entre señales.} La primera dimensión busca cuantificar en qué medida la señal demodulada preserva la forma general de la señal original, con independencia de posibles diferencias de amplitud o desplazamiento en continua introducidos por el proceso de filtrado o por el acondicionamiento de la señal dentro del embebido. Para esta dimensión existen múltiples alternativas establecidas en la literatura de procesamiento de señales.
+
+Una primera opción corresponde al coeficiente de determinación $R^2$, ampliamente utilizado en análisis de regresión como indicador de la fracción de varianza explicada por el modelo. Sin embargo, su interpretación asume una relación lineal entre las señales comparadas y es sensible a diferencias de escala absoluta, lo que lo hace menos robusto ante variaciones de amplitud sistemáticas introducidas por el procesamiento embebido \cite{kay1993fundamentals}. Una segunda alternativa corresponde a la coherencia espectral, que evalúa la similitud entre señales en el dominio de la frecuencia. Aunque esta métrica es apropiada para análisis estacionario de señales, su cálculo requiere transformadas de Fourier sobre ventanas suficientemente largas, lo que introduce latencia en la retroalimentación y resulta más adecuado para análisis post-procesado que para retroalimentación en tiempo real.
+
+La métrica seleccionada para esta dimensión corresponde a la Correlación Cruzada Normalizada (NCC), formulada como la correlación de Pearson entre la señal original y la señal demodulada, centradas respecto a sus respectivas medias, tal como se expresa en la ecuación \ref{eq:ncc_analogico}.
 
 \begin{equation}
-\text{NCC} = \frac{\displaystyle\sum_{i=1}^{N}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\displaystyle\sum_{i=1}^{N}(x_i - \bar{x})^2}\sqrt{\displaystyle\sum_{i=1}^{N}(y_i - \bar{y})^2}}
+\text{NCC} = \frac{\displaystyle\sum_{i=1}^{N}(x_i - \bar{x})(y_i - \bar{y})}
+{\sqrt{\displaystyle\sum_{i=1}^{N}(x_i - \bar{x})^2}
+\sqrt{\displaystyle\sum_{i=1}^{N}(y_i - \bar{y})^2}}
 \label{eq:ncc_analogico}
 \end{equation}
 
-Para la técnica ASK/OOK, en cambio, la comparación directa de valores de correlación analógica resulta menos informativa debido a la naturaleza discreta de la señal digital. En este caso, la métrica se transforma en una comparación por coincidencia de bits, donde ambas señales son convertidas a representación binaria mediante umbral de signo y el NCC corresponde al porcentaje de bits correctamente recuperados:
+La elección de NCC frente a las alternativas descritas se justifica en que la normalización respecto a las normas de ambas señales hace que el resultado sea invariante ante diferencias de escala y offset, lo cual resulta especialmente relevante en este contexto dado que el procesamiento de demodulación introduce componentes de continua y variaciones de amplitud que no constituyen degradación real de la técnica sino artefactos del acondicionamiento. El resultado está acotado en $[-1, 1]$, lo que facilita su interpretación como porcentaje de similitud al escalarlo al rango $[0, 100]$, y su cálculo requiere únicamente operaciones vectoriales básicas, compatibles con una actualización por bloque en tiempo real.
+
+No obstante, la aplicación directa de NCC sobre señales digitales presenta una limitación fundamental. En la técnica ASK/OOK, la señal original corresponde a una secuencia binaria representada en formato NRZ, por lo que la correlación analógica entre la señal original y la demodulada puede verse influenciada por la forma de los pulsos reconstituidos y no reflejar fielmente la tasa de recuperación de bits. En este caso, la métrica más informativa consiste en comparar directamente la correspondencia lógica entre ambas señales, convirtiendo ambas a representación binaria mediante umbral de signo y calculando la fracción de bits correctamente recuperados, conforme se define en la ecuación \ref{eq:ncc_digital}.
 
 \begin{equation}
-\text{NCC}_{\text{digital}} = \frac{1}{N}\sum_{i=1}^{N}\mathbf{1}\left[\text{sgn}(x_i) = \text{sgn}(y_i)\right] \times 100
+\text{NCC}_{\text{digital}} = \frac{1}{N}\sum_{i=1}^{N}
+\mathbf{1}\left[\text{sgn}(x_i) = \text{sgn}(y_i)\right] \times 100
 \label{eq:ncc_digital}
 \end{equation}
 
-Esta diferenciación entre el cálculo de NCC según el tipo de técnica activa es fundamental, ya que aplicar la correlación analógica a señales digitales podría generar resultados engañosos derivados de la naturaleza cuantizada de las formas de onda. La selección automática de la métrica adecuada según el campo \texttt{type} contenido en los metadatos del sistema garantiza que la evaluación sea siempre coherente con la naturaleza de la señal procesada.
+Esta diferenciación en el cálculo de NCC según el tipo de técnica activa es esencial, ya que aplicar la correlación analógica a señales digitales introduciría una evaluación estructuralmente incorrecta. La selección automática de la variante adecuada a partir del campo de identificación de técnica contenido en los metadatos del protocolo serial garantiza que la métrica sea siempre coherente con la naturaleza de la señal procesada.
 
-La segunda métrica seleccionada corresponde al Error Cuadrático Medio Normalizado (NRMSE), orientado a cuantificar el error promedio punto a punto entre la señal original y la señal reconstruida:
+\textbf{Dimensión 2: Precisión numérica de la reconstrucción.} La segunda dimensión complementa la evaluación de similitud al medir cuán exactamente los valores de la señal demodulada coinciden con los valores de la señal original en cada instante. Una señal puede presentar alta correlación con la original ---conservando adecuadamente su forma general--- y aun así contener desviaciones sistemáticas de amplitud, errores de escala o distorsión en regiones específicas que el NCC no detecta por su naturaleza invariante a la escala.
+
+Para esta dimensión, la alternativa más directa corresponde al Error Cuadrático Medio (RMSE), que cuantifica la raíz del error promedio cuadrático punto a punto entre ambas señales. Sin embargo, el RMSE en su forma estándar es dimensional y dependiente de la amplitud de la señal, lo que impide comparar resultados entre bloques procesados bajo diferentes configuraciones de parámetros o entre las dos técnicas implementadas, las cuales operan sobre señales con rangos dinámicos distintos. La normalización respecto al rango dinámico de la señal original resuelve esta limitación, dando lugar al Error Cuadrático Medio Normalizado (NRMSE), definido en la ecuación~\ref{eq:nrmse}.
 
 \begin{equation}
-\text{NRMSE} = \frac{\sqrt{\dfrac{1}{N}\displaystyle\sum_{i=1}^{N}(x_i - y_i)^2}}{x_{\max} - x_{\min}}
+\text{NRMSE} = \frac{\sqrt{\dfrac{1}{N}\displaystyle\sum_{i=1}^{N}(x_i - y_i)^2}}
+{x_{\max} - x_{\min}}
 \label{eq:nrmse}
 \end{equation}
 
-La utilización de NRMSE complementa el análisis realizado mediante NCC debido a que permite medir la precisión numérica de la reconstrucción de la señal y no únicamente la similitud en su forma. Una señal demodulada puede presentar alta correlación con la señal original si conserva su forma general, pero aun así contener desviaciones sistemáticas de amplitud o componentes de offset que el NCC no detecta directamente. El NRMSE captura estas desviaciones al operar sobre diferencias puntuales, proporcionando así una medida complementaria del error de reconstrucción.
+La adopción de NRMSE sobre RMSE se justifica precisamente en esta propiedad de invarianza al rango dinámico, que permite interpretar el error en términos relativos respecto a la excursión total de la señal de referencia. Adicionalmente, la implementación incorpora una etapa de compensación de desfase y ganancia previa al cálculo del error, con el propósito de desacoplar la degradación real introducida por el proceso de modulación y demodulación de los desplazamientos temporales y variaciones de amplitud asociados al filtrado pasa bajos aplicado durante la reconstrucción de la señal. De esta manera, el indicador refleja principalmente la fidelidad efectiva de reconstrucción y no distorsiones deterministas inherentes al procesamiento interno del sistema.
 
-La tercera métrica integrada corresponde a la desviación estándar del NCC entre bloques consecutivos, cuyo propósito es caracterizar la estabilidad temporal del sistema durante la ejecución continua:
+\textbf{Dimensión 3: Estabilidad temporal del procesamiento continuo.} Las dos métricas anteriores caracterizan el desempeño del sistema en cada bloque individualmente, pero no capturan el comportamiento del sistema a lo largo del tiempo durante la ejecución continua. En un sistema que procesa señales mediante bloques secuenciales, es posible que el desempeño sea aceptable en promedio pero que exhiba variaciones significativas entre bloques consecutivos, lo cual evidenciaría inestabilidad en el procesamiento, problemas de sincronización serial o sensibilidad excesiva a las transiciones entre bloques.
+
+Para esta dimensión se consideró el uso de la varianza temporal del NRMSE, que mediría directamente la dispersión del error de reconstrucción a lo largo del tiempo. Sin embargo, dado que NCC ya constituye el indicador principal de calidad del sistema, resulta más informativo y coherente evaluar la estabilidad sobre la misma métrica base, manteniendo consistencia semántica en la interpretación de los indicadores. La desviación estándar del historial de valores NCC entre bloques consecutivos cumple esta función, según se expresa en la ecuación \ref{eq:std_ncc}.
 
 \begin{equation}
-\sigma_{\text{NCC}} = \sqrt{\frac{1}{M}\sum_{i=1}^{M}\left(\text{NCC}_i - \overline{\text{NCC}}\right)^2}
+\sigma_{\text{NCC}} = \sqrt{\frac{1}{M}\sum_{i=1}^{M}
+\left(\text{NCC}_i - \overline{\text{NCC}}\right)^2}
 \label{eq:std_ncc}
 \end{equation}
 
-donde $M$ representa la cantidad de bloques acumulados y $\overline{\text{NCC}}$ el promedio de los valores NCC registrados. Esta métrica se orienta específicamente a detectar inestabilidad temporal en el procesamiento continuo del sistema embebido. Una desviación estándar reducida indica que el desempeño del sistema se mantiene consistente entre bloques consecutivos, mientras que variaciones elevadas pueden evidenciar inestabilidad en el procesamiento, problemas de sincronización serial o degradación temporal en la calidad de reconstrucción de señal.
+donde $M$ representa la cantidad de bloques acumulados en el historial y $\overline{\text{NCC}}$ el promedio de los valores registrados. Una desviación estándar reducida indica que el desempeño del sistema se mantiene consistente entre bloques, mientras que valores elevados pueden evidenciar inestabilidad en el procesamiento, pérdida de sincronización en el protocolo serial o degradación temporal asociada a variaciones en los parámetros del embebido durante la ejecución.
+
 
 \subsubsection{Integración dentro del flujo operativo del monitor}
 
-La integración de las métricas dentro del sistema de monitoreo requiere definir en qué punto del flujo de adquisición y visualización se realiza su cálculo, con qué periodicidad se actualizan y de qué forma se presentan al usuario. Dado que el sistema recibe bloques de señal en forma continua, resulta natural vincular el cálculo de métricas directamente al evento de recepción de un nuevo frame, de forma que cada bloque procesado genere automáticamente una actualización de los indicadores de desempeño.
+La integración de las métricas dentro del sistema de monitoreo requiere definir en qué punto del flujo de adquisición y visualización se realiza su cálculo, con qué periodicidad se actualizan y de qué forma se vinculan con los datos transmitidos por el embebido. Dado que el sistema recibe bloques de señal en forma continua y el protocolo serial transmite en cada frame las tres versiones sincronizadas de la señal, resulta natural vincular el cálculo de métricas directamente al evento de recepción de un nuevo frame, de forma que cada bloque procesado genere automáticamente una actualización de los indicadores de desempeño.
 
-Bajo este esquema, por cada frame de señal recibido y visualizado, el sistema extrae los vectores correspondientes a la señal original y la señal demodulada, calcula el NCC utilizando la variante adecuada según el tipo de técnica activa, y registra el resultado en el historial de bloques para el posterior cálculo de la desviación estándar. El resultado se presenta en el panel de registro de la interfaz gráfica mediante un código de color que facilita la interpretación inmediata del nivel de calidad del procesamiento: valores superiores al 70\% se representan en verde, valores entre 65\% y 70\% en amarillo, y valores inferiores en rojo. Esta retroalimentación visual permite al usuario identificar de forma inmediata regiones de operación donde el sistema presenta degradación en la calidad de reconstrucción.
-
-La decisión de realizar el cálculo de métricas sobre el bloque más recientemente recibido en lugar de acumular múltiples bloques en un buffer extendido responde a la necesidad de mantener retroalimentación en tiempo real sin introducir latencia adicional en el ciclo de actualización de la interfaz. El historial de valores NCC se conserva internamente como una ventana deslizante de bloques, permitiendo calcular la desviación estándar sobre la ventana acumulada sin requerir almacenamiento indefinido de señales pasadas.
+Bajo este esquema, por cada frame recibido el sistema extrae los vectores correspondientes a la señal original y la señal demodulada, selecciona la variante de NCC adecuada según el tipo de técnica activa identificado en los metadatos del frame, y registra el resultado en el historial de bloques para el posterior cálculo de la desviación estándar. La decisión de realizar el cálculo sobre el bloque más recientemente recibido, en lugar de acumular múltiples bloques en un buffer extendido, responde a la necesidad de mantener retroalimentación en tiempo real sin introducir latencia adicional en el ciclo de actualización de la interfaz. El historial de valores NCC se conserva internamente como una ventana deslizante, permitiendo calcular $\sigma_{\text{NCC}}$ sobre la ventana acumulada sin requerir almacenamiento indefinido de señales pasadas.
 
 En conjunto, la implementación de este proceso de evaluación proporciona al sistema un mecanismo de retroalimentación cuantitativa que complementa la visualización gráfica de señales y permite caracterizar objetivamente el comportamiento del sistema bajo distintas configuraciones de parámetros, técnicas activas y condiciones de operación del entorno embebido.
+
 
 \section{Análisis de los resultados obtenidos}
 
 \subsection{Resultados asociados a la integración de los algoritmos de modulación y demodulación}
 
+La evaluación funcional de las técnicas implementadas se realizó mediante pruebas variando sistemáticamente los parámetros de control disponibles en el sistema físico. El objetivo de estas pruebas consiste en observar cómo los cambios de configuración afectan la profundidad de modulación, la calidad de reconstrucción de la señal, verificando simultáneamente que el sistema mantiene operación continua y estable bajo distintas condiciones.
 
-\subsection{Resultados asociados al sistema de visualización y análisis de señales}
+\subsubsection{Resultados obtenidos para la técnica AM}
+
+Para la técnica AM, las pruebas se realizaron variando el índice de modulación $\mu$ a lo largo del rango disponible, con el propósito de observar su efecto sobre la profundidad de envolvente, la estabilidad visual de la señal modulada y la calidad de reconstrucción de la señal demodulada. Los resultados obtenidos para tres valores representativos de $\mu$ se presentan a continuación.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.74\textwidth]{fig/am-3.png}
+\caption{Resultados obtenidos para AM utilizando $\mu = 0.10$. Fuente: Elaboración propia.}
+\label{fig:am_mu010}
+\end{figure}
+
+La Figura \ref{fig:am_mu010} muestra el comportamiento del sistema para un índice de modulación reducido ($\mu = 0.10$). En este caso, la profundidad de modulación sobre la envolvente es baja, lo que se traduce en una variación de amplitud poco pronunciada sobre la señal modulada. Como consecuencia directa, la señal demodulada presenta una mayor presencia de componentes residuales asociadas a la portadora, las cuales no son completamente suprimidas por el filtro pasa bajos de primer orden utilizado. Este comportamiento es consistente con la decisión de diseño que priorizó simplicidad computacional sobre selectividad frecuencial del filtrado: a bajos índices de modulación, la energía de la componente de información es proporcionalmente menor respecto a la portadora, lo que reduce la efectividad relativa del filtrado recursivo empleado. Los valores de NCC registrados se sitúan en el rango de 82--84\%, indicando que la forma general de la señal es recuperada, si bien con menor similitud respecto a configuraciones de mayor profundidad. El NRMSE observado alcanza valores alrededor de 0.15, reflejando el efecto del residuo de alta frecuencia sobre el error punto a punto. No obstante, el sistema mantiene funcionamiento continuo y estable, sin evidenciar pérdida de sincronización ni interrupciones en el flujo de procesamiento.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.74\textwidth]{fig/am-2.png}
+\caption{Resultados obtenidos para AM utilizando $\mu = 0.51$. Fuente: Elaboración propia.}
+\label{fig:am_mu051}
+\end{figure}
+
+Al incrementar el índice de modulación a un valor intermedio ($\mu = 0.51$), los resultados presentados en la Figura \ref{fig:am_mu051} evidencian una mejora notable en la calidad de reconstrucción. La mayor profundidad de modulación incrementa la relación entre la energía de la señal de información y la portadora, lo que favorece la supresión de componentes residuales durante el filtrado y permite que la señal demodulada conserve con mayor fidelidad la forma de onda original. El NCC se mantiene en el rango de 82--84\%, aunque la reducción del NRMSE hacia valores de 0.03--0.04 evidencia que el error de reconstrucción punto a punto disminuye sustancialmente respecto al caso anterior. Este resultado indica que, si bien la similitud de forma general se preserva en ambas configuraciones, la modulación intermedia produce un equilibrio más favorable entre estabilidad visual y precisión de reconstrucción.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.74\textwidth]{fig/am-1.png}
+\caption{Resultados obtenidos para AM utilizando $\mu = 1.00$. Fuente: Elaboración propia.}
+\label{fig:am_mu100}
+\end{figure}
+
+La Figura \ref{fig:am_mu100} presenta los resultados obtenidos para máxima profundidad de modulación ($\mu = 1.00$). En esta configuración, la envolvente de la señal modulada se encuentra claramente definida, y la señal demodulada presenta la mayor aproximación visual a la señal original observada durante las pruebas. El NRMSE alcanza valores extremadamente bajos, en torno a 0.02, lo que confirma que el incremento de $\mu$ reduce significativamente el error de reconstrucción al maximizar la profundidad de la componente de información dentro de la señal modulada. El sistema conserva sincronización continua entre generación, modulación y demodulación, sin evidenciar inestabilidad temporal incluso bajo la mayor carga de modulación evaluada. Este resultado valida que la formulación discreta simplificada adoptada para la técnica AM es capaz de sostener una reconstrucción de alta calidad dentro del entorno embebido cuando el índice de modulación opera en su valor máximo.
+
+La comparación entre las tres configuraciones evaluadas muestra que el índice de modulación constituye el factor determinante sobre la calidad de reconstrucción en AM: valores bajos de $\mu$ introducen mayor residuo de portadora y elevan el error de reconstrucción, mientras que valores intermedios y altos permiten reducir el NRMSE de forma significativa sin comprometer la estabilidad operativa del sistema. En conjunto, los resultados confirman que la técnica AM logra ejecutarse correctamente sobre el RP2040 bajo distintas configuraciones de parámetros, manteniendo funcionamiento continuo y recuperación funcional de la señal en todos los casos evaluados.
 
 
+% =========================================================
+\subsubsection{Resultados obtenidos para la técnica ASK/OOK}
+
+Para la técnica ASK/OOK, las pruebas se orientaron a evaluar la estabilidad de la recuperación binaria ante variaciones en la secuencia digital generada y ante cambios en el umbral de decisión $\tau$. Dado que la naturaleza de la señal procesada es discreta, el comportamiento del sistema se analiza en términos de coherencia entre los patrones de activación y desactivación de la portadora observados en la señal modulada y la correspondencia lógica entre la señal original y la señal demodulada.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.74\textwidth]{fig/ask-1.png}
+\caption{Resultados obtenidos para ASK/OOK con $\tau = 0.52$. Fuente: Elaboración propia.}
+\label{fig:ask_th052}
+\end{figure}
+
+La Figura \ref{fig:ask_th052} muestra el comportamiento del sistema bajo un umbral de decisión cercano al valor central del rango normalizado ($\tau = 0.52$). En esta configuración, la activación y desactivación de la portadora refleja fielmente los estados lógicos generados por el mecanismo pseudoaleatorio, y la coincidencia visual entre la señal original y la señal demodulada es notoria. Los valores de NCC digital registrados se sitúan en el rango de 88--92\%, evidenciando que el sistema recupera correctamente la mayor parte de los bits transmitidos. El NRMSE se ubica en el rango de 0.15--0.18, valor que es esperable para señales de naturaleza binaria, ya que la métrica es sensible a las transiciones abruptas características de este tipo de señal. La estabilidad temporal entre bloques consecutivos es adecuada, sin evidencia de desalineamiento entre la secuencia generada y la recuperada.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.74\textwidth]{fig/ask-2.png}
+\caption{Resultados obtenidos para ASK/OOK con una secuencia digital distinta. Fuente: Elaboración propia.}
+\label{fig:ask_seed2}
+\end{figure}
+
+Con el propósito de evaluar si la estabilidad del sistema depende de un patrón binario específico, la Figura \ref{fig:ask_seed2} presenta los resultados obtenidos al modificar el valor de semilla del generador pseudoaleatorio, produciendo una secuencia digital diferente. El cambio en el patrón binario es visible en la señal modulada, que presenta una distribución distinta de bloques activos e inactivos respecto al caso anterior. Sin embargo, el comportamiento del sistema en términos de recuperación binaria se mantiene estable, con NCC digital en el rango de 89--93\%. En algunos bloques evaluados, el NRMSE desciende hasta valores de 0.06, asociados a secuencias con menor densidad de transiciones. Este resultado confirma que la sincronización del sistema no depende de características particulares de la secuencia transmitida, sino que se mantiene de forma consistente independientemente del patrón generado.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.74\textwidth]{fig/ask-3.png}
+\caption{Resultados obtenidos para ASK/OOK con $\tau = 0.70$. Fuente: Elaboración propia.}
+\label{fig:ask_th070}
+\end{figure}
+
+La Figura \ref{fig:ask_th070} evidencia el efecto de incrementar el umbral de decisión hacia un valor más alto ($\tau = 0.70$). En esta configuración, el proceso de detección binaria se vuelve más exigente, ya que una fracción mayor de los valores detectados debe superar el umbral para ser interpretados como estado lógico activo. Como consecuencia, la sensibilidad del detector aumenta y el error de reconstrucción se eleva, con valores de NRMSE en el rango de 0.20--0.25. Este incremento refleja que algunos bits cuya componente detectada se sitúa entre 0.52 y 0.70 son ahora clasificados incorrectamente, degradando la correspondencia lógica entre la señal original y la recuperada. Pese a este incremento en el error, el sistema conserva operación continua y estable, sin interrupciones en el procesamiento ni pérdida de sincronización serial.
+
+El análisis comparativo entre las configuraciones evaluadas para ASK/OOK muestra que el umbral de decisión constituye el principal factor de sensibilidad del proceso de recuperación binaria: valores cercanos al punto central del rango producen la mejor tasa de recuperación, mientras que umbrales más alejados incrementan el error de clasificación. Adicionalmente, la variación de la secuencia digital no compromete la estabilidad del sistema, confirmando que la arquitectura de detección coherente simplificada adoptada mantiene su efectividad con independencia del patrón binario transmitido. En conjunto, los resultados confirman que la técnica ASK/OOK logra recuperar correctamente la información digital bajo las distintas configuraciones evaluadas, evidenciando el funcionamiento correcto del sistema para esta modalidad de modulación.
+
+
+% =========================================================
+\subsection{Resultados asociados al sistema de visualización y monitoreo}
+
+Las Figuras \ref{fig:am_mu010} a \ref{fig:ask_th070} presentadas en la subsección anterior no solo documentan el comportamiento de las técnicas de modulación y demodulación, sino que constituyen simultáneamente evidencia directa del funcionamiento del sistema de visualización y monitoreo desarrollado. En cada una de estas figuras es posible observar la representación simultánea de la señal original, la señal modulada y la señal demodulada dentro de una misma interfaz gráfica, manteniendo alineación temporal entre las tres etapas del procesamiento.
+
+El monitor opera de forma continua durante toda la ejecución del sistema, recibiendo frames seriales sincronizados y actualizando las representaciones gráficas en cada ciclo de adquisición. La estabilidad visual observada a lo largo de las pruebas confirma que la arquitectura de visualización basada en PyQtGraph sostiene el refresco continuo de múltiples curvas sin degradar perceptiblemente el rendimiento del sistema. Adicionalmente, la interfaz integra la visualización de parámetros activos y métricas calculadas en tiempo real, permitiendo correlacionar de forma directa los cambios de configuración física con el comportamiento cuantitativo del sistema.
+
+
+% =========================================================
 \subsection{Resultados asociados a la optimización del procesamiento y flujo de datos}
 
 
+% =========================================================
+\subsubsection{Resultados del procesamiento por bloques}
+
+Con el propósito de determinar el tamaño de bloque más adecuado para la operación del sistema, se evaluó el comportamiento del procesamiento bajo distintos valores de $N$, observando el impacto sobre la frecuencia de actualización visual, la estabilidad temporal del procesamiento y la latencia percibida durante la ejecución continua. La Tabla \ref{tab:comparacion_fps_n} resume el comportamiento observado para los valores de $N$ evaluados.
+
+\begin{table}[H]
+\centering
+\caption{Comportamiento del sistema bajo distintos tamaños de bloque $N$.}
+\label{tab:comparacion_fps_n}
+\resizebox{0.8\textwidth}{!}{
+\begin{tabular}{|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{3cm}|>{\centering\arraybackslash}p{7cm}|>{\centering\arraybackslash}p{4cm}|}
+\hline
+\textbf{$N$ (muestras)} & \textbf{FPS promedio} & \textbf{Estabilidad visual} & \textbf{Latencia observada} \\ \hline
+64  & 11-13 & Baja, con fluctuaciones visibles & Muy baja \\ \hline
+128 & 8-10 & Moderada, con variaciones ocasionales & Baja \\ \hline
+256 & 6-8 & Adecuada, comportamiento uniforme & Moderada \\ \hline
+512 & 4-5 & Alta, sin fluctuaciones apreciables & Alta \\ \hline
+1024 & 2-3 & Alta, muy estable & Muy alta \\ \hline
+\end{tabular}
+}
+\end{table}
+
+El comportamiento registrado por el medidor de FPS integrado en la aplicación de monitoreo confirma que el incremento de $N$ reduce progresivamente la frecuencia de actualización y mejora la estabilidad visual, por lo que $N = 256$ fue seleccionado como configuración operativa al representar el equilibrio más adecuado entre actualización, estabilidad y latencia, siendo además la configuración utilizada en las Figuras \ref{fig:am_mu010} a \ref{fig:ask_th070}.
+
+% =========================================================
+
+
+\subsubsection{Resultados de modularidad y parametrización}
+
+La Figura \ref{fig:config_tool} muestra la herramienta de configuración que facilita la separación entre los parámetros generales del sistema y los parámetros específicos de cada técnica, permitiendo modificar la configuración sin afectar el firmware del microcontrolador.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{fig/config-tool.png}
+\caption{Herramienta de configuración desarrollada para la parametrización dinámica del sistema. Fuente: Elaboración propia.}
+\label{fig:config_tool}
+\end{figure}
+
+
+Esta separación entre lógica de procesamiento y configuración operativa constituye un resultado directo de la arquitectura modular adoptada durante el desarrollo. La herramienta evidencia que el sistema permite incorporar nuevas técnicas de modulación y demodulación únicamente mediante la extensión del archivo de configuración y la adición del módulo correspondiente, sin necesidad de modificar el núcleo de procesamiento.
+
+% =========================================================
 \subsection{Resultados asociados al proceso de evaluación y análisis de desempeño}
 
+Los indicadores cuantitativos calculados durante las pruebas permiten complementar el análisis visual con una caracterización objetiva del desempeño del sistema. La Tabla \ref{tab:metricas_consolidadas} resume los valores de NCC, NRMSE y $\sigma_{\text{NCC}}$ registrados para cada técnica y configuración evaluada, relacionando las tres dimensiones de desempeño dentro de una visión consolidada.
+
+\begin{table}[H]
+\centering
+\caption{Resumen consolidado de métricas de desempeño por técnica y configuración.}
+\label{tab:metricas_consolidadas}
+\resizebox{0.9\textwidth}{!}{
+\begin{tabular}{|>{\centering\arraybackslash}p{2.8cm}|>{\centering\arraybackslash}p{4.5cm}|>{\centering\arraybackslash}p{3.2cm}|>{\centering\arraybackslash}p{3.2cm}|>{\centering\arraybackslash}p{3.2cm}|}
+\hline
+\textbf{Técnica} & \textbf{Configuración} & \textbf{NCC promedio (\%)} & \textbf{NRMSE promedio} & \textbf{$\sigma_{\text{NCC}}$ (\%)} \\ \hline
+AM & $\mu = 0.10$ & 82--84 & $\sim$0.15      & \multirow{3}{*}{$\sim$1.5--2.5} \\ \cline{1-4}
+AM & $\mu = 0.51$ & 82--84 & $\sim$0.03--0.04 & \\ \cline{1-4}
+AM & $\mu = 1.00$ & 83--85 & $\sim$0.02       & \\ \hline
+ASK/OOK & $\tau = 0.52$, secuencia base   & 88--92 & $\sim$0.15--0.18 & \multirow{2}{*}{$\sim$1.0--2.0} \\ \cline{1-4}
+ASK/OOK & $\tau = 0.52$, secuencia alterna & 89--93 & $\sim$0.06--0.15 & \\ \hline
+ASK/OOK & $\tau = 0.70$ & 85--89 & $\sim$0.20--0.25 & $\sim$2.5--3.5 \\ \hline
+\end{tabular}
+}
+\end{table}
+
+Los valores de la Tabla \ref{tab:metricas_consolidadas} evidencian que NCC y NRMSE permiten evaluar dimensiones distintas y complementarias del desempeño, ya que mientras el NCC en AM se mantiene relativamente estable, el NRMSE varía significativamente con $\mu$, reflejando diferencias en precisión de amplitud; para ASK/OOK, los mayores valores de NCC obtenidos validan la utilización de una variante de cálculo orientada a comparación lógica binaria, mientras que los bajos valores de $\sigma_{\text{NCC}}$ en ambas técnicas confirman estabilidad temporal consistente entre bloques consecutivos.

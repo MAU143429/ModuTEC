@@ -10,7 +10,15 @@ from ui_help        import HelpDialog
 from PyQt5 import QtCore, QtWidgets, QtGui
 from ui_config_tool import ConfigToolDialog
 from serial_worker  import SerialParser, BAUD
-from metrics        import analog_ncc, digital_ncc, ncc_color
+from metrics import (
+    analog_ncc,
+    digital_ncc,
+    ncc_color,
+    nrmse,
+    ncc_std,
+    nrmse_color,
+    std_color
+)
 import pyqtgraph as pg
 from ui_styles import (
     DARK_BTN, DARK_BTN_GREEN, DARK_BTN_RED,
@@ -36,10 +44,12 @@ class TripleScope(QtWidgets.QMainWindow):
         self.running    = False
         self.ser        = None
         self.parser     = SerialParser()
+        self.ncc_history = []
 
         self._build_ui()
         self.refresh_ports()
-
+        
+    
         # Main tick timer
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.tick)
@@ -174,6 +184,8 @@ class TripleScope(QtWidgets.QMainWindow):
         self.log_box = QtWidgets.QTextEdit()
         self.log_box.setReadOnly(True)
         self.log_box.setStyleSheet(LOG_BOX)
+        self.log_box.setFont(QtGui.QFont("Consolas", 9))
+        self.log_box.setReadOnly(True)
         self.log_box.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         parent_layout.addWidget(self.log_box, stretch=1)
 
@@ -393,19 +405,73 @@ class TripleScope(QtWidgets.QMainWindow):
             self.p3.setTitle(f"DEMODULATED ({tech_id}) | {label_p3}: {p3:.2f}")
 
             chunk_counter += 1
+
+            # NCC
             ncc_val = (
-                analog_ncc(y_msg, y_dem) if tech_type == "analog"
+                analog_ncc(y_msg, y_dem)
+                if tech_type == "analog"
                 else digital_ncc(y_msg, y_dem)
             )
-            color    = ncc_color(ncc_val)
-            ts       = time.strftime("%H:%M:%S")
+
+            # NRMSE
+            nrmse_val = nrmse(y_msg, y_dem)
+            # Update NCC history
+            self.ncc_history.append(ncc_val)
+
+            # Sliding window
+            if len(self.ncc_history) > 50:
+                self.ncc_history.pop(0)
+
+            # STD NCC
+            std_val = ncc_std(self.ncc_history)
+
+            # Colors
+            ncc_col    = ncc_color(ncc_val)
+            nrmse_col  = nrmse_color(nrmse_val)
+            
+            std_col    = std_color(std_val)
+
+            # Timestamp
+            ts = time.strftime("%H:%M:%S")
+
             log_line = (
                 f'<span style="color:#555;">[{ts}]</span> '
-                f'<span style="color:#3498db;">[{tech_id}]</span> '
-                f'Chunk #{chunk_counter} — NCC: '
-                f'<span style="color:{color}; font-weight:bold;">{ncc_val:.1f}%</span>'
+
+                f'<span style="color:#3498db; font-weight:bold;">'
+                f'[{tech_id}]'
+                f'</span> '
+
+                f'<span style="color:#ecf0f1;">'
+                f'CHUNK #{chunk_counter:04d}'
+                f'</span>'
+
+                f'<br>'
+
+                f'<span style="color:#888;">NCC:</span> '
+                f'<span style="color:{ncc_col}; font-weight:bold;">'
+                f'{ncc_val:.1f}%'
+                f'</span> '
+
+                f'| '
+
+                f'<span style="color:#888;">NRMSE:</span> '
+                f'<span style="color:{nrmse_col}; font-weight:bold;">'
+                f'{nrmse_val:.4f}'
+                f'</span> '
+
+                f'| '
+
+                f'<span style="color:#888;">σNCC:</span> '
+                f'<span style="color:{std_col}; font-weight:bold;">'
+                f'{std_val:.2f}'
+                f'</span>'
+
+                f'<br>'
             )
+            
             self.log_box.append(log_line)
+            
+            
             sb = self.log_box.verticalScrollBar()
             sb.setValue(sb.maximum())
 
