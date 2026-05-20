@@ -511,7 +511,7 @@ La estructura de configuración se organiza en dos grupos principales: parámetr
 
 \subsection{Implementación del proceso de evaluación y análisis de desempeño}
 
-La disposición de un sistema funcional capaz de modular, demodular y visualizar señales en tiempo real no constituye por sí sola evidencia suficiente sobre la calidad del procesamiento realizado. La inspección visual de las formas de onda reconstruidas permite identificar anomalías groseras en el comportamiento del sistema, pero resulta insuficiente para caracterizar con precisión la fidelidad de reconstrucción, la estabilidad temporal del procesamiento y la sensibilidad del sistema ante variaciones en los parámetros de operación. Dos señales pueden mostrar formas visualmente similares y presentar, no obstante, diferencias significativas en amplitud, desplazamiento de fase o dispersión acumulada que un análisis puramente cualitativo no detecta. Por esta razón, la incorporación de un proceso de evaluación cuantitativa integrado al flujo operativo del sistema constituye uno de los principales objetivos dentro del desarrollo del proyecto.
+La disposición de un sistema funcional capaz de modular, demodular y visualizar señales en tiempo real no constituye por sí sola evidencia suficiente sobre la calidad del procesamiento realizado. La inspección visual de las formas de onda reconstruidas permite identificar anomalías significativas en el comportamiento del sistema, pero resulta insuficiente para caracterizar con precisión la fidelidad de reconstrucción, la estabilidad temporal del procesamiento y la sensibilidad del sistema ante variaciones en los parámetros de operación. Dos señales pueden mostrar formas visualmente similares y presentar, no obstante, diferencias significativas en amplitud, desplazamiento de fase o dispersión acumulada que un análisis puramente cualitativo no detecta. Por esta razón, la incorporación de un proceso de evaluación cuantitativa integrado al flujo operativo del sistema constituye uno de los principales objetivos dentro del desarrollo del proyecto.
 
 El problema principal consiste en definir un conjunto de métricas complementarias capaces de evaluar distintas dimensiones del comportamiento del sistema sin introducir redundancia entre indicadores. En consecuencia, la selección de métricas no depende únicamente de la facilidad de implementación, sino de la capacidad de cada indicador para caracterizar propiedades específicas asociadas a la calidad de reconstrucción y estabilidad del procesamiento continuo.
 
@@ -589,49 +589,48 @@ En conjunto, esta integración permite complementar la inspección visual de se�
 
 
 
-
-
+% =========================================================
 \section{Análisis de los resultados obtenidos}
 
+% =========================================================
 \subsection{Resultados asociados a la integración de los algoritmos de modulación y demodulación}
 
-La evaluación funcional de las técnicas implementadas se realizó mediante pruebas variando sistemáticamente los parámetros de control disponibles en el sistema físico. El objetivo de estas pruebas consiste en observar cómo los cambios de configuración afectan la profundidad de modulación, la calidad de reconstrucción de la señal, verificando simultáneamente que el sistema mantiene operación continua y estable bajo distintas condiciones.
+La evaluación funcional de las técnicas implementadas se realizó mediante pruebas variando sistemáticamente los parámetros de control disponibles en el sistema físico. El objetivo de estas pruebas consiste en observar cómo los cambios de configuración afectan la profundidad de modulación y la calidad de reconstrucción de la señal, verificando simultáneamente que el sistema mantiene operación continua y estable bajo distintas condiciones.
 
+% ---------------------------------------------------------
 \subsubsection{Resultados obtenidos para la técnica AM}
 
 Para la técnica AM, las pruebas se realizaron variando el índice de modulación $\mu$ a lo largo del rango disponible, con el propósito de observar su efecto sobre la profundidad de envolvente, la estabilidad visual de la señal modulada y la calidad de reconstrucción de la señal demodulada. Los resultados obtenidos para tres valores representativos de $\mu$ se presentan a continuación.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.74\textwidth]{fig/am-3.png}
+\includegraphics[width=0.75\textwidth]{fig/am-3.png}
 \caption{Resultados obtenidos para AM utilizando $\mu = 0.10$. Fuente: Elaboración propia.}
 \label{fig:am_mu010}
 \end{figure}
 
-La Figura \ref{fig:am_mu010} muestra el comportamiento del sistema para un índice de modulación reducido ($\mu = 0.10$). En este caso, la profundidad de modulación sobre la envolvente es baja, lo que se traduce en una variación de amplitud poco pronunciada sobre la señal modulada. Como consecuencia directa, la señal demodulada presenta una mayor presencia de componentes residuales asociadas a la portadora, las cuales no son completamente suprimidas por el filtro pasa bajos de primer orden utilizado. Este comportamiento es consistente con la decisión de diseño que priorizó simplicidad computacional sobre selectividad frecuencial del filtrado: a bajos índices de modulación, la energía de la componente de información es proporcionalmente menor respecto a la portadora, lo que reduce la efectividad relativa del filtrado recursivo empleado. Los valores de NCC registrados se sitúan en el rango de 82--84\%, indicando que la forma general de la señal es recuperada, si bien con menor similitud respecto a configuraciones de mayor profundidad. El NRMSE observado alcanza valores alrededor de 0.15, reflejando el efecto del residuo de alta frecuencia sobre el error punto a punto. No obstante, el sistema mantiene funcionamiento continuo y estable, sin evidenciar pérdida de sincronización ni interrupciones en el flujo de procesamiento.
+La Figura \ref{fig:am_mu010} muestra el comportamiento del sistema para un índice de modulación reducido ($\mu = 0.10$). En este caso, la profundidad de modulación sobre la envolvente es baja, lo que se traduce en una variación de amplitud poco pronunciada sobre la señal modulada. Como consecuencia directa, la señal demodulada presenta una mayor presencia de componentes residuales asociadas a la portadora, las cuales no son completamente suprimidas por el filtro pasa bajos de primer orden utilizado. Este comportamiento es consistente con la decisión de diseño que priorizó simplicidad computacional sobre selectividad frecuencial del filtrado, a bajos índices de modulación, la energía de la componente de información es proporcionalmente menor respecto a la portadora, lo que reduce la efectividad relativa del filtrado recursivo empleado. 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.74\textwidth]{fig/am-2.png}
+\includegraphics[width=0.75\textwidth]{fig/am-2.png}
 \caption{Resultados obtenidos para AM utilizando $\mu = 0.51$. Fuente: Elaboración propia.}
 \label{fig:am_mu051}
 \end{figure}
 
-Al incrementar el índice de modulación a un valor intermedio ($\mu = 0.51$), los resultados presentados en la Figura \ref{fig:am_mu051} evidencian una mejora notable en la calidad de reconstrucción. La mayor profundidad de modulación incrementa la relación entre la energía de la señal de información y la portadora, lo que favorece la supresión de componentes residuales durante el filtrado y permite que la señal demodulada conserve con mayor fidelidad la forma de onda original. El NCC se mantiene en el rango de 82--84\%, aunque la reducción del NRMSE hacia valores de 0.03--0.04 evidencia que el error de reconstrucción punto a punto disminuye sustancialmente respecto al caso anterior. Este resultado indica que, si bien la similitud de forma general se preserva en ambas configuraciones, la modulación intermedia produce un equilibrio más favorable entre estabilidad visual y precisión de reconstrucción.
+Al incrementar el índice de modulación a un valor intermedio ($\mu = 0.51$), los resultados presentados en la Figura \ref{fig:am_mu051} evidencian una mejora notable en la calidad de reconstrucción. La mayor profundidad de modulación incrementa la relación entre la energía de la señal de información y la portadora, lo que favorece la supresión de componentes residuales durante el filtrado. Este efecto es visible directamente sobre la señal modulada, cuya envolvente se encuentra claramente definida y simétrica respecto al eje de amplitud, confirmando que el índice de modulación intermedio no introduce distorsión de envolvente ni riesgo de sobremodulación dentro del rango operativo del sistema. La señal demodulada recupera la forma sinusoidal original con una ondulación residual aún perceptible pero sustancialmente menor respecto al caso de $\mu = 0.10$, comportamiento consistente con el incremento en la relación de energía entre la componente de información y los armónicos residuales de portadora que atraviesan el filtro recursivo. Este resultado es el esperado para una demodulación coherente con filtrado de primer orden: a medida que $\mu$ crece, la componente útil domina progresivamente sobre el residuo de alta frecuencia, mejorando la fidelidad de reconstrucción sin requerir mayor selectividad del filtro ni modificar ningún otro parámetro del sistema.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.74\textwidth]{fig/am-1.png}
+\includegraphics[width=0.75\textwidth]{fig/am-1.png}
 \caption{Resultados obtenidos para AM utilizando $\mu = 1.00$. Fuente: Elaboración propia.}
 \label{fig:am_mu100}
 \end{figure}
 
-La Figura \ref{fig:am_mu100} presenta los resultados obtenidos para máxima profundidad de modulación ($\mu = 1.00$). En esta configuración, la envolvente de la señal modulada se encuentra claramente definida, y la señal demodulada presenta la mayor aproximación visual a la señal original observada durante las pruebas. El NRMSE alcanza valores extremadamente bajos, en torno a 0.02, lo que confirma que el incremento de $\mu$ reduce significativamente el error de reconstrucción al maximizar la profundidad de la componente de información dentro de la señal modulada. El sistema conserva sincronización continua entre generación, modulación y demodulación, sin evidenciar inestabilidad temporal incluso bajo la mayor carga de modulación evaluada. Este resultado valida que la formulación discreta simplificada adoptada para la técnica AM es capaz de sostener una reconstrucción de alta calidad dentro del entorno embebido cuando el índice de modulación opera en su valor máximo.
+La Figura \ref{fig:am_mu100} presenta los resultados obtenidos para máxima profundidad de modulación ($\mu = 1.00$). En esta configuración, la envolvente de la señal modulada alcanza el valor mínimo de amplitud en cero, condición límite teórica de AM convencional que el sistema reproduce correctamente sin introducir distorsión de envolvente ni comportamiento inestable sobre la portadora. Este resultado confirma que la formulación discreta simplificada adoptada conserva su validez funcional incluso bajo la condición de máxima profundidad de modulación disponible. La señal demodulada presenta la mayor aproximación visual a la señal original observada durante las pruebas: la ondulación residual asociada al filtrado recursivo es mínima y la forma sinusoidal se recupera con alta fidelidad a lo largo de todo el bloque representado. El sistema conserva sincronización continua entre generación, modulación y demodulación, sin evidenciar inestabilidad temporal durante la ejecución continua ni degradación perceptible del flujo de procesamiento bajo la mayor profundidad de modulación evaluada.
 
-La comparación entre las tres configuraciones evaluadas muestra que el índice de modulación constituye el factor determinante sobre la calidad de reconstrucción en AM: valores bajos de $\mu$ introducen mayor residuo de portadora y elevan el error de reconstrucción, mientras que valores intermedios y altos permiten reducir el NRMSE de forma significativa sin comprometer la estabilidad operativa del sistema. En conjunto, los resultados confirman que la técnica AM logra ejecutarse correctamente sobre el RP2040 bajo distintas configuraciones de parámetros, manteniendo funcionamiento continuo y recuperación funcional de la señal en todos los casos evaluados.
-
-
-% =========================================================
+La comparación entre las tres configuraciones evaluadas confirma que la técnica AM se ejecuta correctamente sobre el RP2040 a lo largo de todo el rango disponible de $\mu$, manteniendo operación continua y estable en cada caso. El comportamiento observado es consistente con lo esperado para una demodulación coherente complementada mediante filtrado recursivo de primer orden, reafirmando que conforme aumenta el índice de modulación, la envolvente de la señal modulada adquiere mayor definición y la señal demodulada aproxima progresivamente la forma de onda original, reduciendo simultáneamente el residuo de alta frecuencia asociado a la portadora. Aun bajo máxima profundidad de modulación, el sistema no evidencia pérdida de sincronización ni degradación perceptible del flujo de procesamiento, validando que la formulación discreta simplificada adoptada reproduce adecuadamente el comportamiento funcional esperado de la técnica AM dentro del entorno embebido.
+% ---------------------------------------------------------
 \subsubsection{Resultados obtenidos para la técnica ASK/OOK}
 
 Para la técnica ASK/OOK, las pruebas se orientaron a evaluar la estabilidad de la recuperación binaria ante variaciones en la secuencia digital generada y ante cambios en el umbral de decisión $\tau$. Dado que la naturaleza de la señal procesada es discreta, el comportamiento del sistema se analiza en términos de coherencia entre los patrones de activación y desactivación de la portadora observados en la señal modulada y la correspondencia lógica entre la señal original y la señal demodulada.
@@ -643,86 +642,118 @@ Para la técnica ASK/OOK, las pruebas se orientaron a evaluar la estabilidad de 
 \label{fig:ask_th052}
 \end{figure}
 
-La Figura \ref{fig:ask_th052} muestra el comportamiento del sistema bajo un umbral de decisión cercano al valor central del rango normalizado ($\tau = 0.52$). En esta configuración, la activación y desactivación de la portadora refleja fielmente los estados lógicos generados por el mecanismo pseudoaleatorio, y la coincidencia visual entre la señal original y la señal demodulada es notoria. Los valores de NCC digital registrados se sitúan en el rango de 88--92\%, evidenciando que el sistema recupera correctamente la mayor parte de los bits transmitidos. El NRMSE se ubica en el rango de 0.15--0.18, valor que es esperable para señales de naturaleza binaria, ya que la métrica es sensible a las transiciones abruptas características de este tipo de señal. La estabilidad temporal entre bloques consecutivos es adecuada, sin evidencia de desalineamiento entre la secuencia generada y la recuperada.
+La Figura \ref{fig:ask_th052} muestra el comportamiento del sistema bajo un umbral de decisión cercano al valor central del rango normalizado ($\tau = 0.52$). En esta configuración, la activación y desactivación de la portadora refleja fielmente los estados lógicos generados por el mecanismo pseudoaleatorio, los segmentos activos presentan portadora continua con amplitud estable, mientras que los segmentos inactivos muestran supresión completa, comportamiento característico de OOK. La correspondencia visual entre la señal original y la señal demodulada es directa, con transiciones entre estados recuperadas sin ambigüedad. Este comportamiento es consistente con el mecanismo de detección coherente reutilizado desde la arquitectura AM. Al utilizar el umbral cerca del punto medio del rango detectado, la componente filtrada posterior a la multiplicación permanece suficientemente separada respecto al nivel de decisión, permitiendo clasificar los estados binarios sin que pequeñas variaciones de amplitud comprometan la recuperación lógica.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.74\textwidth]{fig/ask-2.png}
-\caption{Resultados obtenidos para ASK/OOK con una secuencia digital distinta. Fuente: Elaboración propia.}
+\caption{Resultados obtenidos de ASK alterando la semilla. 
+Fuente: Elaboración propia.}
 \label{fig:ask_seed2}
 \end{figure}
 
-Con el propósito de evaluar si la estabilidad del sistema depende de un patrón binario específico, la Figura \ref{fig:ask_seed2} presenta los resultados obtenidos al modificar el valor de semilla del generador pseudoaleatorio, produciendo una secuencia digital diferente. El cambio en el patrón binario es visible en la señal modulada, que presenta una distribución distinta de bloques activos e inactivos respecto al caso anterior. Sin embargo, el comportamiento del sistema en términos de recuperación binaria se mantiene estable, con NCC digital en el rango de 89--93\%. En algunos bloques evaluados, el NRMSE desciende hasta valores de 0.06, asociados a secuencias con menor densidad de transiciones. Este resultado confirma que la sincronización del sistema no depende de características particulares de la secuencia transmitida, sino que se mantiene de forma consistente independientemente del patrón generado.
+Con el propósito de evaluar si la estabilidad del sistema depende de un patrón binario específico, la Figura \ref{fig:ask_seed2} presenta los resultados obtenidos al modificar el valor de semilla del generador pseudoaleatorio, produciendo una secuencia con mayor densidad de estados activos y pulsos de mayor duración respecto al caso anterior. El cambio en la estructura temporal de la secuencia es visible sobre la señal modulada, que presenta bloques activos más extensos y una distribución distinta de transiciones. La señal demodulada reproduce correctamente esta nueva estructura, manteniendo correspondencia lógica con la señal original independientemente de la variación en el patrón generado. Este resultado confirma que el mecanismo de detección no depende del contenido específico de la secuencia transmitida, ya que la arquitectura opera únicamente sobre la presencia o ausencia de portadora en cada muestra, manteniendo un comportamiento consistente.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.74\textwidth]{fig/ask-3.png}
-\caption{Resultados obtenidos para ASK/OOK con $\tau = 0.70$. Fuente: Elaboración propia.}
+\caption{Resultados obtenidos para ASK/OOK con $\tau = 0.70$. Fuente: 
+Elaboración propia.}
 \label{fig:ask_th070}
 \end{figure}
 
-La Figura \ref{fig:ask_th070} evidencia el efecto de incrementar el umbral de decisión hacia un valor más alto ($\tau = 0.70$). En esta configuración, el proceso de detección binaria se vuelve más exigente, ya que una fracción mayor de los valores detectados debe superar el umbral para ser interpretados como estado lógico activo. Como consecuencia, la sensibilidad del detector aumenta y el error de reconstrucción se eleva, con valores de NRMSE en el rango de 0.20--0.25. Este incremento refleja que algunos bits cuya componente detectada se sitúa entre 0.52 y 0.70 son ahora clasificados incorrectamente, degradando la correspondencia lógica entre la señal original y la recuperada. Pese a este incremento en el error, el sistema conserva operación continua y estable, sin interrupciones en el procesamiento ni pérdida de sincronización serial.
+La Figura \ref{fig:ask_th070} evidencia el efecto de incrementar el umbral de decisión hacia un valor más alto ($\tau = 0.70$). En esta configuración, el proceso de detección binaria se vuelve más exigente, ya que la componente filtrada post-multiplicación debe superar un nivel superior para ser clasificada como estado activo. Aun bajo este desplazamiento, la señal demodulada mantiene correspondencia lógica con la señal original, confirmando que el mecanismo de detección coherente conserva funcionamiento estable fuera del punto central del rango normalizado, sin introducir pérdida de sincronización ni interrupciones en el flujo de procesamiento.
 
-El análisis comparativo entre las configuraciones evaluadas para ASK/OOK muestra que el umbral de decisión constituye el principal factor de sensibilidad del proceso de recuperación binaria: valores cercanos al punto central del rango producen la mejor tasa de recuperación, mientras que umbrales más alejados incrementan el error de clasificación. Adicionalmente, la variación de la secuencia digital no compromete la estabilidad del sistema, confirmando que la arquitectura de detección coherente simplificada adoptada mantiene su efectividad con independencia del patrón binario transmitido. En conjunto, los resultados confirman que la técnica ASK/OOK logra recuperar correctamente la información digital bajo las distintas configuraciones evaluadas, evidenciando el funcionamiento correcto del sistema para esta modalidad de modulación.
-
+El análisis comparativo entre las configuraciones evaluadas confirma que la técnica ASK/ OOK se ejecuta correctamente sobre el RP2040 y que su comportamiento es consistente con lo esperado para una detección coherente con umbral fijo. La recuperación binaria se mantiene estable tanto ante variaciones en la secuencia transmitida como frente a desplazamientos del umbral de decisión, respondiendo en ambos casos a mecanismos predecibles y observables directamente sobre la señal demodulada. En conjunto, los resultados validan que la implementación de ASK/OOK reproduce adecuadamente el comportamiento funcional esperado de la técnica dentro del entorno embebido.
 
 % =========================================================
 \subsection{Resultados asociados al sistema de visualización y monitoreo}
 
-Las Figuras \ref{fig:am_mu010} a \ref{fig:ask_th070} presentadas en la subsección anterior no solo documentan el comportamiento de las técnicas de modulación y demodulación, sino que constituyen simultáneamente evidencia directa del funcionamiento del sistema de visualización y monitoreo desarrollado. En cada una de estas figuras es posible observar la representación simultánea de la señal original, la señal modulada y la señal demodulada dentro de una misma interfaz gráfica, manteniendo alineación temporal entre las tres etapas del procesamiento.
+La evaluación del sistema de monitoreo como componente técnico independiente requiere analizar su comportamiento bajo operación sostenida, considerando la estabilidad del refresco gráfico, la latencia de adquisición, la integridad del hilo serial y la capacidad de adaptación dinámica ante conmutación de técnicas.
 
-El monitor opera de forma continua durante toda la ejecución del sistema, recibiendo frames seriales sincronizados y actualizando las representaciones gráficas en cada ciclo de adquisición. La estabilidad visual observada a lo largo de las pruebas confirma que la arquitectura de visualización basada en PyQtGraph sostiene el refresco continuo de múltiples curvas sin degradar perceptiblemente el rendimiento del sistema. Adicionalmente, la interfaz integra la visualización de parámetros activos y métricas calculadas en tiempo real, permitiendo correlacionar de forma directa los cambios de configuración física con el comportamiento cuantitativo del sistema.
+El balance entre $F_s = 5000\,\text{Hz}$ y $N = 256$ muestras por bloque implica que el sistema embebido genera un nuevo frame cada $T_{bloque} = N / F_s = 51.2\,\text{ms}$. Este intervalo establece el límite teórico inferior de actualización del monitor, equivalente a una frecuencia máxima de 19.5 frames por segundo bajo transmisión ideal y sin overhead de renderizado. En la práctica, el FPS promedio registrado durante las pruebas se sitúa entre 6 y 9 FPS según la técnica activa, tal como se aprecia en la barra de título de las Figuras \ref{fig:am_mu010} a \ref{fig:ask_th070}. Esta reducción respecto al límite teórico refleja la acumulación de tres contribuciones de latencia: el tiempo de empaquetado y transmisión serial dentro del entorno embebido, la deserialización y reconstrucción de frames en el hilo receptor de la aplicación, y el costo de renderizado continuo de tres curvas simultáneas mediante PyQtGraph. La Tabla \ref{tab:latencia_fps} resume los valores registrados bajo la configuración operativa utilizada durante las pruebas.
+
+\begin{table}[H]
+\centering
+\caption{Latencia aproximada del sistema de monitoreo bajo $F_s = 5000\,\text{Hz}$ y $N = 256$.}
+\label{tab:latencia_fps}
+\resizebox{0.6\textwidth}{!}{
+\begin{tabular}{|>{\centering\arraybackslash}p{7cm}|
+                >{\centering\arraybackslash}p{3.5cm}|}
+\hline
+\textbf{Componente} & \textbf{Valor} \\ \hline
+Tiempo de bloque ($T_{bloque}$)      & 51.2 ms       \\ \hline
+FPS promedio observado (AM)          & 6--7 FPS      \\ \hline
+FPS promedio observado (ASK)         & 8--9 FPS      \\ \hline
+Latencia end-to-end aproximada       & 111--167 ms   \\ \hline
+Overhead sobre $T_{bloque}$          & 60--116 ms    \\ \hline
+\end{tabular}
+}
+\end{table}
+
+
+La estabilidad del hilo serial constituye un segundo aspecto relevante del comportamiento del monitor. Durante la totalidad de las pruebas realizadas, el hilo de recepción operó de forma continua sin pérdidas de frame ni reconexiones, manteniendo la adquisición activa a lo largo de sesiones prolongadas. Esta estabilidad se sustenta en la arquitectura de frames seriales sincronizados descrita en la Figura \ref{fig:frame_structure}, ya que al no depender de reagrupamiento externo de paquetes independientes, el hilo receptor no acumula desalineamiento temporal entre señales durante la operación continua, lo que reduce la probabilidad de pérdida de sincronización ante variaciones menores en la cadencia de transmisión del sistema embebido.
+
+El mecanismo de detección automática de conmutación mediante metadata demostró operar correctamente durante las pruebas de conmutación. Al accionarse el interruptor físico sobre el modulador, el sistema embebido actualizó las etiquetas de los paneles de señal, los parámetros visibles en el panel de configuración activa y la variante de NCC utilizada para el cálculo de métricas. Este comportamiento confirma que efectivamente, el ajuste automático por conmutación fue efectivo al eliminar la posibilidad de inconsistencia entre la técnica verdaderamente activa y la configuración representada en la interfaz. Adicionalmente, durante el proceso de conmutación no se generó pérdida de frames ni interrupción del hilo de adquisición en ninguna de las pruebas realizadas.
 
 
 % =========================================================
 \subsection{Resultados asociados a la optimización del procesamiento y flujo de datos}
 
-
-% =========================================================
+% ---------------------------------------------------------
 \subsubsection{Resultados del procesamiento por bloques}
 
-Con el propósito de determinar el tamaño de bloque más adecuado para la operación del sistema, se evaluó el comportamiento del procesamiento bajo distintos valores de $N$, observando el impacto sobre la frecuencia de actualización visual, la estabilidad temporal del procesamiento y la latencia percibida durante la ejecución continua. La Tabla \ref{tab:comparacion_fps_n} resume el comportamiento observado para los valores de $N$ evaluados.
+Con el propósito de determinar las consideraciones realizadas respecto al valor de $N$ en la sección \ref{subsec:refinamiento_flujo}, se evaluó el comportamiento del procesamiento bajo distintos valores, observando el impacto sobre la frecuencia de actualización visual, la estabilidad temporal del procesamiento y la latencia percibida durante la ejecución continua. Todas las evaluaciones se realizaron bajo $F_s = 5000\,\text{Hz}$, manteniendo fijos los demás parámetros del sistema. La Tabla \ref{tab:comparacion_fps_n} resume el comportamiento observado para los valores de $N$ evaluados.
 
 \begin{table}[H]
 \centering
-\caption{Comportamiento del sistema bajo distintos tamaños de bloque $N$.}
+\caption{Comportamiento del sistema bajo distintos tamaños de bloque $N$ ($F_s = 5000\,\text{Hz}$).}
 \label{tab:comparacion_fps_n}
-\resizebox{0.8\textwidth}{!}{
-\begin{tabular}{|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{3cm}|>{\centering\arraybackslash}p{7cm}|>{\centering\arraybackslash}p{4cm}|}
+\resizebox{0.9\textwidth}{!}{
+\begin{tabular}{|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2.5cm}|>{\centering\arraybackslash}p{2.8cm}|>{\centering\arraybackslash}p{6cm}|>{\centering\arraybackslash}p{3cm}|}
 \hline
-\textbf{$N$ (muestras)} & \textbf{FPS promedio} & \textbf{Estabilidad visual} & \textbf{Latencia observada} \\ \hline
-64  & 11-13 & Baja, con fluctuaciones visibles & Muy baja \\ \hline
-128 & 8-10 & Moderada, con variaciones ocasionales & Baja \\ \hline
-256 & 6-8 & Adecuada, comportamiento uniforme & Moderada \\ \hline
-512 & 4-5 & Alta, sin fluctuaciones apreciables & Alta \\ \hline
-1024 & 2-3 & Alta, muy estable & Muy alta \\ \hline
+\textbf{$N$} & \textbf{$T_{bloque}$ (ms)} & \textbf{FPS promedio} & \textbf{Estabilidad visual} & \textbf{Latencia estimada} \\ \hline
+64   & 12.8  & 11--13 & Baja, con fluctuaciones visibles       & $\sim$77--91 ms   \\ \hline
+128  & 25.6  & 8--10  & Moderada, con variaciones ocasionales   & $\sim$100--125 ms \\ \hline
+256  & 51.2  & 6--8   & Adecuada, comportamiento uniforme       & $\sim$125--167 ms \\ \hline
+512  & 102.4 & 4--5   & Alta, sin fluctuaciones apreciables     & $\sim$200--250 ms \\ \hline
+1024 & 204.8 & 2--3   & Alta, muy estable                       & $\sim$333--500 ms \\ \hline
 \end{tabular}
 }
 \end{table}
 
-El comportamiento registrado por el medidor de FPS integrado en la aplicación de monitoreo confirma que el incremento de $N$ reduce progresivamente la frecuencia de actualización y mejora la estabilidad visual, por lo que $N = 256$ fue seleccionado como configuración operativa al representar el equilibrio más adecuado entre actualización, estabilidad y latencia, siendo además la configuración utilizada en las Figuras \ref{fig:am_mu010} a \ref{fig:ask_th070}.
+El análisis de la Tabla \ref{tab:comparacion_fps_n} evidencia que el parámetro $N$ no actúa de forma independiente sobre una sola dimensión del sistema, sino que condiciona simultáneamente la latencia de actualización, la carga computacional por iteración y la estabilidad visual del monitor, tal y como se esperaba que sucediera según \ref{subsec:refinamiento_flujo}. Valores reducidos de $N$ disminuyen la latencia teórica por bloque, pero incrementan la frecuencia de operaciones de empaquetado y transmisión serial, lo que introduce mayor variabilidad en la cadencia de entrega de frames y se traduce en fluctuaciones visibles sobre la interfaz gráfica. El comportamiento contrario se observa para valores de $N$ elevados, donde la latencia crece hasta valores que comprometen la percepción de respuesta inmediata ante cambios de parámetros, aunque la estabilidad visual mejora al reducirse la frecuencia de actualización del buffer gráfico. La configuración $N = 256$ fue seleccionada como punto de operación al representar el equilibrio más adecuado entre estos factores. Esta configuración es la utilizada en todas las pruebas documentadas en las Figuras \ref{fig:am_mu010} a \ref{fig:ask_th070}.
 
-% =========================================================
-
-
+% ---------------------------------------------------------
 \subsubsection{Resultados de modularidad y parametrización}
 
-La Figura \ref{fig:config_tool} muestra la herramienta de configuración que facilita la separación entre los parámetros generales del sistema y los parámetros específicos de cada técnica, permitiendo modificar la configuración sin afectar el firmware del microcontrolador.
+La Figura \ref{fig:config_tool} muestra la herramienta de configuración desarrollada para separar los parámetros globales del sistema de aquellos específicos de cada técnica, permitiendo modificar la configuración operativa sin intervenir directamente sobre el firmware del microcontrolador.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.75\textwidth]{fig/config-tool.png}
-\caption{Herramienta de configuración desarrollada para la parametrización dinámica del sistema. Fuente: Elaboración propia.}
+\includegraphics[width=0.7\textwidth]{fig/config-tool.png}
+\caption{Herramienta de configuración para la parametrización dinámica del sistema. Fuente: Elaboración propia.}
 \label{fig:config_tool}
 \end{figure}
 
+La interfaz organiza los parámetros en dos grupos con responsabilidades distintas: por un lado, los parámetros globales del sistema (frecuencia de muestreo $F_s$, tamaño de bloque $N$, velocidad serial y coeficiente de filtrado $\alpha$) y, por otro, los parámetros específicos de cada técnica, incluyendo identificación del módulo, tipo de señal procesada y rangos de mapeo asociados a cada potenciómetro. Esta separación refleja directamente la arquitectura modular definida en la Sección \ref{subsec:refinamiento_flujo}, donde la configuración operativa fue externalizada hacia un archivo \texttt{config.json} administrado desde la aplicación de monitoreo. La Figura \ref{fig:config_json} presenta un ejemplo del archivo generado automáticamente por la herramienta a partir de los valores introducidos en la interfaz.
 
-Esta separación entre lógica de procesamiento y configuración operativa constituye un resultado directo de la arquitectura modular adoptada durante el desarrollo. La herramienta evidencia que el sistema permite incorporar nuevas técnicas de modulación y demodulación únicamente mediante la extensión del archivo de configuración y la adición del módulo correspondiente, sin necesidad de modificar el núcleo de procesamiento.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{fig/config-json.png}
+\caption{Ejemplo de archivo \texttt{config.json} generado por la herramienta 
+de configuración. Fuente: Elaboración propia.}
+\label{fig:config_json}
+\end{figure}
+
+La estructura del archivo generado evidencia la escalabilidad de la arquitectura adoptada, donde cada técnica se define como un bloque independiente con sus propios rangos de mapeo y tipo de señal, mientras que los parámetros globales permanecen centralizados en la raíz del archivo. Incorporar una nueva técnica requiere únicamente registrar un nuevo bloque de configuración e implementar el módulo correspondiente respetando la interfaz genérica de procesamiento como diseño en Figura \ref{fig:modular_architecture}. 
+
+Esta separación entre lógica de procesamiento y configuración operativa reduce el ciclo de iteración durante pruebas y refinamientos del sistema. Cambios sobre frecuencia de muestreo, tamaño de bloque o rangos de mapeo pueden aplicarse directamente desde la herramienta de configuración y verificarse inmediatamente en la aplicación de monitoreo, sin necesidad de modificar ni recargar el firmware del entorno embebido.
 
 % =========================================================
 \subsection{Resultados asociados al proceso de evaluación y análisis de desempeño}
 
-Los indicadores cuantitativos calculados durante las pruebas permiten complementar el análisis visual con una caracterización objetiva del desempeño del sistema. La Tabla \ref{tab:metricas_consolidadas} resume los valores de NCC, NRMSE y $\sigma_{\text{NCC}}$ registrados para cada técnica y configuración evaluada, relacionando las tres dimensiones de desempeño dentro de una visión consolidada.
+Los indicadores cuantitativos calculados durante las pruebas permiten complementar el análisis visual con una caracterización objetiva del desempeño del sistema. La Tabla \ref{tab:metricas_consolidadas} resume los valores de NCC, NRMSE y $\sigma_{\text{NCC}}$ registrados para cada técnica y configuración evaluada bajo, relacionando las tres dimensiones de desempeño dentro de una visión consolidada.
 
 \begin{table}[H]
 \centering
@@ -731,15 +762,25 @@ Los indicadores cuantitativos calculados durante las pruebas permiten complement
 \resizebox{0.9\textwidth}{!}{
 \begin{tabular}{|>{\centering\arraybackslash}p{2.8cm}|>{\centering\arraybackslash}p{4.5cm}|>{\centering\arraybackslash}p{3.2cm}|>{\centering\arraybackslash}p{3.2cm}|>{\centering\arraybackslash}p{3.2cm}|}
 \hline
-\textbf{Técnica} & \textbf{Configuración} & \textbf{NCC promedio (\%)} & \textbf{NRMSE promedio} & \textbf{$\sigma_{\text{NCC}}$ (\%)} \\ \hline
-AM & $\mu = 0.10$ & 82--84 & $\sim$0.15      & \multirow{3}{*}{$\sim$1.5--2.5} \\ \cline{1-4}
+\textbf{Técnica} & \textbf{Configuración} & \textbf{NCC promedio (\%)} & \textbf{NRMSE promedio} & \textbf{$\sigma_{\text{NCC}}$ } \\ \hline
+AM & $\mu = 0.10$ & 82--84 & $\sim$0.15       & \multirow{3}{*}{$\sim$1.5--2.5} \\ \cline{1-4}
 AM & $\mu = 0.51$ & 82--84 & $\sim$0.03--0.04 & \\ \cline{1-4}
 AM & $\mu = 1.00$ & 83--85 & $\sim$0.02       & \\ \hline
-ASK/OOK & $\tau = 0.52$, secuencia base   & 88--92 & $\sim$0.15--0.18 & \multirow{2}{*}{$\sim$1.0--2.0} \\ \cline{1-4}
+ASK/OOK & $\tau = 0.52$, secuencia base    & 88--92 & $\sim$0.15--0.18 & \multirow{2}{*}{$\sim$1.0--2.0} \\ \cline{1-4}
 ASK/OOK & $\tau = 0.52$, secuencia alterna & 89--93 & $\sim$0.06--0.15 & \\ \hline
 ASK/OOK & $\tau = 0.70$ & 85--89 & $\sim$0.20--0.25 & $\sim$2.5--3.5 \\ \hline
 \end{tabular}
 }
 \end{table}
 
-Los valores de la Tabla \ref{tab:metricas_consolidadas} evidencian que NCC y NRMSE permiten evaluar dimensiones distintas y complementarias del desempeño, ya que mientras el NCC en AM se mantiene relativamente estable, el NRMSE varía significativamente con $\mu$, reflejando diferencias en precisión de amplitud; para ASK/OOK, los mayores valores de NCC obtenidos validan la utilización de una variante de cálculo orientada a comparación lógica binaria, mientras que los bajos valores de $\sigma_{\text{NCC}}$ en ambas técnicas confirman estabilidad temporal consistente entre bloques consecutivos.
+Los valores de las métricas agrupados en la Tabla \ref{tab:metricas_consolidadas} permiten evaluar si los indicadores implementados responden de forma coherente ante cambios controlados de parámetros. En AM, el NCC permanece estable en el rango de 82--85\% a lo largo de las tres configuraciones de $\mu$, mientras que el NRMSE varía desde 0.15 hasta 0.02 ante el mismo conjunto de cambios. En este caso, que dos métricas diseñadas para medir propiedades distintas respondan de forma disociada ante una misma variación de parámetro, constituye precisamente el comportamiento esperado. El NCC es invariante a cambios de amplitud introducidos por $\mu$, mientras que NRMSE sí es sensible a dichas variaciones, aspecto que se ve reflejado en los resultados. El $\sigma_{\text{NCC}}$ permanece además en el rango de 1.5--2.5\% independientemente de $\mu$, confirmando que la estabilidad temporal del procesamiento no se ve afectada por la profundidad de modulación y que las variaciones observadas entre configuraciones corresponden a diferencias reales de desempeño y no a fluctuaciones del sistema.
+
+En ASK/OOK, al variar la semilla manteniendo $\tau$ fijo, el NCC digital permanece estable entre 88--93\% y el $\sigma_{\text{NCC}}$ se mantiene por debajo de 2.0\%, indicando que la métrica responde exclusivamente a la correspondencia lógica entre estados y no al contenido específico del patrón binario transmitido. Al conservar la misma secuencia y desplazar $\tau$ hasta 0.70, el NCC desciende moderadamente y el $\sigma_{\text{NCC}}$ aumenta hasta 2.5--3.5\%, reflejando simultáneamente la degradación en la recuperación lógica y el incremento de variabilidad entre bloques introducidos por el umbral mal posicionado. La combinación de ambas pruebas confirma que el sistema de métricas distingue correctamente entre variaciones que no afectan la recuperación y aquellas que sí degradan el desempeño, produciendo respuestas diferenciadas y coherentes en todas las métricas.
+
+\subsubsection{Limitaciones del sistema de evaluación}
+
+El conjunto de métricas implementado caracteriza adecuadamente la similitud estructural, la precisión de reconstrucción y la estabilidad temporal bajo las condiciones evaluadas. No obstante, el sistema de evaluación presenta limitaciones que condicionan la interpretación de los resultados en escenarios más exigentes. La métrica NCC, al operar sobre bloques de $N = 512$ muestras o superiores, no captura degradaciones de corta duración asociadas a transitorios de conmutación o variaciones bruscas de parámetros que se resuelven dentro de un mismo bloque. De forma similar, el NRMSE depende de la amplitud de la señal de referencia, por lo que configuraciones con amplitudes significativamente distintas entre técnicas reducen la comparabilidad directa entre valores registrados.
+
+En ASK/OOK, la variante digital de NCC cuantifica coincidencia lógica entre estados, pero no detecta errores de temporización dentro de un bit ni desalineamientos sub-simbólicos entre la secuencia original y la recuperada. Bajo secuencias con alta densidad de transiciones, pequeños desfases temporales podrían degradar el NCC aun cuando la clasificación lógica permanezca funcionalmente correcta.
+
+El análisis cuantitativo realizado confirma que el sistema de evaluación cumple adecuadamente su propósito dentro del alcance del proyecto. Los indicadores seleccionados permiten diferenciar configuraciones con comportamiento visual similar, identificar qué parámetros afectan cada dimensión de desempeño y verificar la estabilidad temporal del procesamiento de forma independiente. Las limitaciones identificadas delimitan el alcance actual del sistema y establecen una base clara para futuras extensiones orientadas a ampliar su capacidad diagnóstica bajo condiciones de operación más exigentes.
