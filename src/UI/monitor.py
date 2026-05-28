@@ -45,6 +45,9 @@ class TripleScope(QtWidgets.QMainWindow):
         self.ser        = None
         self.parser     = SerialParser()
         self.ncc_history = []
+        self.last_frame_ts = None
+        self.latency_ms    = 0.0
+        self.latency_avg   = 0.0
 
         self._build_ui()
         self.refresh_ports()
@@ -241,7 +244,11 @@ class TripleScope(QtWidgets.QMainWindow):
         self.btn_run.setText("STOP")
         self.btn_run.setStyleSheet(DARK_BTN_RED)
         self.com_combo.setEnabled(False)
-        self.setWindowTitle(f"ModuTEC Monitor | RUNNING - {port}")
+        self.setWindowTitle(
+            f"ModuTEC Monitor | RUNNING - {port} | "
+            f"FPS: {self.frames} | "
+            f"Latency: {self.latency_avg:.1f} ms"
+        )
 
     def _stop_monitor(self):
         self.running = False
@@ -301,6 +308,26 @@ class TripleScope(QtWidgets.QMainWindow):
             self.parser.consume(consumed)
 
         if last_frame:
+
+            now = time.perf_counter()
+
+            if self.last_frame_ts is not None:
+
+                dt = now - self.last_frame_ts
+
+                self.latency_ms = dt * 1000.0
+
+                # suavizado simple
+                if self.latency_avg == 0.0:
+                    self.latency_avg = self.latency_ms
+                else:
+                    self.latency_avg = (
+                        0.9 * self.latency_avg +
+                        0.1 * self.latency_ms
+                    )
+
+            self.last_frame_ts = now
+
             self.update_ui(last_frame)
             self.frames += 1
 
@@ -308,7 +335,11 @@ class TripleScope(QtWidgets.QMainWindow):
         now = time.time()
         if now - self.last_fps_t > 1.0:
             port = self._selected_port() or "?"
-            self.setWindowTitle(f"ModuTEC Monitor | RUNNING - {port} | FPS: {self.frames}")
+            self.setWindowTitle(
+                f"ModuTEC Monitor | RUNNING - {port} | "
+                f"FPS: {self.frames} | "
+                f"Latency: {self.latency_avg:.1f} ms"
+            )
             self.frames     = 0
             self.last_fps_t = now
 

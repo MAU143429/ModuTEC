@@ -122,7 +122,7 @@ La Figura \ref{fig:pico_schematic} presenta el esquema general de conexión util
     \resizebox{0.60\textwidth}{!}{
     \input{fig/pico_schematic.tex}
     }
-    \caption{Esquemático general del módulo físico de control utilizado por el sistema embebido.}
+    \caption{Esquemático general del módulo físico de control utilizado por el sistema embebido. Fuente: Elaboración propia.}
     \label{fig:pico_schematic}
 \end{figure}
 
@@ -379,7 +379,7 @@ La Figura \ref{fig:monitor_architecture} resume la organización funcional propu
     \resizebox{0.6\textwidth}{!}{
         \input{fig/monitor_architecture.tex}
     }
-    \caption{Diagrama organizativo para el sistema de monitoreo.}
+    \caption{Diagrama organizativo para el sistema de monitoreo. Fuente: Elaboración propia.}
     \label{fig:monitor_architecture}
 \end{figure}
 
@@ -390,7 +390,7 @@ Aunque la selección del stack gráfico establece una base funcional para el mon
 
 La integración entre el sistema embebido y la aplicación de monitoreo introduce un problema asociado a cómo transmitir continuamente las distintas etapas del procesamiento sin perder sincronización temporal entre señales durante la adquisición y reconstrucción de información. Debido a que el sistema requiere visualizar simultáneamente los tres estados de la señal, resulta necesario definir una estrategia que permita mantener asociadas todas las representaciones correspondientes a un mismo instante temporal.
 
-Tomando como referencia la estrategia de procesamiento por bloques descrita previamente en la Sección \ref{sec:flow_control}, el sistema embebido conserva simultáneamente buffers independientes correspondientes a cada etapa de señal. A partir de esta organización interna, una primera posibilidad consiste en transmitir cada bloque de manera individual hacia la aplicación de monitoreo, enviando secuencialmente las representaciones asociadas a un mismo instante temporal.
+Tomando como referencia la estrategia de procesamiento por bloques descrita previamente en la Sección \ref{subsec:flow_control}, el sistema embebido conserva simultáneamente buffers independientes correspondientes a cada etapa de señal. A partir de esta organización interna, una primera posibilidad consiste en transmitir cada bloque de manera individual hacia la aplicación de monitoreo, enviando secuencialmente las representaciones asociadas a un mismo instante temporal.
 
 La principal ventaja de esta estrategia corresponde a la simplicidad estructural del protocolo de transmisión, ya que cada bloque puede enviarse individualmente sin mecanismos adicionales de agrupamiento. Sin embargo, este enfoque traslada el problema de sincronización hacia la aplicación de monitoreo, obligando a reorganizar continuamente los paquetes recibidos y reconstruir externamente la relación temporal entre señales. Bajo transmisión continua, pequeñas variaciones temporales entre paquetes pueden provocar desalineamiento entre etapas y dificultar la comparación visual directa entre la señal original, la señal modulada y la señal demodulada.
 
@@ -399,7 +399,7 @@ Como alternativa, se plantea una arquitectura basada en frames seriales sincroni
 \begin{figure}[H]
     \centering
     \input{fig/frame_structure.tex}
-    \caption{Estructura general propuesta para el frame serial sincronizado.}
+    \caption{Estructura general propuesta para el frame serial sincronizado. Fuente: Elaboración propia.}
     \label{fig:frame_structure}
 \end{figure}
 
@@ -593,12 +593,12 @@ En conjunto, esta integración permite complementar la inspección visual de se�
 \section{Análisis de los resultados obtenidos}
 
 % =========================================================
-\subsection{Resultados asociados a la integración de los algoritmos de modulación y demodulación}
+\subsection{Integración de los algoritmos de modulación y demodulación}
 
 La evaluación funcional de las técnicas implementadas se realizó mediante pruebas variando sistemáticamente los parámetros de control disponibles en el sistema físico. El objetivo de estas pruebas consiste en observar cómo los cambios de configuración afectan la profundidad de modulación y la calidad de reconstrucción de la señal, verificando simultáneamente que el sistema mantiene operación continua y estable bajo distintas condiciones.
 
 % ---------------------------------------------------------
-\subsubsection{Resultados obtenidos para la técnica AM}
+\subsubsection{Técnica AM}
 
 Para la técnica AM, las pruebas se realizaron variando el índice de modulación $\mu$ a lo largo del rango disponible, con el propósito de observar su efecto sobre la profundidad de envolvente, la estabilidad visual de la señal modulada y la calidad de reconstrucción de la señal demodulada. Los resultados obtenidos para tres valores representativos de $\mu$ se presentan a continuación.
 
@@ -631,7 +631,7 @@ La Figura \ref{fig:am_mu100} presenta los resultados obtenidos para máxima prof
 
 La comparación entre las tres configuraciones evaluadas confirma que la técnica AM se ejecuta correctamente sobre el RP2040 a lo largo de todo el rango disponible de $\mu$, manteniendo operación continua y estable en cada caso. El comportamiento observado es consistente con lo esperado para una demodulación coherente complementada mediante filtrado recursivo de primer orden, reafirmando que conforme aumenta el índice de modulación, la envolvente de la señal modulada adquiere mayor definición y la señal demodulada aproxima progresivamente la forma de onda original, reduciendo simultáneamente el residuo de alta frecuencia asociado a la portadora. Aun bajo máxima profundidad de modulación, el sistema no evidencia pérdida de sincronización ni degradación perceptible del flujo de procesamiento, validando que la formulación discreta simplificada adoptada reproduce adecuadamente el comportamiento funcional esperado de la técnica AM dentro del entorno embebido.
 % ---------------------------------------------------------
-\subsubsection{Resultados obtenidos para la técnica ASK/OOK}
+\subsubsection{Técnica ASK/OOK}
 
 Para la técnica ASK/OOK, las pruebas se orientaron a evaluar la estabilidad de la recuperación binaria ante variaciones en la secuencia digital generada y ante cambios en el umbral de decisión $\tau$. Dado que la naturaleza de la señal procesada es discreta, el comportamiento del sistema se analiza en términos de coherencia entre los patrones de activación y desactivación de la portadora observados en la señal modulada y la correspondencia lógica entre la señal original y la señal demodulada.
 
@@ -667,11 +667,11 @@ La Figura \ref{fig:ask_th070} evidencia el efecto de incrementar el umbral de de
 El análisis comparativo entre las configuraciones evaluadas confirma que la técnica ASK/ OOK se ejecuta correctamente sobre el RP2040 y que su comportamiento es consistente con lo esperado para una detección coherente con umbral fijo. La recuperación binaria se mantiene estable tanto ante variaciones en la secuencia transmitida como frente a desplazamientos del umbral de decisión, respondiendo en ambos casos a mecanismos predecibles y observables directamente sobre la señal demodulada. En conjunto, los resultados validan que la implementación de ASK/OOK reproduce adecuadamente el comportamiento funcional esperado de la técnica dentro del entorno embebido.
 
 % =========================================================
-\subsection{Resultados asociados al sistema de visualización y monitoreo}
+\subsection{Sistema de visualización y monitoreo}
 
 La evaluación del sistema de monitoreo como componente técnico independiente requiere analizar su comportamiento bajo operación sostenida, considerando la estabilidad del refresco gráfico, la latencia de adquisición, la integridad del hilo serial y la capacidad de adaptación dinámica ante conmutación de técnicas.
 
-El balance entre $F_s = 5000\,\text{Hz}$ y $N = 256$ muestras por bloque implica que el sistema embebido genera un nuevo frame cada $T_{bloque} = N / F_s = 51.2\,\text{ms}$. Este intervalo establece el límite teórico inferior de actualización del monitor, equivalente a una frecuencia máxima de 19.5 frames por segundo bajo transmisión ideal y sin overhead de renderizado. En la práctica, el FPS promedio registrado durante las pruebas se sitúa entre 6 y 9 FPS según la técnica activa, tal como se aprecia en la barra de título de las Figuras \ref{fig:am_mu010} a \ref{fig:ask_th070}. Esta reducción respecto al límite teórico refleja la acumulación de tres contribuciones de latencia: el tiempo de empaquetado y transmisión serial dentro del entorno embebido, la deserialización y reconstrucción de frames en el hilo receptor de la aplicación, y el costo de renderizado continuo de tres curvas simultáneas mediante PyQtGraph. La Tabla \ref{tab:latencia_fps} resume los valores registrados bajo la configuración operativa utilizada durante las pruebas.
+El balance entre $F_s = 5000\,\text{Hz}$ y $N = 256$ muestras por bloque implica que el sistema embebido genera un nuevo frame cada $T_{bloque} = N / F_s = 51.2\,\text{ms}$. Este intervalo establece el límite teórico inferior de actualización del monitor, equivalente a una frecuencia máxima de 19.5 frames por segundo bajo transmisión ideal y sin overhead de renderizado. En la práctica, el FPS promedio registrado durante las pruebas se sitúa entre 6 y 9 FPS según la técnica activa, tal como se aprecia en la barra de título de las Figuras \ref{fig:am_mu010} a \ref{fig:ask_th070}. Esta reducción respecto al límite teórico refleja la acumulación de tres contribuciones de latencia: el tiempo de empaquetado y transmisión serial dentro del entorno embebido, la deserialización y reconstrucción de frames en el hilo receptor de la aplicación, y el costo de renderizado continuo de tres curvas simultáneas mediante PyQtGraph. La Tabla \ref{tab:latencia_fps} resume los valores promedio registrados bajo la configuración operativa utilizada, obtenidos a partir de cinco ejecuciones continuas del sistema.
 
 \begin{table}[H]
 \centering
@@ -698,16 +698,16 @@ El mecanismo de detección automática de conmutación mediante metadata demostr
 
 
 % =========================================================
-\subsection{Resultados asociados a la optimización del procesamiento y flujo de datos}
+\subsection{Optimización del procesamiento y flujo de datos}
 
 % ---------------------------------------------------------
-\subsubsection{Resultados del procesamiento por bloques}
+\subsubsection{Procesamiento por bloques}
 
 Con el propósito de determinar las consideraciones realizadas respecto al valor de $N$ en la sección \ref{subsec:refinamiento_flujo}, se evaluó el comportamiento del procesamiento bajo distintos valores, observando el impacto sobre la frecuencia de actualización visual, la estabilidad temporal del procesamiento y la latencia percibida durante la ejecución continua. Todas las evaluaciones se realizaron bajo $F_s = 5000\,\text{Hz}$, manteniendo fijos los demás parámetros del sistema. La Tabla \ref{tab:comparacion_fps_n} resume el comportamiento observado para los valores de $N$ evaluados.
 
 \begin{table}[H]
 \centering
-\caption{Comportamiento del sistema bajo distintos tamaños de bloque $N$ ($F_s = 5000\,\text{Hz}$).}
+\caption{Comportamiento del sistema bajo distintos tamaños de bloque $N$ ($F_s = 5000\,\text{Hz}$), considerando cinco ejecuciones continuas independientes por cada valor evaluado.}
 \label{tab:comparacion_fps_n}
 \resizebox{0.9\textwidth}{!}{
 \begin{tabular}{|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2.5cm}|>{\centering\arraybackslash}p{2.8cm}|>{\centering\arraybackslash}p{6cm}|>{\centering\arraybackslash}p{3cm}|}
@@ -725,7 +725,7 @@ Con el propósito de determinar las consideraciones realizadas respecto al valor
 El análisis de la Tabla \ref{tab:comparacion_fps_n} evidencia que el parámetro $N$ no actúa de forma independiente sobre una sola dimensión del sistema, sino que condiciona simultáneamente la latencia de actualización, la carga computacional por iteración y la estabilidad visual del monitor, tal y como se esperaba que sucediera según \ref{subsec:refinamiento_flujo}. Valores reducidos de $N$ disminuyen la latencia teórica por bloque, pero incrementan la frecuencia de operaciones de empaquetado y transmisión serial, lo que introduce mayor variabilidad en la cadencia de entrega de frames y se traduce en fluctuaciones visibles sobre la interfaz gráfica. El comportamiento contrario se observa para valores de $N$ elevados, donde la latencia crece hasta valores que comprometen la percepción de respuesta inmediata ante cambios de parámetros, aunque la estabilidad visual mejora al reducirse la frecuencia de actualización del buffer gráfico. La configuración $N = 256$ fue seleccionada como punto de operación al representar el equilibrio más adecuado entre estos factores. Esta configuración es la utilizada en todas las pruebas documentadas en las Figuras \ref{fig:am_mu010} a \ref{fig:ask_th070}.
 
 % ---------------------------------------------------------
-\subsubsection{Resultados de modularidad y parametrización}
+\subsubsection{Modularidad y parametrización}
 
 La Figura \ref{fig:config_tool} muestra la herramienta de configuración desarrollada para separar los parámetros globales del sistema de aquellos específicos de cada técnica, permitiendo modificar la configuración operativa sin intervenir directamente sobre el firmware del microcontrolador.
 
@@ -751,7 +751,7 @@ La estructura del archivo generado evidencia la escalabilidad de la arquitectura
 Esta separación entre lógica de procesamiento y configuración operativa reduce el ciclo de iteración durante pruebas y refinamientos del sistema. Cambios sobre frecuencia de muestreo, tamaño de bloque o rangos de mapeo pueden aplicarse directamente desde la herramienta de configuración y verificarse inmediatamente en la aplicación de monitoreo, sin necesidad de modificar ni recargar el firmware del entorno embebido.
 
 % =========================================================
-\subsection{Resultados asociados al proceso de evaluación y análisis de desempeño}
+\subsection{Proceso de evaluación y análisis de desempeño}
 
 Los indicadores cuantitativos calculados durante las pruebas permiten complementar el análisis visual con una caracterización objetiva del desempeño del sistema. La Tabla \ref{tab:metricas_consolidadas} resume los valores de NCC, NRMSE y $\sigma_{\text{NCC}}$ registrados para cada técnica y configuración evaluada bajo, relacionando las tres dimensiones de desempeño dentro de una visión consolidada.
 

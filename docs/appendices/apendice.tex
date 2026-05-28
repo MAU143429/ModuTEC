@@ -1,12 +1,181 @@
-\chapter{Apéndices y Anexos}
-\iffalse
-El título anterior es solo un ejemplo ilustrativo.  Éste teorema no ameritaría
-un apéndice pues es parte normal del currículum de Electrónica, pero apéndices
-usualmente involucran aspectos de esta índole, que se salen de la línea de la
-tesis, pero que es conveniente incluir por completitud.
+%===============================================================
+% Apéndice 1: Implicaciones ambientales y de desarrollo sostenible
+% Proyecto: ModuTEC – Modulación y Demodulación de Señales en
+%           Sistemas Embebidos
+% TFG CE-5601 | Instituto Tecnológico de Costa Rica
+%===============================================================
 
-Los anexos contienen toda información adicional que se considere pertinente
-agregar, como manuales de usuario, demostraciones matemáticas que se salen de
-la línea principal de la tesis, pero que pueden considerarse parte de los
-resultados del trabajo.
-\fi
+\appendix
+\chapter{Implicaciones ambientales y de desarrollo sostenible}
+\label{apx:sostenibilidad}
+
+El presente apéndice analiza las implicaciones del proyecto ModuTEC
+desde una perspectiva amplia de sostenibilidad, considerando su impacto
+actual y potencial sobre la sociedad, el entorno y el ejercicio
+profesional de la ingeniería en computadores. El proyecto consistió en
+el desarrollo de un sistema embebido para la modulación y demodulación
+de señales AM y ASK/OOK sobre hardware de bajo costo, integrando
+procesamiento digital de señales, visualización en tiempo real y
+evaluación cuantitativa del desempeño. Si bien su alcance es académico,
+las decisiones de ingeniería adoptadas a lo largo del desarrollo tienen
+implicaciones que trascienden el entorno controlado en el que fue
+concebido.
+
+%---------------------------------------------------------------
+\section{Identificación y análisis de los impactos asociados al proyecto}
+%---------------------------------------------------------------
+
+El impacto social más directo del proyecto se deriva de la accesibilidad
+económica del hardware seleccionado. La dependencia de simuladores
+especializados o equipos de laboratorio de elevado costo limita las
+posibilidades de experimentación práctica en entornos educativos con
+recursos restringidos, profundizando brechas entre instituciones con
+distintos niveles de infraestructura. Al implementar la solución sobre
+un microcontrolador de bajo costo, el proyecto demuestra que es posible
+abordar técnicas de procesamiento digital de señales sin depender de
+equipamiento especializado, lo que amplía el acceso a herramientas de
+formación práctica en áreas como las comunicaciones digitales y los
+sistemas embebidos. Esta característica tiene un impacto social concreto
+sobre la equidad en la educación técnica, tanto en el contexto
+institucional del Instituto Tecnológico de Costa Rica como en otros
+entornos formativos con limitaciones similares.
+
+Desde el punto de vista económico, la decisión de diseño que prioriza
+el bajo costo no es únicamente una restricción presupuestaria, sino una
+postura de ingeniería con implicaciones sobre la sostenibilidad del
+sistema. Al demostrar que la complejidad técnica no exige inversiones
+elevadas en infraestructura, el proyecto aporta evidencia práctica
+que puede incidir sobre las decisiones de equipamiento en laboratorios
+de formación, reduciendo costos operativos sin comprometer la calidad
+de la experiencia educativa. Esta lógica tiene valor económico acumulado
+cuando se replica en múltiples instituciones y contextos.
+
+En cuanto al aspecto ambiental, el hardware utilizado presenta un
+consumo energético reducido en comparación con plataformas de mayor
+capacidad computacional, lo que representa una ventaja durante la
+operación continua del sistema. La arquitectura modular adoptada, que
+permite extender la funcionalidad del sistema sin reemplazar los
+componentes existentes, reduce la generación de residuos electrónicos
+asociados a la obsolescencia tecnológica. No obstante, como todo
+hardware electrónico, los componentes del sistema generan residuos al
+final de su vida útil cuya gestión inadecuada puede tener efectos
+negativos sobre el entorno. Esta consideración es relevante para el
+ejercicio responsable de la ingeniería y recae tanto en los usuarios
+finales como en los sistemas institucionales de gestión de residuos
+tecnológicos.
+
+Respecto al aspecto legal, el proyecto fue desarrollado íntegramente
+mediante herramientas de software de código abierto cuyos términos
+de licencia permiten su uso académico y de investigación sin
+restricciones significativas. El sistema opera mediante comunicación
+serial USB en un entorno completamente cerrado, sin emisión de señales
+hacia el medio externo, por lo que no genera afectaciones en materia
+de regulación del espectro radioeléctrico bajo su configuración actual.
+Sin embargo, extensiones futuras del sistema hacia comunicaciones
+inalámbricas requerirían una evaluación regulatoria cuidadosa, aspecto
+que el ingeniero responsable del desarrollo deberá contemplar
+explícitamente en etapas posteriores.
+
+Finalmente, en términos de seguridad y salud, el sistema opera con
+niveles de tensión reducidos propios de la alimentación USB, lo que
+minimiza el riesgo de accidentes eléctricos durante su manipulación
+en entornos de laboratorio. Desde la perspectiva de la seguridad
+informática, la ausencia de mecanismos de cifrado en la comunicación
+serial no representa un riesgo bajo el alcance académico del proyecto,
+pero constituye una limitación a considerar en aplicaciones futuras
+con requerimientos de integridad o confidencialidad de datos. En
+materia de salud, el uso prolongado de la interfaz gráfica de monitoreo
+introduce factores ergonómicos comunes al trabajo con dispositivos de
+visualización, cuya gestión recae en las prácticas de higiene postural
+y de descanso recomendadas para estos entornos.
+
+%---------------------------------------------------------------
+\section{Relación del proyecto con los Objetivos de Desarrollo Sostenible}
+%---------------------------------------------------------------
+
+El proyecto ModuTEC guarda relación directa con varios de los Objetivos
+de Desarrollo Sostenible establecidos por las Naciones Unidas en la
+Agenda 2030. El vínculo más evidente se establece con el ODS~4, orientado
+a garantizar una educación de calidad e inclusiva, dado que la solución
+desarrollada facilita el acceso a herramientas de experimentación práctica
+en telecomunicaciones y sistemas embebidos sin depender de infraestructura
+costosa. Esta contribución se concreta en la posibilidad de que entornos
+educativos con recursos limitados incorporen prácticas formativas de mayor
+profundidad técnica a partir de plataformas replicables y accesibles.
+
+En el plano de la innovación tecnológica, el proyecto se alinea con el
+ODS~9, cuya meta de fomentar la investigación científica y el desarrollo
+de infraestructura tecnológica accesible encuentra en esta solución un
+ejemplo concreto de cómo la ingeniería aplicada puede generar conocimiento
+técnico reproducible sobre plataformas de bajo costo. La arquitectura
+modular y extensible del sistema refuerza este alineamiento al proporcionar
+una base reutilizable para desarrollos futuros.
+
+La accesibilidad económica del hardware seleccionado tiene implicaciones
+directas sobre el ODS~10, orientado a la reducción de desigualdades. Al
+eliminar la barrera de costo como restricción de acceso a herramientas
+de formación práctica en ingeniería, el proyecto contribuye a reducir la
+brecha tecnológica entre instituciones con distintos niveles de recursos,
+favoreciendo una distribución más equitativa de las capacidades de
+experimentación técnica. Esta dimensión adquiere especial relevancia en
+el contexto latinoamericano, donde la disparidad en infraestructura
+educativa es una limitación real para el desarrollo de competencias
+técnicas avanzadas.
+
+Desde la perspectiva ambiental, el diseño del sistema con criterios de
+bajo consumo energético y modularidad extensible se relaciona al ODS~12, orientado a la producción y el consumo responsables. La
+posibilidad de extender la funcionalidad del sistema sin reemplazar el
+hardware existente favorece un modelo de uso tecnológico más sostenible,
+reduciendo la generación de residuos electrónicos asociados a ciclos de
+reemplazo acelerado. Finalmente, el desarrollo del proyecto en el marco
+de una institución pública de educación superior orientada al impacto
+social refleja el espíritu colaborativo del ODS~17, en cuanto que el
+conocimiento generado tiene potencial de ser transferido y adoptado por
+otros grupos académicos o instituciones con necesidades similares.
+
+%---------------------------------------------------------------
+\section{Proyecciones futuras e impacto potencial del proyecto}
+%---------------------------------------------------------------
+
+A mediano y largo plazo, el mayor impacto potencial del proyecto se
+deriva de su capacidad de ser replicado, extendido y adoptado como
+recurso educativo en múltiples contextos. La disponibilidad de una
+plataforma funcional y documentada para la experimentación con técnicas
+de modulación y demodulación puede incidir positivamente en la calidad
+de la formación práctica de estudiantes de ingeniería en Costa Rica y
+en otros países de la región, especialmente en instituciones donde el
+acceso a equipamiento especializado es limitado. En términos sociales,
+esta proyección apunta hacia una democratización progresiva del
+conocimiento aplicado en comunicaciones digitales, con impacto sobre
+la equidad educativa en el área tecnológica.
+
+Desde la perspectiva tecnológica y ambiental, el proyecto se inserta
+en una tendencia más amplia hacia la computación de borde, en la que
+el procesamiento se desplaza desde infraestructuras centralizadas hacia
+dispositivos embebidos de bajo consumo. Esta tendencia tiene
+implicaciones ambientales favorables en términos de eficiencia energética
+agregada, y posiciona soluciones como la desarrollada en este proyecto
+como antecedentes relevantes para el diseño de sistemas distribuidos
+de bajo impacto energético.
+
+Económicamente, la formación de ingenieros con experiencia práctica en
+plataformas de bajo costo fortalece el ecosistema local de desarrollo
+tecnológico, ampliando el perfil de soluciones abordables sin depender
+de importación de tecnología especializada. La consolidación de líneas
+de investigación aplicada en sistemas embebidos dentro del Instituto
+Tecnológico de Costa Rica puede derivar en mayor producción académica
+y en proyectos de vinculación con el sector productivo, generando
+impacto económico que trasciende el alcance individual de este trabajo.
+
+En materia legal, la eventual extensión del sistema hacia comunicaciones
+inalámbricas demandará una alineación explícita con el marco regulatorio
+aplicable en materia de uso del espectro radioeléctrico, aspecto que
+el ingeniero responsable de ese desarrollo deberá contemplar desde
+etapas tempranas del diseño. En cuanto a seguridad y salud, la proyección
+del área hacia aplicaciones de monitoreo en entornos críticos, como
+salud o gestión ambiental, elevaría considerablemente los requisitos
+de confiabilidad, seguridad informática y ergonomía exigibles a sistemas
+de esta naturaleza. La arquitectura modular y los principios de evaluación
+cuantitativa del desempeño incorporados en este proyecto son compatibles
+con esos estándares más exigentes, constituyendo una base técnica sobre
+la cual pueden desarrollarse soluciones de mayor complejidad en el futuro.

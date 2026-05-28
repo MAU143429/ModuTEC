@@ -1,11 +1,17 @@
 \chapter*{Abstract}
 \thispagestyle{empty}
 
-%The same as before, but in English.
+Signal modulation and demodulation constitute a fundamental component of modern communication systems and digital signal processing applications. However, many of the tools commonly used for studying and experimenting with these techniques rely on simulators or specialized equipment, which limits the practical validation of algorithms on accessible hardware platforms.
+
+This work presents the development of an embedded system for analog and digital signal modulation and demodulation using AM and ASK/OOK techniques, executed on a low-cost hardware platform. The proposed solution integrates signal generation, modulation, demodulation, and visualization processes, enabling the analysis of the original, modulated, and reconstructed signals through an external monitoring application.
+
+Additionally, processing strategies were incorporated to maintain operational stability and continuous data flow during execution while considering the memory, processing, and communication constraints inherent to embedded environments. These strategies include block-based processing, structured serial communication, and algorithm adaptation for efficient execution on the target hardware.
+
+The developed architecture was structured under a modular approach that facilitates the integration and evaluation of different signal processing and communication techniques. Likewise, the monitoring application incorporates metrics focused on precision and stability analysis between the original and demodulated signals, allowing validation of the platform behavior under different operational configurations. The obtained results demonstrate the feasibility of implementing fundamental communication techniques on low-cost devices, providing a functional foundation for experimentation, analysis, and evaluation of digital signal processing algorithms under real operating conditions.
 
 \bigskip
 
-\textbf{Keywords:} %Signal Analysis, Embedded Systems, Modulation, Demodulation, AM, ASK, Raspberry Pi.
+\textbf{Keywords: Embedded systems, modulation, demodulation, digital signal processing, AM, ASK/OOK.} %Signal Analysis, Embedded Systems, Modulation, Demodulation, AM, ASK, Raspberry Pi.
 
 \cleardoublepage
 

@@ -1,18 +1,17 @@
 \chapter*{Resumen}
 \thispagestyle{empty}
-\iffalse
-El resumen es la síntesis de lo que aparecerá en el tesis. Tiene que ser lo
-suficientemente consiso y claro para que alguien que lo lea sepa qué esperar
-del resto de la tesis si la leyera completamente. Puede concluir con palabras
-clave, que son los temas principales tratados en el documento. El resumen queda
-fuera de la numeración del resto de secciones.
 
-No se acostumbra utilizar referencias bibliográficas, tablas, o figuras
-en el resumen.
-\fi
+La modulación y demodulación de señales constituye un elemento fundamental dentro de los sistemas modernos de comunicación y de procesamiento digital de señales. Sin embargo, gran parte de las herramientas utilizadas para el estudio y experimentación de estas técnicas dependen de simuladores o equipos especializados, lo que limita la validación práctica de algoritmos sobre plataformas de hardware de fácil acceso.
+
+Este trabajo presenta el desarrollo de un sistema embebido para la modulación y demodulación de señales analógicas y digitales mediante las técnicas AM y ASK/OOK, ejecutadas sobre una plataforma de hardware de bajo costo. La solución integra procesos de generación, modulación, demodulación y visualización de señales, permitiendo analizar el comportamiento de las señales originales, moduladas y reconstruidas mediante una aplicación externa de monitoreo.
+
+Adicionalmente, se incorporaron estrategias de procesamiento orientadas a mantener estabilidad operativa y un flujo continuo de datos durante la ejecución, considerando las limitaciones de memoria, procesamiento y comunicación propias del entorno embebido. Entre estas estrategias se incluyen procesamiento por bloques, comunicación serial estructurada y adaptación de algoritmos para su ejecución eficiente sobre el hardware.
+
+La arquitectura desarrollada fue estructurada bajo un enfoque modular que facilita la incorporación y evaluación de distintas técnicas de procesamiento y comunicación. Asimismo, la aplicación de monitoreo incorpora métricas orientadas al análisis de precisión y estabilidad entre las señales originales y demoduladas, permitiendo validar el comportamiento de la plataforma bajo distintas configuraciones operativas. Los resultados obtenidos evidencian la viabilidad de implementar técnicas fundamentales de comunicación en dispositivos de bajo costo, aportando una base funcional para la experimentación, análisis y evaluación de algoritmos de procesamiento digital de señales en condiciones reales de operación.
+
 \bigskip
 
-\textbf{Palabras clave:} %\thesisKeywords
+\textbf{Palabras clave: Sistemas embebidos, modulación, demodulación, procesamiento digital de señales, AM, ASK/OOK.} %\thesisKeywords
 
 \clearpage
 
@@ -20,3 +19,4 @@ en el resumen.
 %%% mode: latex
 %%% TeX-master: "../main"
 %%% End:
+
