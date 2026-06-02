@@ -27,8 +27,29 @@ from ui_styles import (
     LABEL_TITLE, LABEL_SECTION, LABEL_MUTED, LABEL_VALUE,
     LOG_BOX
 )
+from firmware_flasher import flash_firmware
 
 chunk_counter = 0
+
+class FirmwareWorker(QtCore.QThread):
+
+    progress = QtCore.pyqtSignal(str)
+    success = QtCore.pyqtSignal(str)
+    error = QtCore.pyqtSignal(str)
+
+    def run(self):
+
+        try:
+
+            port = flash_firmware(
+                self.progress.emit
+            )
+
+            self.success.emit(port)
+
+        except Exception as e:
+
+            self.error.emit(str(e))
 
 class TripleScope(QtWidgets.QMainWindow):
     def __init__(self):
@@ -87,6 +108,17 @@ class TripleScope(QtWidgets.QMainWindow):
         self.btn_help.setToolTip("Help / User Guide")
         self.btn_help.clicked.connect(self.show_help)
         lay.addWidget(self.btn_help)
+        
+        self.btn_flash = QtWidgets.QPushButton()
+        self.btn_flash.setIcon(QIcon("src/assets/upload.png"))
+        self.btn_flash.setText("Flash Firmware")
+        self.btn_flash.setStyleSheet(DARK_BTN)
+
+        self.btn_flash.clicked.connect(
+            self.on_flash_firmware
+        )
+
+        lay.addWidget(self.btn_flash)
 
         lay.addStretch()
  
@@ -191,6 +223,69 @@ class TripleScope(QtWidgets.QMainWindow):
         self.log_box.setReadOnly(True)
         self.log_box.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         parent_layout.addWidget(self.log_box, stretch=1)
+
+    
+    # ══════════════════════════════════════════════════════════════
+    # Firmware flash helper
+    # ══════════════════════════════════════════════════════════════
+    def on_flash_firmware(self):
+
+        if self.running:
+
+            QtWidgets.QMessageBox.warning(
+                self,
+                "Monitor is running",
+                "Stop the monitor before updating the firmware."
+            )
+
+            return
+
+        self.log_box.append(
+            "<span style='color:#3498db'>"
+            "[FW] Starting firmware update..."
+            "</span>"
+        )
+
+        self.worker = FirmwareWorker()
+
+        self.worker.progress.connect(
+            self.log_box.append
+        )
+
+        self.worker.success.connect(
+            self.on_flash_success
+        )
+
+        self.worker.error.connect(
+            self.on_flash_error
+        )
+
+        self.worker.start()
+        
+    def on_flash_success(self, port):
+
+        self.log_box.append(
+            f"[FW] Finished successfully ({port})"
+        )
+
+        QtWidgets.QMessageBox.information(
+            self,
+            "Firmware updated",
+            f"Firmware installed successfully on {port}"
+        )
+
+        self.refresh_ports()
+    def on_flash_error(self, message):
+
+        QtWidgets.QMessageBox.critical(
+            self,
+            "Error",
+            message
+        )
+
+        self.log_box.append(
+            f"[FW] ERROR: {message}"
+        )
 
     # ══════════════════════════════════════════════════════════════
     # COM port helpers
@@ -505,6 +600,7 @@ class TripleScope(QtWidgets.QMainWindow):
             
             sb = self.log_box.verticalScrollBar()
             sb.setValue(sb.maximum())
+
 
 
 # ─────────────────────────────────────────

@@ -27,12 +27,12 @@ La aplicación de monitoreo se estructuró mediante módulos independientes de r
 
 A partir de la arquitectura definida para la solución propuesta, el proceso de desarrollo del sistema se orientó a la integración progresiva de los distintos componentes funcionales. A continuación, se describe el desarrollo realizado para cada uno de estos componentes, considerando las principales decisiones técnicas asociadas al sistema embebido, el procesamiento de señales, la comunicación de datos y la aplicación de monitoreo implementada para el proyecto.
 
-% === INICIO TAREA-1B ===
+
 
 \label{sec:adaptacion}
 \subsection{Adaptación de los algoritmos al entorno embebido}
 
-La adaptación de los algoritmos de modulación y demodulación al entorno embebido constituye el primer objetivo específico del desarrollo, ya que las técnicas implementadas deben mantener operación continua bajo restricciones de procesamiento, memoria, sincronización temporal y transmisión serial. En consecuencia, el problema no consiste únicamente en trasladar ecuaciones de modulación al microcontrolador, sino en reorganizar las técnicas para conservar estabilidad operativa dentro de una plataforma computacionalmente limitada.
+La adaptación de los algoritmos de modulación y demodulación al entorno embebido constituye el primer paso del desarrollo, ya que las técnicas implementadas deben mantener operación continua bajo restricciones de procesamiento, memoria, sincronización temporal y transmisión serial. En consecuencia, el problema no consiste únicamente en trasladar ecuaciones de modulación al microcontrolador, sino en reorganizar las técnicas para conservar estabilidad operativa dentro de una plataforma computacionalmente limitada.
 
 \subsubsection{Selección de la plataforma embebida}
 
@@ -327,7 +327,7 @@ Las tres versiones de la señal permanecen almacenadas simultáneamente en buffe
 
 \subsection{Desarrollo del sistema de visualización y monitoreo}
 
-El segundo objetivo específico del proyecto corresponde al desarrollo de un sistema de visualización y monitoreo capaz de adquirir, reconstruir y representar continuamente las señales procesadas por el sistema embebido durante su ejecución. Por lo tanto, disponer de este sistema resulta fundamental para verificar el funcionamiento de las técnicas implementadas y analizar el comportamiento de las señales en cada etapa del procesamiento.
+El segundo componente del proyecto corresponde al desarrollo de un sistema de visualización y monitoreo capaz de adquirir, reconstruir y representar continuamente las señales procesadas por el sistema embebido durante su ejecución. Por lo tanto, disponer de este sistema resulta fundamental para verificar el funcionamiento de las técnicas implementadas y analizar el comportamiento de las señales en cada etapa del procesamiento.
 
 A diferencia de un entorno de simulación, donde el procesamiento y la visualización se ejecutaban dentro de un mismo entorno local, en este proyecto el procesamiento principal ocurre sobre un sistema embebido y la visualización se realiza externamente. Esta separación introduce la necesidad de transmitir continuamente información hacia la aplicación de monitoreo para posteriormente reconstruir y representar las señales procesadas.
 
@@ -604,7 +604,7 @@ Para la técnica AM, las pruebas se realizaron variando el índice de modulació
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.75\textwidth]{fig/am-3.png}
+\includegraphics[width=0.76\textwidth]{fig/am-3.png}
 \caption{Resultados obtenidos para AM utilizando $\mu = 0.10$. Fuente: Elaboración propia.}
 \label{fig:am_mu010}
 \end{figure}
@@ -613,7 +613,7 @@ La Figura \ref{fig:am_mu010} muestra el comportamiento del sistema para un índi
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.75\textwidth]{fig/am-2.png}
+\includegraphics[width=0.85\textwidth]{fig/am-2.png}
 \caption{Resultados obtenidos para AM utilizando $\mu = 0.51$. Fuente: Elaboración propia.}
 \label{fig:am_mu051}
 \end{figure}
@@ -622,7 +622,7 @@ Al incrementar el índice de modulación a un valor intermedio ($\mu = 0.51$), l
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.75\textwidth]{fig/am-1.png}
+\includegraphics[width=0.85\textwidth]{fig/am-1.png}
 \caption{Resultados obtenidos para AM utilizando $\mu = 1.00$. Fuente: Elaboración propia.}
 \label{fig:am_mu100}
 \end{figure}
@@ -637,7 +637,7 @@ Para la técnica ASK/OOK, las pruebas se orientaron a evaluar la estabilidad de 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.74\textwidth]{fig/ask-1.png}
+\includegraphics[width=0.85\textwidth]{fig/ask-1.png}
 \caption{Resultados obtenidos para ASK/OOK con $\tau = 0.52$. Fuente: Elaboración propia.}
 \label{fig:ask_th052}
 \end{figure}
@@ -646,7 +646,7 @@ La Figura \ref{fig:ask_th052} muestra el comportamiento del sistema bajo un umbr
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.74\textwidth]{fig/ask-2.png}
+\includegraphics[width=0.75\textwidth]{fig/ask-2.png}
 \caption{Resultados obtenidos de ASK alterando la semilla. 
 Fuente: Elaboración propia.}
 \label{fig:ask_seed2}
@@ -656,7 +656,7 @@ Con el propósito de evaluar si la estabilidad del sistema depende de un patrón
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.74\textwidth]{fig/ask-3.png}
+\includegraphics[width=0.75\textwidth]{fig/ask-3.png}
 \caption{Resultados obtenidos para ASK/OOK con $\tau = 0.70$. Fuente: 
 Elaboración propia.}
 \label{fig:ask_th070}
@@ -737,6 +737,87 @@ La Figura \ref{fig:config_tool} muestra la herramienta de configuración desarro
 \end{figure}
 
 La interfaz organiza los parámetros en dos grupos con responsabilidades distintas: por un lado, los parámetros globales del sistema (frecuencia de muestreo $F_s$, tamaño de bloque $N$, velocidad serial y coeficiente de filtrado $\alpha$) y, por otro, los parámetros específicos de cada técnica, incluyendo identificación del módulo, tipo de señal procesada y rangos de mapeo asociados a cada potenciómetro. Esta separación refleja directamente la arquitectura modular definida en la Sección \ref{subsec:refinamiento_flujo}, donde la configuración operativa fue externalizada hacia un archivo \texttt{config.json} administrado desde la aplicación de monitoreo. La Figura \ref{fig:config_json} presenta un ejemplo del archivo generado automáticamente por la herramienta a partir de los valores introducidos en la interfaz.
+
+\begin{multicols}{3}
+\begin{lstlisting}[
+    language=json,
+    basicstyle=\ttfamily\tiny,
+    breaklines=true,
+    frame=single
+]
+{
+  "techniques": [
+    {
+      "id": "AM",
+      "file": "AM.py",
+      "type": "Analog",
+      "pots": [
+        {
+          "pot": 1,
+          "param": "f_signal",
+          "label": "F Signal",
+          "min": 1.0,
+          "max": 300.0
+        },
+        {
+          "pot": 2,
+          "param": "f_carrier",
+          "label": "F Carrier",
+          "min": 500.0,
+          "max": 2000.0
+        },
+        {
+          "pot": 3,
+          "param": "mu",
+          "label": "Mu",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ]
+    },
+    {
+      "id": "ASK",
+      "file": "ASK.py",
+      "type": "Analog",
+      "pots": [
+        {
+          "pot": 1,
+          "param": "seed",
+          "label": "Seed",
+          "min": 0.0,
+          "max": 100.0
+        },
+        {
+          "pot": 2,
+          "param": "f_carrier",
+          "label": "F Carrier",
+          "min": 0.0,
+          "max": 100.0
+        },
+        {
+          "pot": 3,
+          "param": "threshold",
+          "label": "Threshold",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ]
+    }
+  ],
+  "system": {
+    "fs": 5000,
+    "n": 256,
+    "amp": 14000,
+    "baud": 115200,
+    "bit_rate": 400.0,
+    "pattern_len": 32,
+    "alpha": 0.25
+  }
+}
+\end{lstlisting}
+\end{multicols}
+
+
 
 \begin{figure}[H]
 \centering
