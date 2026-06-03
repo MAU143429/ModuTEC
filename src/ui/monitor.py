@@ -7,6 +7,7 @@ from PyQt5.QtGui import QIcon
 import serial.tools.list_ports
 from PyQt5.QtWidgets import QStyle
 from ui_help        import HelpDialog
+from resource_path import resource_path
 from PyQt5 import QtCore, QtWidgets, QtGui
 from ui_config_tool import ConfigToolDialog
 from serial_worker  import SerialParser, BAUD
@@ -55,7 +56,9 @@ class TripleScope(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("ModuTEC Monitor")
-        self.setWindowIcon(QIcon("src/assets/logo.png"))
+        self.setWindowIcon(
+            QIcon(resource_path("assets/logo.png"))
+        )
         self.resize(1400, 850)
 
         # Internal state
@@ -102,7 +105,7 @@ class TripleScope(QtWidgets.QMainWindow):
 
         # Help button — top left
         self.btn_help = QtWidgets.QPushButton()
-        self.btn_help.setIcon(QIcon("src/assets/help.png"))
+        self.btn_help.setIcon(QIcon(resource_path("assets/help.png")))
         self.btn_help.setFixedSize(28, 28)
         self.btn_help.setStyleSheet(DARK_BTN)
         self.btn_help.setToolTip("Help / User Guide")
@@ -110,7 +113,7 @@ class TripleScope(QtWidgets.QMainWindow):
         lay.addWidget(self.btn_help)
         
         self.btn_flash = QtWidgets.QPushButton()
-        self.btn_flash.setIcon(QIcon("src/assets/upload.png"))
+        self.btn_flash.setIcon(QIcon(resource_path("assets/upload.png")))
         self.btn_flash.setText("Flash Firmware")
         self.btn_flash.setStyleSheet(DARK_BTN)
 
@@ -133,7 +136,7 @@ class TripleScope(QtWidgets.QMainWindow):
         lay.addWidget(self.com_combo)
 
         btn_refresh = QtWidgets.QPushButton()
-        btn_refresh.setIcon(QIcon("src/assets/refresh.png"))
+        btn_refresh.setIcon(QIcon(resource_path("assets/refresh.png")))
         btn_refresh.setFixedSize(28, 28)
         btn_refresh.setStyleSheet(DARK_BTN)
         btn_refresh.clicked.connect(self.refresh_ports)
@@ -143,7 +146,7 @@ class TripleScope(QtWidgets.QMainWindow):
 
         # Config Tool
         self.btn_cfg = QtWidgets.QPushButton(" Configuration Tool")
-        self.btn_cfg.setIcon(QIcon("src/assets/config.png"))
+        self.btn_cfg.setIcon(QIcon(resource_path("assets/config.png")))
         self.btn_cfg.setStyleSheet(DARK_BTN)
         self.btn_cfg.clicked.connect(self.open_config_tool)
         lay.addWidget(self.btn_cfg)

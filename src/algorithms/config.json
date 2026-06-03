@@ -9,8 +9,8 @@
           "pot": 1,
           "param": "f_signal",
           "label": "F Signal",
-          "min": 1.0,
-          "max": 300.0
+          "min": 0.0,
+          "max": 200.0
         },
         {
           "pot": 2,
@@ -31,21 +31,21 @@
     {
       "id": "ASK",
       "file": "ASK.py",
-      "type": "Analog",
+      "type": "Digital",
       "pots": [
         {
           "pot": 1,
           "param": "seed",
           "label": "Seed",
           "min": 0.0,
-          "max": 100.0
+          "max": 1000.0
         },
         {
           "pot": 2,
           "param": "f_carrier",
           "label": "F Carrier",
-          "min": 0.0,
-          "max": 100.0
+          "min": 500.0,
+          "max": 2000.0
         },
         {
           "pot": 3,
@@ -62,7 +62,7 @@
     "n": 256,
     "amp": 14000,
     "baud": 115200,
-    "bit_rate": 400.0,
+    "bit_rate": 500.0,
     "pattern_len": 32,
     "alpha": 0.25
   }

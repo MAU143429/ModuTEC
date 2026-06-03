@@ -5,7 +5,7 @@ import serial
 import shutil
 import subprocess
 from PyQt5.QtGui import QIcon
-import serial.tools.list_ports
+from resource_path import resource_path
 from PyQt5 import QtCore, QtWidgets, QtGui
 from ui_styles import (
     DARK_BTN,
@@ -19,7 +19,27 @@ from ui_styles import (
     CARD_STYLE
 )
 
+def run_hidden(cmd, timeout=30):
 
+    startupinfo = None
+    creationflags = 0
+
+    if os.name == "nt":
+
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
+        creationflags = subprocess.CREATE_NO_WINDOW
+
+    return subprocess.run(
+        cmd,
+        capture_output=True,
+        text=True,
+        timeout=timeout,
+        startupinfo=startupinfo,
+        creationflags=creationflags
+    )
+    
 class ConfigToolDialog(QtWidgets.QDialog):
 
     def __init__(self, parent=None):
@@ -67,14 +87,14 @@ class ConfigToolDialog(QtWidgets.QDialog):
         btn_row.addStretch()
 
         self.btn_create = QtWidgets.QPushButton(" Create Configuration File")
-        self.btn_create.setIcon(QIcon("src/assets/create.png"))
+        self.btn_create.setIcon(QIcon(resource_path("assets/create.png")))
         self.btn_create.setStyleSheet(DARK_BTN)
         self.btn_create.setFixedHeight(38)
         self.btn_create.clicked.connect(self.create_config)
         btn_row.addWidget(self.btn_create)
 
         self.btn_upload = QtWidgets.QPushButton("Upload Configuration")
-        self.btn_upload.setIcon(QIcon("src/assets/upload.png"))
+        self.btn_upload.setIcon(QIcon(resource_path("assets/upload.png")))
         self.btn_upload.setStyleSheet(DARK_BTN)
         self.btn_upload.setFixedHeight(38)
         self.btn_upload.setEnabled(False)
@@ -111,7 +131,7 @@ class ConfigToolDialog(QtWidgets.QDialog):
         # Load button + filename
         load_row = QtWidgets.QHBoxLayout()
         btn_load = QtWidgets.QPushButton(" Load .py file")
-        btn_load.setIcon(QIcon("src/assets/pyicon.png"))
+        btn_load.setIcon(QIcon(resource_path("assets/pyicon.png")))
         btn_load.setStyleSheet(DARK_BTN)
         btn_load.setFixedHeight(32)
         btn_load.clicked.connect(lambda _, i=idx: self.load_technique(i))
@@ -241,7 +261,7 @@ class ConfigToolDialog(QtWidgets.QDialog):
             
         
         logo = QtWidgets.QLabel()
-        pixmap = QtGui.QPixmap("src/assets/logo.png") 
+        pixmap = QtGui.QPixmap(resource_path("assets/logo.png")) 
         pixmap = pixmap.scaled(
             170, 170,  # tamaño deseado
             QtCore.Qt.KeepAspectRatio,
@@ -446,7 +466,10 @@ class ConfigToolDialog(QtWidgets.QDialog):
         errors = []
         for cmd in cmds:
             try:
-                result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+                result = run_hidden(
+                    cmd,
+                    timeout=30
+                )
                 if result.returncode != 0:
                     errors.append(f"{' '.join(cmd)}\n{result.stderr.strip()}")
             except subprocess.TimeoutExpired:
