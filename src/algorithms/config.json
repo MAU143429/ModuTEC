@@ -1,0 +1,69 @@
+{
+  "techniques": [
+    {
+      "id": "AM",
+      "file": "AM.py",
+      "type": "Analog",
+      "pots": [
+        {
+          "pot": 1,
+          "param": "f_signal",
+          "label": "F Signal",
+          "min": 0.0,
+          "max": 200.0
+        },
+        {
+          "pot": 2,
+          "param": "f_carrier",
+          "label": "F Carrier",
+          "min": 500.0,
+          "max": 2000.0
+        },
+        {
+          "pot": 3,
+          "param": "mu",
+          "label": "Mu",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ]
+    },
+    {
+      "id": "ASK",
+      "file": "ASK.py",
+      "type": "Digital",
+      "pots": [
+        {
+          "pot": 1,
+          "param": "seed",
+          "label": "Seed",
+          "min": 0.0,
+          "max": 1000.0
+        },
+        {
+          "pot": 2,
+          "param": "f_carrier",
+          "label": "F Carrier",
+          "min": 500.0,
+          "max": 2000.0
+        },
+        {
+          "pot": 3,
+          "param": "threshold",
+          "label": "Threshold",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ]
+    }
+  ],
+  "system": {
+    "fs": 5000,
+    "n": 256,
+    "amp": 14000,
+    "baud": 115200,
+    "bit_rate": 500.0,
+    "pattern_len": 32,
+    "alpha": 0.25
+  }
+}

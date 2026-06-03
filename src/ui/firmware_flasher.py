@@ -1,19 +1,34 @@
 import shutil
+import os
 import subprocess
 from pathlib import Path
-
 import serial.tools.list_ports
+from resource_path import resource_path
 
-
-ROOT_DIR = Path(__file__).resolve().parent.parent
-
-FIRMWARE_DIR = ROOT_DIR / "firmware"
 
 FILES = [
-    FIRMWARE_DIR / "io_pots.py",
-    FIRMWARE_DIR / "main.py",
+    Path(resource_path("firmware/io_pots.py")),
+    Path(resource_path("firmware/main.py")),
 ]
 
+def run_hidden(cmd):
+
+    startupinfo = None
+    creationflags = 0
+
+    if os.name == "nt":
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
+        creationflags = subprocess.CREATE_NO_WINDOW
+
+    return subprocess.run(
+        cmd,
+        capture_output=True,
+        text=True,
+        startupinfo=startupinfo,
+        creationflags=creationflags
+    )
 
 def find_pico_port():
     """
@@ -56,7 +71,7 @@ def flash_firmware(log_callback=None):
 
         log(f"[FW] Copying {file_path.name}...")
 
-        result = subprocess.run(
+        result = run_hidden(
             [
                 mpremote,
                 "connect",
@@ -65,9 +80,7 @@ def flash_firmware(log_callback=None):
                 "cp",
                 str(file_path),
                 ":"
-            ],
-            capture_output=True,
-            text=True
+            ]
         )
 
         if result.returncode != 0:
@@ -81,15 +94,13 @@ def flash_firmware(log_callback=None):
 
     log("[FW] Restarting Pico...")
 
-    result = subprocess.run(
+    result = run_hidden(
         [
             mpremote,
             "connect",
             port,
             "reset"
-        ],
-        capture_output=True,
-        text=True
+        ]
     )
 
     if result.returncode != 0:
