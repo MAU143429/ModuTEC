@@ -206,17 +206,17 @@ de señales analógicas y digitales moduladas, sin requerir equipamiento de labo
 especializado.
 
 El sistema se compone de dos partes complementarias: un modulador que se ejecuta
-sobre una Raspberry Pi Pico, responsable de generar y procesar las señales y un aplicación
-de monitoreo, que recibe los datos vía USB y los visualiza en forma
+sobre una Raspberry Pi Pico, responsable de generar y procesar las señales, y una aplicación
+de monitoreo que recibe los datos vía USB y los visualiza en forma
 de osciloscopio en tres canales simultáneos: señal mensaje, señal modulada y señal
 demodulada.
 
 \section{Aplicación académica}
 
-ModuTEC está orientado a cursos universitarios de \textit{Análisis de Señales Mixtas} y 
-\textit{Electrónica de Comunicaciones}, donde resulta fundamental que el
+ModuTEC está orientado a cursos universitarios de Análisis de Señales y 
+Electrónica de Comunicaciones, donde resulta fundamental que el
 estudiante comprenda la relación entre parámetros de modulación (frecuencia de la
-portadora, índice de modulación, tasa de bit, etc.) y como el modificar estos
+portadora, índice de modulación, tasa de bit, etc.) y cómo la modificación de estos
 parámetros afecta la forma de la señal resultante.
 
 La plataforma facilita que el estudiante transite desde la teoría matemática de cada
@@ -237,9 +237,9 @@ El computador externo donde se ejecutará la aplicación de monitoreo debe tener
 
 \begin{itemize}
   \item \textbf{Python 3.11}: Intérprete de Python para ejecutar la aplicación de monitoreo.
-        Versiones 3.12 o superiores también son compatibles. \url{https://www.python.org/downloads/}.
+        Versiones 3.12 o superiores también son compatibles. Disponible en \url{https://www.python.org/downloads/}.
 
-  \item \textbf{MicroPython}: Librería de firmware para la Raspberry Pi Pico. Se debe instalar la
+  \item \textbf{MicroPython}: Biblioteca para control del firmware para la Raspberry Pi Pico. Se debe instalar la
         versión estable más reciente disponible en
         \url{https://micropython.org/download/RPI_PICO/}.
 
@@ -254,7 +254,7 @@ El computador externo donde se ejecutará la aplicación de monitoreo debe tener
             \terminal{pip install mpremote}  
       \end{center}   
 
-    \item \textbf{Bibliotecas Adicionales}: Recursos necesarias para realizar cálculos matemáticos tanto en el microcontrolador como en la aplicación de monitoreo así como comunicaciones serie. Su instalación puede realizarse mediante el siguiente comando:
+    \item \textbf{Bibliotecas Adicionales}: Recursos necesarios para realizar cálculos matemáticos tanto en el microcontrolador como en la aplicación de monitoreo, así como para las comunicaciones serie. Su instalación puede realizarse mediante el siguiente comando:
       
       \begin{center}
             \terminal{pip install numpy pyserial}
@@ -292,7 +292,7 @@ Para reproducir el entorno de ModuTEC se requieren los siguientes componentes:
 
 \section{Esquemático del sistema}
 
-El esquema eléctrico de ModuTEC es deliberadamente simple. La Raspberry Pi Pico dispone
+El esquema eléctrico inicial de ModuTEC es bastante simple. La Raspberry Pi Pico dispone
 de tres entradas analógicas (\texttt{GP26}, \texttt{GP27}, \texttt{GP28} también
 denominadas \texttt{ADC0}, \texttt{ADC1}, \texttt{ADC2}) que se conectan cada una al
 cursor de un potenciómetro. Los extremos de cada potenciómetro se conectan a
@@ -302,9 +302,9 @@ voltaje entre 0 y 3.3\,V proporcional a la posición.
 Adicionalmente, se incorpora un interruptor conectado al pin digital \texttt{GP5},
 configurado mediante una resistencia \textit{pull-up} interna. Un terminal del interruptor
 se conecta a \texttt{GP5} y el otro a \texttt{GND}. Esta señal se utiliza para seleccionar
-la técnica de modulación activa dentro del sistema. Por último, el cable USB se conecta del 
-microcontrolador al computador y cumple la función de alimentar el embebido y proporciona
-el canal de comunicación serial (USB CDC) hacia el monitor de escritorio.
+la técnica de modulación activa dentro del sistema. Por último, el cable USB conecta el
+microcontrolador al computador, cumpliendo la doble función de alimentar el dispositivo embebido
+y de proporcionar el canal de comunicación serial (USB CDC) hacia el monitor de escritorio.
 
 A continuación se presenta un diagrama esquemático del sistema:
 
@@ -327,8 +327,8 @@ usando la funcionalidad integrada en la aplicación de monitoreo.
 \subsection{Etapa 1: Flashear MicroPython}
 
 \begin{enumerate}
-  \item Debemos tener descargardo el archivo \texttt{.uf2} de MicroPython para Raspberry Pi Pico
-        que se indicó en la sección~\ref{subsec:software}.
+  \item Contar con el archivo \texttt{.uf2} de MicroPython para Raspberry Pi Pico previamente descargado,
+        según se indicó en la sección~\ref{subsec:software}.
   \item Mantener presionado el botón \texttt{BOOTSEL} de la Pico mientras se conecta el
         cable USB a la computadora.
   \item La Pico aparecerá como una unidad de almacenamiento USB llamada
@@ -377,9 +377,10 @@ Al finalizar la búsqueda, el puerto asociado a la Raspberry Pi Pico aparecerá 
 
 ModuTEC incorpora una herramienta de configuración denominada \textit{Config Tool}, la cual permite modificar los parámetros globales del sistema y generar automáticamente el archivo \texttt{config.json} utilizado por el firmware.
 
-Desde esta interfaz es posible ajustar parámetros relacionados con la frecuencia de muestreo, tamaño de bloque, amplitud de las señales y rangos de operación de cada técnica implementada.
+Desde esta interfaz es posible ajustar parámetros relacionados con la frecuencia de muestreo, tamaño de bloque, amplitud de las señales y rangos de operación de cada técnica implementada.La Figura~\ref{fig:config_tool} muestra la ventana principal de Config Tool, donde se pueden ingresar los valores deseados para cada parámetro y generar la configuración personalizada para el sistema.
 
 \begin{figure}[H]
+\label{fig:config_tool}
 \centering
 \includegraphics[width=0.85\textwidth]{../fig/config-tool.png}
 \caption{Herramienta de configuración de ModuTEC.}
@@ -419,11 +420,11 @@ Coeficiente utilizado por los filtros digitales de demodulación basados en suav
 \end{tabularx}
 \end{table}
 
-Adicionalmente, cada técnica posee adicionalmente tres parámetros específicos
+Adicionalmente, cada técnica posee tres parámetros específicos
 asociados a los potenciómetros físicos del sistema. El rango de valores para
-estos parámetros puede ser definido directamente dentro de la misma herramienta
+estos parámetros puede definirse directamente desde la misma herramienta
 de configuración. Una vez completada la configuración, el archivo \texttt{config.json}
-puede generarse automáticamente y posteriormente puede cargarse directamente al
+puede generarse automáticamente y cargarse directamente al
 dispositivo utilizando la función de transferencia integrada dentro de la aplicación.
 
 \section{Inicio del monitoreo}
@@ -435,10 +436,10 @@ generadas por el sistema como se muestra en la Figura~\ref{fig:main_monitor}.
 
 \begin{figure}[H]
 \centering
-\label{fig:main_monitor}
 % Captura de pantalla
 \includegraphics[width=0.69\textwidth]{../fig/main-monitor.png}
 \caption{Ventana principal del monitor ModuTEC durante la ejecución.}
+\label{fig:main_monitor}
 \end{figure}
 
 \section{Selección de técnicas y ajuste de parámetros}
@@ -451,8 +452,8 @@ agregar nuevas técnicas siguiendo el procedimiento descrito más adelante.
 
 Los parámetros específicos de cada técnica se ajustan mediante los tres potenciómetros
 conectados al sistema. Cada potenciómetro controla un parámetro definido dentro de cada
-técnica,permitiendo modificar su valor en tiempo real el cual es mostrado tambien desde 
-la interfaz de ModuTEC.
+técnica, permitiendo modificar su valor en tiempo real, el cual también se muestra
+desde la interfaz de ModuTEC.
 
 
 % ------------------------------------------------
@@ -464,7 +465,7 @@ la interfaz de ModuTEC.
 Para agregar una nueva técnica de modulación y demodulación a ModuTEC, únicamente se requieren dos pasos:
 
 \begin{enumerate}
-\item Crear un archivo Python que implemente la técnica siguiendo la estructura estándar proporcionada en el Apéndice~\ref{ap:template}.
+\item Crear un archivo Python que implemente la técnica siguiendo la estructura estándar proporcionada en el Anexo~\ref{ap:template}.
 \item Registrar la técnica mediante la herramienta \textit{Config Tool}, definiendo sus parámetros y rangos de operación.
 \end{enumerate}
 
@@ -484,10 +485,10 @@ Toda nueva técnica debe ser creada en un archivo de Python con el nombre de la 
 
 \end{itemize}
 
-Estos elementos constituyen la interfaz mínima requerida por el firmware para cargar y ejecutar dinámicamente cualquier técnica registrada. Una vez respetada esta estructura, la lógica interna de modulación y demodulación puede implementarse libremente según las características de la técnica desarrollada. Por ejemplo, una técnica analógica puede requerir almacenar fases de portadora y estados de filtros, mientras que una técnica digital podría necesitar registros de símbolos, contadores de bits o generadores pseudoaleatorios. Como referencia, el Apéndice~\ref{ap:template} incluye un archivo base que puede utilizarse como punto de partida para la implementación de nuevas técnicas compatibles con ModuTEC.
+Estos elementos constituyen la interfaz mínima requerida por el firmware para cargar y ejecutar dinámicamente cualquier técnica registrada. Una vez respetada esta estructura, la lógica interna de modulación y demodulación puede implementarse libremente según las características de la técnica desarrollada. Por ejemplo, una técnica analógica puede requerir almacenar fases de portadora y estados de filtros, mientras que una técnica digital podría necesitar registros de símbolos, contadores de bits o generadores pseudoaleatorios. Como referencia, el Anexo~\ref{ap:template} incluye un archivo base que puede utilizarse como punto de partida para la implementación de nuevas técnicas compatibles con ModuTEC.
 
 % =====================================================
-% APENDICES
+% ANEXOS
 % =====================================================
 \appendix
 \chapter{Plantilla de código para nuevas técnicas}
@@ -495,9 +496,9 @@ Estos elementos constituyen la interfaz mínima requerida por el firmware para c
 % ------------------------------------------------
 
 A continuación se presenta el template completo que debe utilizarse como punto de partida
-para implementar cualquier nueva técnica en ModuTEC. Las secciones marcadas como
-\texttt{\# Ejemplo:} deben ser reemplazadas con la lógica específica de la técnica; los
-comentarios de estructura deben mantenerse para facilitar la revisión y el mantenimiento.
+para implementar cualquier nueva técnica en ModuTEC. Las secciones marcadas con el comentario
+\texttt{\# Ejemplo:} deben reemplazarse con la lógica específica de la técnica; los
+comentarios de estructura deben conservarse para facilitar la revisión y el mantenimiento.
 
 \begin{lstlisting}[language=Python, caption={TECHNIQUE\_NAME.py - Template}]
 import math
@@ -591,5 +592,122 @@ def compute_frame(state, params, sys_cfg):
 
     return payload_m, payload_mod, payload_dem
 \end{lstlisting}
+
+% =====================================================
+\chapter{Ejemplo de Uso Completo}
+\label{ap:ejemplo}
+% =====================================================
+
+Este anexo ilustra el flujo completo de trabajo con ModuTEC, desde la conexión física
+de la Raspberry Pi Pico hasta la ejecución de una sesión de monitoreo con una configuración
+personalizada. El objetivo es que se pueda replicar cada etapa del proceso siguiendo el orden
+aquí descrito.
+
+
+% ------------------------------------------------
+\section*{Paso 1: Instalación del firmware de ModuTEC}
+% ------------------------------------------------
+
+Abra la aplicación \texttt{ModuTEC.exe} y utilice la opción \textit{Flash Firmware}. El
+monitor detectará automáticamente la Pico conectada, transferirá todos los archivos del
+proyecto y reiniciará el dispositivo. Al finalizar, la Pico estará lista para operar con
+ModuTEC.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../fig/ejemplo-flash.png}
+\caption{Proceso de instalación del firmware desde la aplicación de monitoreo.}
+\label{fig:ej-flash}
+\end{figure}
+
+% ------------------------------------------------
+\section*{Paso 2: Creación de una configuración personalizada}
+% ------------------------------------------------
+
+Dirígase a la herramienta \textit{Config Tool} dentro de la aplicación. Para este ejemplo
+se utilizará la siguiente configuración:
+
+\begin{table}[H]
+\centering
+\caption{Configuración de ejemplo utilizada en este anexo.}
+\label{tab:ej-config}
+\begin{tabularx}{0.80\textwidth}{p{3.2cm}p{2cm}X}
+\toprule
+\textbf{Parámetro} & \textbf{Valor} & \textbf{Observación} \\
+\midrule
+\texttt{sample\_rate}   & 5000   & 10\,kHz de frecuencia de muestreo \\
+\texttt{frames}         & 256    & Bloque de 256 muestras por transmisión \\
+\texttt{amplitude}      & 15000  & Amplitud máxima para las señales \\
+\texttt{baud\_rate}     & 115200 & Velocidad de comunicación serial \\
+\texttt{bit\_rate}      & 500.0  & 500 bits/s para modulación digital \\
+\texttt{pattern\_length}& 32     & Patrón pseudoaleatorio de 32 bits \\
+\texttt{alpha}          & 0.25   & Suavizado exponencial del filtro \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Ingrese los valores en los campos correspondientes de \textit{Config Tool}. Los rangos de
+los potenciómetros para cada técnica pueden ajustarse desde la misma pantalla.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../fig/ejemplo-config-tool.png}
+\caption{Configuración personalizada ingresada en Config Tool.} 
+\label{fig:ej-config-tool}
+\end{figure}
+
+% ------------------------------------------------
+\section*{Paso 3: Generación y carga del archivo de configuración}
+% ------------------------------------------------
+
+Una vez completados los parámetros, presione el botón \textit{Generate Config} para
+crear el archivo \texttt{config.json}. A continuación, utilice la opción
+\textit{Upload Config} para transferirlo directamente al dispositivo. El monitor
+confirmará la transferencia exitosa mediante un mensaje en su panel de estado.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../fig/ejemplo-upload-config.png}
+\caption{Generación y transferencia del archivo \texttt{config.json} al dispositivo.}
+\label{fig:ej-upload-config}
+\end{figure}
+
+
+% ------------------------------------------------
+\section*{Paso 4: Inicio del monitoreo}
+% ------------------------------------------------
+
+Presione el botón \textit{Run}. La aplicación establecerá la comunicación serial con el
+dispositivo y comenzará a mostrar en tiempo real las tres señales: mensaje, modulada y
+demodulada. En este punto es posible interactuar con los potenciómetros físicos para
+modificar los parámetros de la técnica activa y observar el efecto inmediato sobre las
+señales desplegadas.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{../fig/ejemplo-monitoreo-am.png}
+\caption{Sesión de monitoreo AM con la configuración personalizada del ejemplo.}
+\label{fig:ej-monitoreo}
+\end{figure}
+
+% ------------------------------------------------
+\section*{Paso 5: Cambio de técnica mediante el interruptor}
+% ------------------------------------------------
+
+Accione el interruptor físico conectado al pin \texttt{GP5} para alternar entre las dos
+técnicas disponibles (por defecto, AM y ASK/OOK). La interfaz actualizará automáticamente
+las señales y los parámetros mostrados, sin necesidad de reiniciar el sistema.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{../fig/ejemplo-monitoreo-ask.png}
+\caption{Cambio de técnica activa mediante el interruptor físico del módulo.}
+\label{fig:ej-cambio-tecnica}
+\end{figure}
+
+\bigskip
+\noindent
+El flujo aquí descrito cubre el ciclo íntegro de operación de ModuTEC y puede repetirse para cualquier configuración o
+técnica personalizada que se desee evaluar.
 
 \end{document}
